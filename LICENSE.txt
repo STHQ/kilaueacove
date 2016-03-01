@@ -1,7 +1,8 @@
 The Lava Lounge project is Copyright (c) 2016 Mark N. Boszko
 
 This repository contains software developed by other people, where necessary 
-to the operation of my systems. Their licenses continue to apply.
+to the operation of my systems. Their licenses continue to apply. See the 
+section below, "THIRD PARTY LICENSES", for any required licenses.
 
 Unless otherwise stated, all content authored by me, Mark Boszko, and contained 
 in this repository, is covered under one of two permissive licenses -- one for 
@@ -9,7 +10,7 @@ software, and one for other elements.
 
 
 ----------
-For software, including code for running on Raspberry Pi and Arduino:
+For software by Mark Boszko, including code for Raspberry Pi and Arduino:
 
 
 The MIT License (MIT)
@@ -36,7 +37,8 @@ SOFTWARE.
 
 
 ----------
-For all other elements, including documentation, graphics, and diagrams:
+For all other elements by Mark Boszko, including documentation, 
+graphics, and diagrams:
 
 
 Lava Lounge by Mark N. Boszko is licensed under a
@@ -44,3 +46,37 @@ Creative Commons Attribution 4.0 International License.
 https://creativecommons.org/licenses/by/4.0/
 
 (please visit the link for license details)
+
+
+
+--------------------
+THIRD PARTY LICENSES
+--------------------
+
+----------
+For /tikinook/neopixel.py
+from https://github.com/jgarff/rpi_ws281x
+
+Copyright (c) 2014, jgarff
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice, this
+  list of conditions and the following disclaimer.
+
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
