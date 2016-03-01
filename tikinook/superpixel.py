@@ -60,7 +60,7 @@ class SuperPixel(object):
         """
         for strand in self._strands:
             strand.begin()
-        #self.show()
+        self.show()
         
     def show(self):
         """Update the display with the data from the LED buffer."""
