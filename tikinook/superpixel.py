@@ -33,23 +33,23 @@ if __name__ == '__main__':
 	print 'Press Ctrl-C to quit.'
 	while True:
 		# Color wipe animations.
-		colorWipe(strip1, Color(255, 0, 0))  # Red wipe
-		colorWipe(strip2, Color(255, 0, 0))  # Red wipe
-		colorWipe(strip1, Color(0, 255, 0))  # Blue wipe
-		colorWipe(strip2, Color(0, 255, 0))  # Blue wipe
-		colorWipe(strip1, Color(0, 0, 255))  # Green wipe
-		colorWipe(strip2, Color(0, 0, 255))  # Green wipe
+		paleopixel.colorWipe(strip1, Color(255, 0, 0))  # Red wipe
+		paleopixel.colorWipe(strip2, Color(255, 0, 0))  # Red wipe
+		paleopixel.colorWipe(strip1, Color(0, 255, 0))  # Blue wipe
+		paleopixel.colorWipe(strip2, Color(0, 255, 0))  # Blue wipe
+		paleopixel.colorWipe(strip1, Color(0, 0, 255))  # Green wipe
+		paleopixel.colorWipe(strip2, Color(0, 0, 255))  # Green wipe
 		# Theater chase animations.
-		theaterChase(strip1, Color(127, 127, 127))  # White theater chase
-		theaterChase(strip2, Color(127, 127, 127))  # White theater chase
-		theaterChase(strip1, Color(127,   0,   0))  # Red theater chase
-		theaterChase(strip2, Color(127,   0,   0))  # Red theater chase
-		theaterChase(strip1, Color(  0,   0, 127))  # Blue theater chase
-		theaterChase(strip2, Color(  0,   0, 127))  # Blue theater chase
+		paleopixel.theaterChase(strip1, Color(127, 127, 127))  # White theater chase
+		paleopixel.theaterChase(strip2, Color(127, 127, 127))  # White theater chase
+		paleopixel.theaterChase(strip1, Color(127,   0,   0))  # Red theater chase
+		paleopixel.theaterChase(strip2, Color(127,   0,   0))  # Red theater chase
+		paleopixel.theaterChase(strip1, Color(  0,   0, 127))  # Blue theater chase
+		paleopixel.theaterChase(strip2, Color(  0,   0, 127))  # Blue theater chase
 		# Rainbow animations.
-		rainbow(strip1)
-		rainbow(strip2)
-		rainbowCycle(strip1)
-		rainbowCycle(strip2)
-		theaterChaseRainbow(strip1)
-		theaterChaseRainbow(strip2)
+		paleopixel.rainbow(strip1)
+		paleopixel.rainbow(strip2)
+		paleopixel.rainbowCycle(strip1)
+		paleopixel.rainbowCycle(strip2)
+		paleopixel.theaterChaseRainbow(strip1)
+		paleopixel.theaterChaseRainbow(strip2)
