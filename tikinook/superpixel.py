@@ -3,8 +3,8 @@
 
 import time
 
-import neopixel
-import paleopixel
+from neopixel import *
+from paleopixel import *
 
 # SuperPixel
 # Author:  Mark Boszko
@@ -26,30 +26,30 @@ PALEOPIXEL_COUNT = 50    # Number of PaleoPixels in the strand
 if __name__ == '__main__':
 	# Create NeoPixel object with appropriate configuration.
 	strip1 = neopixel.Adafruit_NeoPixel(NEOPIXEL_COUNT, NEOPIXEL_PIN)
-	strip2 = paleopixel.PaleoPixel(PALEOPIXEL_COUNT)
+	strip2 = PaleoPixel(PALEOPIXEL_COUNT)
 	# Intialize the library (must be called once for NeoPixels before other functions).
 	strip1.begin()
 
 	print 'Press Ctrl-C to quit.'
 	while True:
 		# Color wipe animations.
-		paleopixel.colorWipe(strip1, Color(255, 0, 0))  # Red wipe
-		paleopixel.colorWipe(strip2, Color(255, 0, 0))  # Red wipe
-		paleopixel.colorWipe(strip1, Color(0, 255, 0))  # Blue wipe
-		paleopixel.colorWipe(strip2, Color(0, 255, 0))  # Blue wipe
-		paleopixel.colorWipe(strip1, Color(0, 0, 255))  # Green wipe
-		paleopixel.colorWipe(strip2, Color(0, 0, 255))  # Green wipe
+		colorWipe(strip1, Color(255, 0, 0))  # Red wipe
+		colorWipe(strip2, Color(255, 0, 0))  # Red wipe
+		colorWipe(strip1, Color(0, 255, 0))  # Blue wipe
+		colorWipe(strip2, Color(0, 255, 0))  # Blue wipe
+		colorWipe(strip1, Color(0, 0, 255))  # Green wipe
+		colorWipe(strip2, Color(0, 0, 255))  # Green wipe
 		# Theater chase animations.
-		paleopixel.theaterChase(strip1, Color(127, 127, 127))  # White theater chase
-		paleopixel.theaterChase(strip2, Color(127, 127, 127))  # White theater chase
-		paleopixel.theaterChase(strip1, Color(127,   0,   0))  # Red theater chase
-		paleopixel.theaterChase(strip2, Color(127,   0,   0))  # Red theater chase
-		paleopixel.theaterChase(strip1, Color(  0,   0, 127))  # Blue theater chase
-		paleopixel.theaterChase(strip2, Color(  0,   0, 127))  # Blue theater chase
+		theaterChase(strip1, Color(127, 127, 127))  # White theater chase
+		theaterChase(strip2, Color(127, 127, 127))  # White theater chase
+		theaterChase(strip1, Color(127,   0,   0))  # Red theater chase
+		theaterChase(strip2, Color(127,   0,   0))  # Red theater chase
+		theaterChase(strip1, Color(  0,   0, 127))  # Blue theater chase
+		theaterChase(strip2, Color(  0,   0, 127))  # Blue theater chase
 		# Rainbow animations.
-		paleopixel.rainbow(strip1)
-		paleopixel.rainbow(strip2)
-		paleopixel.rainbowCycle(strip1)
-		paleopixel.rainbowCycle(strip2)
-		paleopixel.theaterChaseRainbow(strip1)
-		paleopixel.theaterChaseRainbow(strip2)
+		rainbow(strip1)
+		rainbow(strip2)
+		rainbowCycle(strip1)
+		rainbowCycle(strip2)
+		theaterChaseRainbow(strip1)
+		theaterChaseRainbow(strip2)
