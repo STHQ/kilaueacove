@@ -100,16 +100,16 @@ class SuperPixel(object):
 
 # Main program logic follows:
 if __name__ == '__main__':
-	# Create pixel strands with appropriate configuration.
-	strand1 = neopixel.Adafruit_NeoPixel(NEOPIXEL_COUNT, NEOPIXEL_PIN)
-	strand2 = paleopixel.PaleoPixel(PALEOPIXEL_COUNT)
-	
-	# Combine them into one SuperPixel strand
-	strand = SuperPixel(strand1, strand2)
-	
-	# Intialize the SuperPixel strand (must be called once, before other 
-	# functions, is the SuperPixel strand contains any NeoPixels)
-	strand.begin()
+    # Create pixel strands with appropriate configuration.
+    strand1 = neopixel.Adafruit_NeoPixel(NEOPIXEL_COUNT, NEOPIXEL_PIN)
+    strand2 = paleopixel.PaleoPixel(PALEOPIXEL_COUNT)
+    
+    # Combine them into one SuperPixel strand
+    strand = SuperPixel(strand1, strand2)
+    
+    # Intialize the SuperPixel strand (must be called once, before other 
+    # functions, is the SuperPixel strand contains any NeoPixels)
+    strand.begin()
 
     print('Press Ctrl-C to quit.')
     while True:
