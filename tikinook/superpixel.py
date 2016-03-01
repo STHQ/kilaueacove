@@ -192,7 +192,7 @@ if __name__ == '__main__':
     strand = SuperPixel(strand1, strand2)
     
     # Intialize the SuperPixel strand (must be called once, before other 
-    # functions, is the SuperPixel strand contains any NeoPixels)
+    # functions, if the SuperPixel strand contains any NeoPixel sub-strands)
     strand.begin()
 
     print('Press Ctrl-C to quit.')
