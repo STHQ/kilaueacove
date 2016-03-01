@@ -19,6 +19,19 @@ NEOPIXEL_COUNT   = 244   # Number of NeoPixels in the strand
 NEOPIXEL_PIN     = 18    # GPIO pin connected to the pixels (must support PWM!)
 PALEOPIXEL_COUNT = 50    # Number of PaleoPixels in the strand
 
+#####
+# 
+# SuperPixel - superset pixel strand class
+# 
+#####
+
+def Color(red, green, blue):
+    """Convert the provided red, green, blue color to a 24-bit color value.
+    Each color component should be a value 0-255 where 0 is the lowest intensity
+    and 255 is the highest intensity.
+    """
+    return ((red & 0xFF) << 16) | ((green & 0xFF) << 8) | (blue & 0xFF)
+
 class SuperPixel(object):
     def __init__(self, *strands):
         """Class to represent a superset of both neopixel and paleopixel strands
