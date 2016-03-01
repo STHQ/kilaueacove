@@ -1,7 +1,8 @@
 #!/usr/bin/env python
+# -*- coding: UTF-8 -*-
 """
 Adafruit NeoPixel library port to control the older WS2801 pixels from 
-  Raspberry Pi hardware SPI. Includes Adafruit "strandtest"-style functions
+  Raspberry Pi hardware SPI. Includes Adafruit “strandtest”-style functions
   and performs a self-test if run as main.
 
 
