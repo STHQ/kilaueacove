@@ -25,8 +25,8 @@ PALEOPIXEL_COUNT = 50    # Number of PaleoPixels in the strand
 # Main program logic follows:
 if __name__ == '__main__':
 	# Create NeoPixel object with appropriate configuration.
-	strip1 = Adafruit_NeoPixel(NEOPIXEL_COUNT, NEOPIXEL_PIN)
-	strip2 = PaleoPixel(PALEOPIXEL_COUNT)
+	strip1 = neopixel.Adafruit_NeoPixel(NEOPIXEL_COUNT, NEOPIXEL_PIN)
+	strip2 = paleopixel.PaleoPixel(PALEOPIXEL_COUNT)
 	# Intialize the library (must be called once for NeoPixels before other functions).
 	strip1.begin()
 
