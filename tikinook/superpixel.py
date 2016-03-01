@@ -189,7 +189,7 @@ if __name__ == '__main__':
     strand2 = paleopixel.PaleoPixel(PALEOPIXEL_COUNT)
     
     # Combine them into one SuperPixel strand
-    strand = SuperPixel(strand2)
+    strand = SuperPixel(strand1)
     
     # Intialize the SuperPixel strand (must be called once, before other 
     # functions, is the SuperPixel strand contains any NeoPixels)
