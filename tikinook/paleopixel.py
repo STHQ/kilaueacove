@@ -92,13 +92,16 @@ class PaleoPixel(object):
         
     def show(self):
         """Update the display with the data from the LED buffer."""
-        spidev = file("/dev/spidev0.0", "w")
+        # Trying to use the is access directly, instead of going through the
+        # Python file code. Suggestion by Mike Ash. 
+        spidev = os.open('/dev/spidev0.0', os.O_WRONLY)
         for i in range(len(self._led_data)):
-            spidev.write(chr((self._led_data[i]>>16) & 0xFF))
-            spidev.write(chr((self._led_data[i]>>8) & 0xFF))
-            spidev.write(chr(self._led_data[i] & 0xFF))
-        spidev.close()
+            os.write(spidev, chr((self._led_data[i]>>16) & 0xFF))
+            os.write(spidev, chr((self._led_data[i]>>8) & 0xFF))
+            os.write(spidev, chr(self._led_data[i] & 0xFF))
+        os.close(spidev)
         time.sleep(0.002)
+
 
     def setPixelColor(self, n, color):
         """Set LED at position n to the provided 24-bit color value (in RGB order).
