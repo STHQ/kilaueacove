@@ -30,7 +30,7 @@ class SuperPixel(object):
         self._strands = strands
         pixel_count = 0
         for strand in self._strands:
-            pixel_count = pixel_count + strand.numPixels
+            pixel_count = pixel_count + strand.numPixels()
         
         # Create an array for all of the LED color data
         self._led_data = [0] * pixel_count
@@ -68,13 +68,13 @@ class SuperPixel(object):
         pixel_max    = 0
         for strand in self._strands:
         # TODO: Determine which strand this pixel is a part of, and set it.
-            pixel_max = pixel_offset + strand.numPixels
+            pixel_max = pixel_offset + strand.numPixels()
             if (pixel_offset <= n) and (n < pixel_max):
                 pixel = n - pixel_offset
                 strand.setPixelColor(pixel, color)
                 break
             else:  # Must be in the next one
-                pixel_offset = pixel_offset + strand.numPixels
+                pixel_offset = pixel_offset + strand.numPixels()
 
     def setPixelColorRGB(self, n, red, green, blue):
         """Set LED at position n to the provided red, green, and blue color.
