@@ -99,7 +99,7 @@ class PaleoPixel(object):
             rgb_strand.extend([(pixel>>16) & 0xFF, (pixel>>8) & 0xFF, pixel & 0xFF])
         spi = spidev.SpiDev()
         spi.open(0, 0)
-        spi.max_speed_hz = 8000000
+        spi.max_speed_hz = 7000000
         spi.writebytes(rgb_strand)
         spi.close()
         time.sleep(0.002)
