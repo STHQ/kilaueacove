@@ -93,7 +93,7 @@ class PaleoPixel(object):
         
     def show(self):
         """Update the display with the data from the LED buffer."""
-        # Using the spidev library
+        # Using the SpiDev() class
         try:
             spi = spidev.SpiDev()
             spi.open(0, 0)
