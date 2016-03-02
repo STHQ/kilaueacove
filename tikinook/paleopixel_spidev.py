@@ -210,9 +210,11 @@ def theaterChaseRainbow(strip, wait_ms=50):
 if __name__ == '__main__':
     # Create PaleoPixel object with appropriate number of LEDs.
     strip = PaleoPixel(LED_COUNT)
+    print('strip init')
     # Reset the library (does not actually need to be called before
     # other functions, but we're testing here).
     strip.begin()
+    print('strip.begin()')
 
     print('Press Ctrl-C to quit.')
     while True:
