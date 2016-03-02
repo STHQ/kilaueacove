@@ -105,7 +105,8 @@ class PaleoPixel(object):
             spi.close()
             time.sleep(0.002)
         except Exception:
-            print("spi.writebytes(rgb) failed.")
+            print("PaleoPixel spi.writebytes(rgb) failed.")
+            traceback.print_exception(type, value, traceback[, limit[, file]])
 
     def setPixelColor(self, n, color):
         """Set LED at position n to the provided 24-bit color value (in RGB order).
