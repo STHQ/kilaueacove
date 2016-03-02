@@ -89,11 +89,13 @@ class PaleoPixel(object):
         """Initialize _led_data to zeroes.
         Not necessary, since we do this in __init__, but handy.
         """
-        print('begin() starts')
+        print('PaleoPixel.begin() starts')
         for i in range(len(self._led_data)):
             self._led_data[i] = 0
+        print('PaleoPixel.begin() - self_led_data zeroed')
         self.show()
-        print('begin() ends')
+        print('PaleoPixel.begin() - self.show()')
+        print('PaleoPixel.begin() ends')
         
     def show(self):
         """Update the display with the data from the LED buffer."""
