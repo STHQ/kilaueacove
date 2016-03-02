@@ -4,7 +4,7 @@
 import time
 
 import neopixel
-import paleopixel
+import paleopixel-spidev
 
 # SuperPixel
 # Author:  Mark Boszko
