@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 """
+paleopixel_spidev EXPERIMENTAL BRANCH
+
 Adafruit NeoPixel library port to control the older WS2801 pixels from 
   Raspberry Pi hardware SPI. Includes Adafruit “strandtest”-style functions
   and performs a self-test if run as main.
@@ -39,12 +41,21 @@ of the license.
 
 Version History:
 
+- 1.1.0 - 2016-03-01 - This experimental spidev branch now uses the spidev 
+                       library to write out the pixel data. However, it flickers
+                       under SuperPixel use, like a communication speed issue
 - 1.0.1 - 2016-02-29 - Changed license from CC-BY-4.0 to MIT, due to 
                        recommendation by Creative Commons not to apply their 
                        licenses to software. See CC's FAQ for details:
                        https://creativecommons.org/faq/#can-i-apply-a-creative-commons-license-to-software
-- 1.0   - 2016-02-27 - Started development and complete rewrite, all in the 
+- 1.0.0 - 2016-02-27 - Started development and complete rewrite, all in the 
                        same day!
+                       
+                       
+TODO:
+
+- Replace spidev library with Adafruit Python PureIO when available:
+  https://github.com/adafruit/Adafruit_Python_PureIO
 
 """
 
