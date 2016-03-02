@@ -75,10 +75,8 @@ class PaleoPixel(object):
         
         num - number of pixels in the display.
         """
-        print('__init__() starts')
         # Create an array for the LED data
         self._led_data = [0] * num
-        print('__init__() ends')
 
     def __del__(self):
         # Clean up memory used by the library when not needed anymore.
@@ -89,42 +87,23 @@ class PaleoPixel(object):
         """Initialize _led_data to zeroes.
         Not necessary, since we do this in __init__, but handy.
         """
-        print('PaleoPixel.begin() starts')
         for i in range(len(self._led_data)):
             self._led_data[i] = 0
-        print('PaleoPixel.begin() - self_led_data zeroed')
         self.show()
-        print('PaleoPixel.begin() - self.show()')
-        print('PaleoPixel.begin() ends')
         
     def show(self):
         """Update the display with the data from the LED buffer."""
-        print('PaleoPixel.show() starts')
         # Using the SpiDev() class
         try:
-            print('PaleoPixel.show() - try: starts')
             spi = spidev.SpiDev()
-            print('PaleoPixel.show() - try: - spi init')
             spi.open(0, 0)
-            print('PaleoPixel.show() - try: - spi.open()')
-            print('PaleoPixel.show() - try: - loop will start')
-            #for i in range(len(self._led_data)):
-                #rgb = bytearray([chr((self._led_data[i]>>16) & 0xFF), chr((self._led_data[i]>>8) & 0xFF), chr(self._led_data[i] & 0xFF)])
-                #spi.writebytes(rgb)
             for pixel in self._led_data:
-                print("pixel: " + str(pixel))
                 rgb = [(pixel>>16) & 0xFF, (pixel>>8) & 0xFF, pixel & 0xFF]
-                print("rgb: " + str(rgb))
                 spi.writebytes(rgb)
-                print("spi.writebytes()")
-            print('PaleoPixel.show() - try: - loop ends')
             spi.close()
-            print('PaleoPixel.show() - try: - spi.close()')
             time.sleep(0.002)
-            print('PaleoPixel.show() - try: ends')
         except Exception:
             print("spi.writebytes(rgb) failed.")
-        print('PaleoPixel.show() ends')
 
     def setPixelColor(self, n, color):
         """Set LED at position n to the provided 24-bit color value (in RGB order).
@@ -230,11 +209,9 @@ def theaterChaseRainbow(strip, wait_ms=50):
 if __name__ == '__main__':
     # Create PaleoPixel object with appropriate number of LEDs.
     strip = PaleoPixel(LED_COUNT)
-    print('strip init')
     # Reset the library (does not actually need to be called before
     # other functions, but we're testing here).
     strip.begin()
-    print('strip.begin()')
 
     print('Press Ctrl-C to quit.')
     while True:
