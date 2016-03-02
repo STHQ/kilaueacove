@@ -112,9 +112,9 @@ class PaleoPixel(object):
                 #rgb = bytearray([chr((self._led_data[i]>>16) & 0xFF), chr((self._led_data[i]>>8) & 0xFF), chr(self._led_data[i] & 0xFF)])
                 #spi.writebytes(rgb)
             for pixel in self._led_data:
-                print(pixel)
+                print("pixel: " + str(pixel))
                 rgb = bytearray([chr((pixel>>16) & 0xFF), chr((pixel>>8) & 0xFF), chr(pixel & 0xFF)])
-                print(rgb)
+                print("rgb: " + str(rgb))
                 spi.writebytes(rgb)
                 print("spi.writebytes()")
             print('PaleoPixel.show() - try: - loop ends')
