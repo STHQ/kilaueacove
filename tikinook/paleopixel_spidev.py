@@ -104,13 +104,19 @@ class PaleoPixel(object):
         try:
             print('PaleoPixel.show() - try: starts')
             spi = spidev.SpiDev()
+            print('PaleoPixel.show() - try: - spi init')
             spi.open(0, 0)
+            print('PaleoPixel.show() - try: - spi.open()')
             # Make this -> for pixel in self._led_data:
+            print('PaleoPixel.show() - try: - loop will start')
             for i in range(len(self._led_data)):
                 rgb = bytearray([chr((self._led_data[i]>>16) & 0xFF), chr((self._led_data[i]>>8) & 0xFF), chr(self._led_data[i] & 0xFF)])
                 spi.writebytes(rgb)
+            print('PaleoPixel.show() - try: - loop ends')
             spi.close()
+            print('PaleoPixel.show() - try: - spi.close()')
             time.sleep(0.002)
+            print('PaleoPixel.show() - try: ends')
         except Exception:
             print("spi.writebytes(rgb) failed.")
         print('PaleoPixel.show() ends')
