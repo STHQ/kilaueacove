@@ -94,14 +94,14 @@ class PaleoPixel(object):
     def show(self):
         """Update the display with the data from the LED buffer."""
         # Using the spidev library
-        spi = spidev.SpiDev()
-        spi.open(0, 0)
-        for i in range(len(self._led_data)):
-            rgb = bytearray([chr((self._led_data[i]>>16) & 0xFF), chr((self._led_data[i]>>8) & 0xFF), chr(self._led_data[i] & 0xFF)])
-            result = spi.writebytes(rgb)
-            print(result)
-        spi.close()
-        time.sleep(0.002)
+        try:
+            spi = spidev.SpiDev()
+            spi.open(0, 0)
+            for i in range(len(self._led_data)):
+                rgb = bytearray([chr((self._led_data[i]>>16) & 0xFF), chr((self._led_data[i]>>8) & 0xFF), chr(self._led_data[i] & 0xFF)])
+                spi.writebytes(rgb)
+            spi.close()
+            time.sleep(0.002)
 
 
     def setPixelColor(self, n, color):
