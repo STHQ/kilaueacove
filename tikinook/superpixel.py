@@ -11,7 +11,7 @@ import paleopixel_spidev as paleopixel
 #
 # Combines both NeoPixels and PaleoPixels (WS2801) into a single addressable
 # SuperPixel type. Also allows merging of separate pixel strands into one
-# master strand or array.
+# master strand or grid.
 
 
 # My LED strip configurations (for test):
@@ -111,7 +111,119 @@ class SuperPixel(object):
         return self._led_data[n]
 
 
+#####
+# 
+# PixelGrid
+# 
+#####
+
+class PixelGrid(object):
+    def __init__(self, strand, *segments):
+        """Represents a grid of pixels built from segments of LED strands.
         
+        strand   - The pixel strand that these segments come from. Can be of
+                   class Adafruit_NeoPixel, PaleoPixel, SuperPixel or compatible
+        segments - Variable argument list of segments which should make up the
+                   grid. The segments are tuples of (start_pixel, length), and
+                   represents one horizontal row in the grid. Each row is added
+                   from the top down to make a grid with origin 0,0 in the upper 
+                   left.
+                   
+                   start_pixel - int, The left-most pixel in this row
+                   length      - signed int, The number of pixels in this row,
+                                 negative values representing a count backwards
+                                 up the strand (to account for zig-zag layouts)
+        
+        WORK IN PROGRESS
+        """
+        self._strand = strand
+        self._grid = []
+        for segment in segments:
+            # Create map
+            start_pixel = segment[0]
+            stop_pixel = segment[0] + segment[1]
+            if (segment[1] < 0):
+                step = -1
+            else:
+                step = 1
+            row = []
+            for pixel in range(start_pixel, stop_pixel, step):
+                row.append({'pixel': pixel, "color": 0})
+            self._grid.append(row)
+
+    def __del__(self):
+        # Clean up memory used by the library when not needed anymore.
+        if self._strand is not None:
+            self._strand = None
+        if self._grid is not None:
+            self._grid = None
+
+    def begin(self):
+        """Initialize _led_data to zeroes and set up any NeoPixels
+        """
+        self._strand.begin()
+        self._strand.show()
+        
+    def show(self):
+        """Update the display with the data from the LED buffer."""
+        self._strand.show()
+        
+    # GRID UNWRITTEN AFTER THIS
+    # HERE BE DRAGONS
+
+    def setPixelColor(self, n, color):
+        """Set LED at position n to the provided 24-bit color value (in RGB order).
+        """
+        if (n >= len(self._led_data)):
+            return  # out of bounds; throw it away
+            
+        # SuperPixel internal representation:
+        self._led_data[n] = color
+        
+        # Now also set it in the sub-strand
+        pixel_offset = 0
+        pixel_max    = 0
+        for strand in self._strands:
+        # TODO: Determine which strand this pixel is a part of, and set it.
+            pixel_max = pixel_offset + strand.numPixels()
+            if (pixel_offset <= n) and (n < pixel_max):
+                pixel = n - pixel_offset
+                strand.setPixelColor(pixel, color)
+                break
+            else:  # Must be in the next one
+                pixel_offset = pixel_offset + strand.numPixels()
+
+    def setPixelColorRGB(self, n, red, green, blue):
+        """Set LED at position n to the provided red, green, and blue color.
+        Each color component should be a value from 0 to 255 (where 0 is the
+        lowest intensity and 255 is the highest intensity).
+        """
+        self.setPixelColor(n, Color(red, green, blue))
+
+    def getPixels(self):
+        """Return an object which allows access to the LED display data as if 
+        it were a sequence of 24-bit RGB values.
+        """
+        return self._led_data
+
+    def numPixels(self):
+        """Return the number of pixels in the display."""
+        return len(self._led_data)
+
+    def getPixelColor(self, n):
+        """Get the 24-bit RGB color value for the LED at position n."""
+        return self._led_data[n]
+        
+
+#####
+#
+# PixelMap - real world dimension map of pixels
+#
+#####
+
+# TODO - PixelMap class
+
+
 #####
 # 
 # Test functions which animate LEDs in various ways.
