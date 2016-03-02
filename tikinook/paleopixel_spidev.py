@@ -95,11 +95,12 @@ class PaleoPixel(object):
         """Update the display with the data from the LED buffer."""
         # Using the SpiDev() class
         try:
+            rgb_strand = []
+            for pixel in self._led_data:
+                rgb_strand.extend([(pixel>>16) & 0xFF, (pixel>>8) & 0xFF, pixel & 0xFF])
             spi = spidev.SpiDev()
             spi.open(0, 0)
-            for pixel in self._led_data:
-                rgb = [(pixel>>16) & 0xFF, (pixel>>8) & 0xFF, pixel & 0xFF]
-                spi.writebytes(rgb)
+            spi.writebytes(rgb_strand)
             spi.close()
             time.sleep(0.002)
         except Exception:
