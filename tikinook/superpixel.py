@@ -199,8 +199,8 @@ if __name__ == '__main__':
     while True:
         # Color wipe animations.
         colorWipe(strand, Color(255, 0, 0))  # Red wipe
-        colorWipe(strand, Color(0, 255, 0))  # Blue wipe
-        colorWipe(strand, Color(0, 0, 255))  # Green wipe
+        colorWipe(strand, Color(0, 255, 0))  # Green wipe
+        colorWipe(strand, Color(0, 0, 255))  # Blue wipe
         # Theater chase animations.
         theaterChase(strand, Color(127, 127, 127))  # White theater chase
         theaterChase(strand, Color(127,   0,   0))  # Red theater chase
