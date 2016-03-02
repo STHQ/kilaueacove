@@ -75,8 +75,10 @@ class PaleoPixel(object):
         
         num - number of pixels in the display.
         """
+        print('__init__() starts')
         # Create an array for the LED data
         self._led_data = [0] * num
+        print('__init__() ends')
 
     def __del__(self):
         # Clean up memory used by the library when not needed anymore.
@@ -87,9 +89,11 @@ class PaleoPixel(object):
         """Initialize _led_data to zeroes.
         Not necessary, since we do this in __init__, but handy.
         """
+        print('begin() starts')
         for i in range(len(self._led_data)):
             self._led_data[i] = 0
         self.show()
+        print('begin() ends')
         
     def show(self):
         """Update the display with the data from the LED buffer."""
