@@ -100,7 +100,7 @@ class PaleoPixel(object):
             os.write(spidev, chr((self._led_data[i]>>8) & 0xFF))
             os.write(spidev, chr(self._led_data[i] & 0xFF))
         os.close(spidev)
-        time.sleep(0.002)
+        time.sleep(0.001)
 
 
     def setPixelColor(self, n, color):
