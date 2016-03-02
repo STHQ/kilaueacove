@@ -113,7 +113,7 @@ class PaleoPixel(object):
                 #spi.writebytes(rgb)
             for pixel in self._led_data:
                 print(pixel)
-                rgb = [chr((pixel>>16) & 0xFF), chr((pixel>>8) & 0xFF), chr(pixel & 0xFF)]
+                rgb = bytearray([chr((pixel>>16) & 0xFF), chr((pixel>>8) & 0xFF), chr(pixel & 0xFF)])
                 print(rgb)
                 spi.writebytes(rgb)
                 print("spi.writebytes()")
