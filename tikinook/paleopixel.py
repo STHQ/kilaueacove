@@ -92,15 +92,19 @@ class PaleoPixel(object):
         
     def show(self):
         """Update the display with the data from the LED buffer."""
-        # Trying to use the is access directly, instead of going through the
-        # Python file code. Suggestion by Mike Ash. 
+        # Trying to use the os access directly, instead of going through the
+        # Python file code. Suggestion by Mike Ash.
         spidev = os.open('/dev/spidev0.0', os.O_WRONLY)
         for i in range(len(self._led_data)):
-            os.write(spidev, chr((self._led_data[i]>>16) & 0xFF))
-            os.write(spidev, chr((self._led_data[i]>>8) & 0xFF))
-            os.write(spidev, chr(self._led_data[i] & 0xFF))
+            r = chr((self._led_data[i]>>16) & 0xFF)
+            g = chr((self._led_data[i]>>8) & 0xFF)
+            b = chr(self._led_data[i] & 0xFF)
+            rgb = bytearray([r, g, b])
+            os.write(spidev, rgb)
         os.close(spidev)
         time.sleep(0.002)
+        # This works, for the most part, but there is some flickering
+        # in the PaleoPixel strand when used inside a SuperPixel set
 
 
     def setPixelColor(self, n, color):
