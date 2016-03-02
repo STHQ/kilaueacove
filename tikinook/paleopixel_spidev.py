@@ -94,13 +94,10 @@ class PaleoPixel(object):
     def show(self):
         """Update the display with the data from the LED buffer."""
         # Using the SpiDev() class
-        rgb_strand = []
-        for pixel in self._led_data:
-            rgb_strand.extend([(pixel>>16) & 0xFF, (pixel>>8) & 0xFF, pixel & 0xFF])
         spi = spidev.SpiDev()
         spi.open(0, 0)
-        #spi.max_speed_hz = 5000000
-        spi.writebytes(rgb_strand)
+        for pixel in self._led_data:
+            spi.writebytes([(pixel>>16) & 0xFF, (pixel>>8) & 0xFF, pixel & 0xFF])
         spi.close()
         time.sleep(0.002)
 
