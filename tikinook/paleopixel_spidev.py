@@ -101,7 +101,7 @@ class PaleoPixel(object):
 #             os.write(spidev, chr((self._led_data[i]>>16) & 0xFF))
 #             os.write(spidev, chr((self._led_data[i]>>8) & 0xFF))
 #             os.write(spidev, chr(self._led_data[i] & 0xFF))
-            spi.write(rgb)
+            spi.writebytes(rgb)
         spi.close()
         time.sleep(0.002)
 
