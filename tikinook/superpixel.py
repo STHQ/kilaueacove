@@ -182,16 +182,16 @@ class PixelGrid(object):
         # Now also set it in the strand
         self._strand.setPixelColor(self._grid[x][y]["pixel"], self._grid[x][y]["color"])
         
-    def setPixelColorRGB(self, n, red, green, blue):
+    def setPixelColorRGB(self, x, y, red, green, blue):
         """Set LED at position n to the provided red, green, and blue color.
         Each color component should be a value from 0 to 255 (where 0 is the
         lowest intensity and 255 is the highest intensity).
         """
-        self.setPixelColor(n, Color(red, green, blue))
+        self.setPixelColor(x, y, Color(red, green, blue))
 
     def getPixels(self):
         """Return the grid matrix as a 2D list.
-        WARNING: Retunr value is NOT COMPATIBLE with what you would expect from
+        WARNING: Return value is NOT COMPATIBLE with what you would expect from
         a NeoPixel or PaleoPixel instance.
         """
         return self._grid
