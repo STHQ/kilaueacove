@@ -380,7 +380,7 @@ if __name__ == '__main__':
         colorWipeGrid(grid, Color(0, 255, 0))  # Green wipe
         colorWipeGrid(grid, Color(0, 0, 255))  # Blue wipe
         
-        grid.setAllColorRGB(255, 255, 255)     # ALL BRIGHT WHITE!
+        grid.setAllColorRGB(127, 127, 127)     # ALL DIM WHITE!
         grid.show()
         time.sleep(5)
         
