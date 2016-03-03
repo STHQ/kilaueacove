@@ -330,6 +330,6 @@ if __name__ == '__main__':
         #rainbowCycle(strand)
         #theaterChaseRainbow(strand)
         # Grid animations
-        for row in grid.numRows():
+        for row in range(grid.numRows()):
             grid.setPixelColorRGB(row, 0, 255, 255, 255)
         grid.show()
