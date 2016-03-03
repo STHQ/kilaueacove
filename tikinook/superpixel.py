@@ -180,7 +180,7 @@ class PixelGrid(object):
         """
         if (x >= len(self._grid)):
             return  # out of bounds; throw it away
-        else if (y >= len(self._grid[x]):
+        elif (y >= len(self._grid[x]):
             return  # We have to check the specific row because y isn't constant
             
         # Grid internal representation:
