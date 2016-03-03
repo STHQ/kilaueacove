@@ -196,6 +196,15 @@ class PixelGrid(object):
         lowest intensity and 255 is the highest intensity).
         """
         self.setPixelColor(x, y, Color(red, green, blue))
+        
+    def setAllColorRGB(self, red, green, blue):
+        """Set all LEDs to the provided red, green, and blue color.
+        Each color component should be a value from 0 to 255 (where 0 is the
+        lowest intensity and 255 is the highest intensity).
+        """
+        for row in self._grid:
+            for pixel in row:
+                pixel['color'] = Color(red, green, blue)
 
     def getPixels(self):
         """Return the grid matrix as a 2D list.
@@ -333,3 +342,20 @@ if __name__ == '__main__':
         for row in range(grid.numRows()):
             grid.setPixelColorRGB(row, 0, 255, 255, 255)
         grid.show()
+        time.sleep(5)
+        grid.setAllColorRGB(127, 127, 127)
+        grid.show()
+        time.sleep(1)
+        grid.setAllColorRGB(127, 0, 0)
+        grid.show()
+        time.sleep(1)
+        grid.setAllColorRGB(0, 127, 0)
+        grid.show()
+        time.sleep(1)
+        grid.setAllColorRGB(0, 0, 127)
+        grid.show()
+        time.sleep(1)
+        grid.setAllColorRGB(255, 255, 255)
+        grid.show()
+        time.sleep(1)
+        
