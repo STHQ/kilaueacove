@@ -359,6 +359,9 @@ if __name__ == '__main__':
     
     # Create a pixel grid for same
     grid = PixelGrid(strand, (293, -9), (275, 10), (274, -10), (255, 10), (254, -11), (243, -41), (162, 41), (161, -41), (80, 41), (79, -41), (0, 39))
+    rattan_grid = PixelGrid(strand, (293, -9), (275, 10), (274, -10), (255, 10), (254, -11))
+    shelf_back_grid = PixelGrid(strand, (162, 41), (80, 41), (0, 39))
+    shelf_front_grid = PixelGrid(strand, (243, -41), (161, -41), (79, -41))
 
     print('Press Ctrl-C to quit.')
     while True:
@@ -376,11 +379,15 @@ if __name__ == '__main__':
         #theaterChaseRainbow(strand)
         # Grid animations
         boatGrid(grid)                         # port-starboard markers for each row
-        colorWipeGrid(grid, Color(255, 0, 0))  # Red wipe
-        colorWipeGrid(grid, Color(0, 255, 0))  # Green wipe
-        colorWipeGrid(grid, Color(0, 0, 255))  # Blue wipe
+        colorWipeGrid(grid, Color(255, 0, 0), 5)  # Red wipe
+        colorWipeGrid(grid, Color(0, 255, 0), 5)  # Green wipe
+        colorWipeGrid(grid, Color(0, 0, 255), 5)  # Blue wipe
         
-        grid.setAllColorRGB(127, 127, 127)     # ALL DIM WHITE!
-        grid.show()
+        rattan_grid.setAllColorRGB(127, 127, 0)
+        shelf_back_grid.setAllColorRGB(0, 0, 127)
+        shelf_front_grid.setAllColorRGB(255, 0, 0)
+        rattan_grid.show()
+        shelf_back_grid.show()
+        shelf_front_grid.show()
         time.sleep(5)
         
