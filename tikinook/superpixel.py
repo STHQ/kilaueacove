@@ -317,11 +317,11 @@ def colorWipeGrid(grid, color, wait_ms=50):
     theGrid = grid.getGrid()
     for y in range(len(theGrid)):
         for x in range(len(theGrid[y])):
-            grid.setPixelColor(pixel, y, color)
+            grid.setPixelColor(x, y, color)
             grid.show()
             time.sleep(wait_ms/1000.0)
             
-def boatGrid(grid):
+def boatGrid(grid, wait_ms=50):
     """Mark port and starboard end pixels of each row with red and green."""
     theGrid = grid.getGrid()
     for y in range(len(theGrid)):
@@ -329,7 +329,7 @@ def boatGrid(grid):
         end_x = len(theGrid[y]) - 1
         grid.setPixelColorRGB(end_x, y, 0, 255, 0)
         grid.show()
-        time.sleep(5)
+        time.sleep(wait_ms/1000.0)
      
      
        
