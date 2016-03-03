@@ -179,16 +179,16 @@ class PixelGrid(object):
     def setPixelColor(self, x, y, color):
         """Set LED at position x, y to the provided 24-bit color value (in RGB order).
         """
-        if (x >= len(self._grid)):
+        if (y >= len(self._grid)):
             return  # out of bounds; throw it away
-        elif (y >= len(self._grid[x])):
+        elif (x >= len(self._grid[y])):
             return  # We have to check the specific row because y isn't constant
             
         # Grid internal representation:
-        self._grid[x][y]["color"] = color
+        self._grid[y][x]["color"] = color
         
         # Now also set it in the strand
-        self._strand.setPixelColor(self._grid[x][y]["pixel"], self._grid[x][y]["color"])
+        self._strand.setPixelColor(self._grid[y][x]["pixel"], self._grid[y][x]["color"])
         
     def setPixelColorRGB(self, x, y, red, green, blue):
         """Set LED at position n to the provided red, green, and blue color.
@@ -210,6 +210,11 @@ class PixelGrid(object):
         """Return the grid matrix as a 2D list.
         WARNING: Return value is NOT COMPATIBLE with what you would expect from
         a NeoPixel or PaleoPixel instance.
+        """
+        return self.getGrid()
+
+    def getGrid(self):
+        """Return the grid matrix as a 2D list.
         """
         return self._grid
         
@@ -299,6 +304,32 @@ def theaterChaseRainbow(strip, wait_ms=50):
             time.sleep(wait_ms/1000.0)
             for i in range(0, strip.numPixels(), 3):
                 strip.setPixelColor(i+q, 0)
+
+
+#####
+# 
+# Grid Test functions
+# 
+#####
+         
+def colorWipeGrid(grid, color, wait_ms=50):
+    """Wipe color across display a pixel at a time."""
+    theGrid = grid.getGrid()
+    for row in range(theGrid):
+        for pixel in row:
+            grid.setPixelColor(pixel, row, color)
+            grid.show()
+            time.sleep(wait_ms/1000.0)
+            
+def boatGrid(grid):
+    """Mark port and starboard end pixels of each row with red and green."""
+    theGrid = grid.getGrid()
+    for row in range(theGrid):
+        grid.setPixelColorRGB(0, row, 255, 0, 0)
+        end_pixel = len(row) - 1
+        grid.setPixelColorRGB(end_pixel, row, 0, 255, 0)
+        grid.show()
+        time.sleep(5)
      
      
        
@@ -339,23 +370,12 @@ if __name__ == '__main__':
         #rainbowCycle(strand)
         #theaterChaseRainbow(strand)
         # Grid animations
-        for row in range(grid.numRows()):
-            grid.setPixelColorRGB(row, 0, 255, 255, 255)
-        grid.show()
-        time.sleep(5)
-        grid.setAllColorRGB(127, 127, 127)
-        grid.show()
-        time.sleep(1)
-        grid.setAllColorRGB(127, 0, 0)
-        grid.show()
-        time.sleep(1)
-        grid.setAllColorRGB(0, 127, 0)
-        grid.show()
-        time.sleep(1)
-        grid.setAllColorRGB(0, 0, 127)
-        grid.show()
-        time.sleep(1)
-        grid.setAllColorRGB(255, 255, 255)
+        boatGrid(grid)                         # port-starboard markers for each row
+        colorWipeGrid(grid, Color(255, 0, 0))  # Red wipe
+        colorWipeGrid(grid, Color(0, 255, 0))  # Green wipe
+        colorWipeGrid(grid, Color(0, 0, 255))  # Blue wipe
+        
+        grid.setAllColorRGB(255, 255, 255)     # ALL BRIGHT WHITE!
         grid.show()
         time.sleep(1)
         
