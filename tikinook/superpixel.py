@@ -146,6 +146,7 @@ class PixelGrid(object):
         self._strand = strand
         self._grid = []
         for segment in segments:
+            print("segment: ", segment)
             # Create map
             start_pixel = segment[0]
             stop_pixel = segment[0] + segment[1]
