@@ -315,19 +315,19 @@ def theaterChaseRainbow(strip, wait_ms=50):
 def colorWipeGrid(grid, color, wait_ms=50):
     """Wipe color across display a pixel at a time."""
     theGrid = grid.getGrid()
-    for row in range(theGrid):
-        for pixel in row:
-            grid.setPixelColor(pixel, row, color)
+    for y in range(len(theGrid)):
+        for x in range(len(theGrid[y])):
+            grid.setPixelColor(pixel, y, color)
             grid.show()
             time.sleep(wait_ms/1000.0)
             
 def boatGrid(grid):
     """Mark port and starboard end pixels of each row with red and green."""
     theGrid = grid.getGrid()
-    for row in range(theGrid):
-        grid.setPixelColorRGB(0, row, 255, 0, 0)
-        end_pixel = len(row) - 1
-        grid.setPixelColorRGB(end_pixel, row, 0, 255, 0)
+    for y in range(len(theGrid)):
+        grid.setPixelColorRGB(0, y, 255, 0, 0)
+        end_x = len(theGrid[y]) - 1
+        grid.setPixelColorRGB(end_x, y, 0, 255, 0)
         grid.show()
         time.sleep(5)
      
