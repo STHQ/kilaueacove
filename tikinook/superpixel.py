@@ -197,14 +197,19 @@ class PixelGrid(object):
         """
         self.setPixelColor(x, y, Color(red, green, blue))
         
+    def setAllColor(self, color):
+        """Set all LEDs to the provided 24-bit color value (in RGB order).
+        """
+        for y in range(len(self._grid)):
+            for x in range(len(self._grid[y])):
+                self.setPixelColor(x, y, color)
+        
     def setAllColorRGB(self, red, green, blue):
         """Set all LEDs to the provided red, green, and blue color.
         Each color component should be a value from 0 to 255 (where 0 is the
         lowest intensity and 255 is the highest intensity).
         """
-        for row in self._grid:
-            for pixel in row:
-                pixel['color'] = Color(red, green, blue)
+        self.setAllColor(Color(red, green, blue))
 
     def getPixels(self):
         """Return the grid matrix as a 2D list.
@@ -321,7 +326,7 @@ def colorWipeGrid(grid, color, wait_ms=50):
             grid.show()
             time.sleep(wait_ms/1000.0)
             
-def boatGrid(grid, wait_ms=50):
+def boatGrid(grid, wait_ms=5000):
     """Mark port and starboard end pixels of each row with red and green."""
     theGrid = grid.getGrid()
     for y in range(len(theGrid)):
@@ -329,7 +334,7 @@ def boatGrid(grid, wait_ms=50):
         end_x = len(theGrid[y]) - 1
         grid.setPixelColorRGB(end_x, y, 0, 255, 0)
         grid.show()
-        time.sleep(wait_ms/1000.0)
+    time.sleep(wait_ms/1000.0)
      
      
        
@@ -377,5 +382,5 @@ if __name__ == '__main__':
         
         grid.setAllColorRGB(255, 255, 255)     # ALL BRIGHT WHITE!
         grid.show()
-        time.sleep(1)
+        time.sleep(5)
         
