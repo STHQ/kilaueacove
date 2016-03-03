@@ -19,6 +19,13 @@ NEOPIXEL_COUNT   = 244   # Number of NeoPixels in the strand
 NEOPIXEL_PIN     = 18    # GPIO pin connected to the pixels (must support PWM!)
 PALEOPIXEL_COUNT = 50    # Number of PaleoPixels in the strand
 
+# My grid configuration (for test):
+TIKI_NOOK_GRID = [(293, -9), (275, 10), (274, -10), (255, 10), (254, -11),
+                  (243, -41), (162, 41), (161, -41), (80, 41), (79, -41), (0, 39)]
+
+# Rows, bottom up: 39, -41, 41, -41,  41, -41, -11,  10, -10,  10,  -9
+# Index, bottom up: 0,  79, 80, 161, 162, 243, 254, 255, 274, 275, 293
+
 #####
 # 
 # SuperPixel - superset pixel strand class
@@ -303,18 +310,25 @@ if __name__ == '__main__':
     # Intialize the SuperPixel strand (must be called once, before other 
     # functions, if the SuperPixel strand contains any NeoPixel sub-strands)
     strand.begin()
+    
+    # Create a pixel grid for same
+    grid = PixelGrid(strand, TIKI_NOOK_GRID)
 
     print('Press Ctrl-C to quit.')
     while True:
         # Color wipe animations.
-        colorWipe(strand, Color(255, 0, 0))  # Red wipe
-        colorWipe(strand, Color(0, 255, 0))  # Green wipe
-        colorWipe(strand, Color(0, 0, 255))  # Blue wipe
+        #colorWipe(strand, Color(255, 0, 0))  # Red wipe
+        #colorWipe(strand, Color(0, 255, 0))  # Green wipe
+        #colorWipe(strand, Color(0, 0, 255))  # Blue wipe
         # Theater chase animations.
-        theaterChase(strand, Color(127, 127, 127))  # White theater chase
-        theaterChase(strand, Color(127,   0,   0))  # Red theater chase
-        theaterChase(strand, Color(  0,   0, 127))  # Blue theater chase
+        #theaterChase(strand, Color(127, 127, 127))  # White theater chase
+        #theaterChase(strand, Color(127,   0,   0))  # Red theater chase
+        #theaterChase(strand, Color(  0,   0, 127))  # Blue theater chase
         # Rainbow animations.
-        rainbow(strand)
-        rainbowCycle(strand)
-        theaterChaseRainbow(strand)
+        #rainbow(strand)
+        #rainbowCycle(strand)
+        #theaterChaseRainbow(strand)
+        # Grid animations
+        for row in grid.numRows():
+            grid.setPixelColorRGB(row, 0, 255, 255, 255)
+        grid.show()
