@@ -384,7 +384,7 @@ if __name__ == '__main__':
         colorWipeGrid(grid, Color(0, 0, 255), 5)  # Blue wipe
         
         rattan_grid.setAllColorRGB(200, 127, 0)
-        shelf_back_grid.setAllColorRGB(0, 0, 200)
+        shelf_back_grid.setAllColorRGB(0, 127, 200)
         shelf_front_grid.setAllColorRGB(200, 0, 0)
         rattan_grid.show()
         shelf_back_grid.show()
