@@ -167,32 +167,21 @@ class PixelGrid(object):
     def show(self):
         """Update the display with the data from the LED buffer."""
         self._strand.show()
-        
-    # GRID UNWRITTEN AFTER THIS
-    # HERE BE DRAGONS
 
-    def setPixelColor(self, n, color):
-        """Set LED at position n to the provided 24-bit color value (in RGB order).
+    def setPixelColor(self, x, y, color):
+        """Set LED at position x, y to the provided 24-bit color value (in RGB order).
         """
-        if (n >= len(self._led_data)):
+        if (x >= len(self._grid)):
             return  # out of bounds; throw it away
+        else if (y >= len(self._grid[x]):
+            return  # We have to check the specific row because y isn't constant
             
-        # SuperPixel internal representation:
-        self._led_data[n] = color
+        # Grid internal representation:
+        self._grid[x][y]["color"] = color
         
-        # Now also set it in the sub-strand
-        pixel_offset = 0
-        pixel_max    = 0
-        for strand in self._strands:
-        # TODO: Determine which strand this pixel is a part of, and set it.
-            pixel_max = pixel_offset + strand.numPixels()
-            if (pixel_offset <= n) and (n < pixel_max):
-                pixel = n - pixel_offset
-                strand.setPixelColor(pixel, color)
-                break
-            else:  # Must be in the next one
-                pixel_offset = pixel_offset + strand.numPixels()
-
+        # Now also set it in the strand
+        self._strand.setPixelColor(self._grid[x][y]["pixel"], self._grid[x][y]["color"])
+        
     def setPixelColorRGB(self, n, red, green, blue):
         """Set LED at position n to the provided red, green, and blue color.
         Each color component should be a value from 0 to 255 (where 0 is the
@@ -201,18 +190,26 @@ class PixelGrid(object):
         self.setPixelColor(n, Color(red, green, blue))
 
     def getPixels(self):
-        """Return an object which allows access to the LED display data as if 
-        it were a sequence of 24-bit RGB values.
+        """Return the grid matrix as a 2D list.
+        WARNING: Retunr value is NOT COMPATIBLE with what you would expect from
+        a NeoPixel or PaleoPixel instance.
         """
-        return self._led_data
+        return self._grid
+        
+    def numRows(self):
+        """Return the number of rows in the grid"""
+        return len(self._grid)
 
     def numPixels(self):
         """Return the number of pixels in the display."""
-        return len(self._led_data)
+        pixel_count = 0
+        for row in self._grid:
+            pixel_count = pixel_count + len(row)
+        return pixel_count
 
-    def getPixelColor(self, n):
-        """Get the 24-bit RGB color value for the LED at position n."""
-        return self._led_data[n]
+    def getPixelColor(self, x, y):
+        """Get the 24-bit RGB color value for the LED at position x, y."""
+        return self._grid[x][y]["color"]
         
 
 #####
