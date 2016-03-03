@@ -312,7 +312,7 @@ if __name__ == '__main__':
     strand.begin()
     
     # Create a pixel grid for same
-    grid = PixelGrid(strand, TIKI_NOOK_GRID)
+    grid = PixelGrid(strand, (293, -9), (275, 10), (274, -10), (255, 10), (254, -11), (243, -41), (162, 41), (161, -41), (80, 41), (79, -41), (0, 39))
 
     print('Press Ctrl-C to quit.')
     while True:
