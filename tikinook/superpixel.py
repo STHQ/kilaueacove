@@ -383,20 +383,20 @@ if __name__ == '__main__':
         #rainbowCycle(strand)
         #theaterChaseRainbow(strand)
         # Grid animations
-        boatGrid(grid)                         # port-starboard markers for each row
-        colorWipeGrid(grid, Color(127, 127, 127), 5)  # White (50%) wipe
-        colorWipeGrid(grid, Color(255, 0, 0), 5)  # Red wipe
-        colorWipeGrid(grid, Color(0, 255, 0), 5)  # Green wipe
-        colorWipeGrid(grid, Color(0, 0, 255), 5)  # Blue wipe
-        colorWipeGrid(grid, Color(255, 255, 255), 5)  # White (100%) wipe
-        
-        rattan_grid.setAllColorRGB(200, 127, 0)
-        shelf_back_grid.setAllColorRGB(0, 127, 200)
-        shelf_front_grid.setAllColorRGB(200, 0, 0)
-        rattan_grid.show()
-        shelf_back_grid.show()
-        shelf_front_grid.show()
-        time.sleep(5)
+        #boatGrid(grid)                         # port-starboard markers for each row
+        #colorWipeGrid(grid, Color(127, 127, 127), 5)  # White (50%) wipe
+        #colorWipeGrid(grid, Color(255, 0, 0), 5)  # Red wipe
+        #colorWipeGrid(grid, Color(0, 255, 0), 5)  # Green wipe
+        #colorWipeGrid(grid, Color(0, 0, 255), 5)  # Blue wipe
+        #colorWipeGrid(grid, Color(255, 255, 255), 5)  # White (100%) wipe
+        # Use multiple grids at once, from the same strand
+        #rattan_grid.setAllColorRGB(200, 127, 0)
+        #shelf_back_grid.setAllColorRGB(0, 127, 200)
+        #shelf_front_grid.setAllColorRGB(200, 0, 0)
+        #rattan_grid.show()
+        #shelf_back_grid.show()
+        #shelf_front_grid.show()
+        #time.sleep(5)
         
         # Load in the data from an MPEG-4 video
         command = [ FFMPEG_BIN,
@@ -413,7 +413,12 @@ if __name__ == '__main__':
             image = numpy.fromstring(raw_image, dtype='uint8')
             image = image.reshape((11,5,3))
             # TODO: display the frame here
-            print(image)
+            for y in range(5):
+                x = 0
+                for pixel in image[y]:
+                    rattan_grid.setPixelColorRGB(x, y, pixel[0], pixel[1], pixel[2])
+                    x = x + 1
+            rattan_grid.show()
             time.sleep(1)
             
         # throw away the data in the pipe's buffer.
