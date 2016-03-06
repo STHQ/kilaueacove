@@ -3,14 +3,22 @@
 Installing FFmpeg on Raspberry Pi 2 Ver B
 -----------------------------------------
 
-Look for "pi@tikinook:" to find typed commands
+Look for "pi@tikinook:" to find typed commands.
 
-Installation based on instructions from these URLs:
+I was going to set up a cross-compile toolchain for building FFmpeg, as here:
+
+https://trac.ffmpeg.org/wiki/CompilationGuide/RaspberryPi
+
+...but I found that setting up to cross-compile on a Mac was such a royal pain
+that I figured I could just build it on the RPi in less time than it would take
+for me to the the toolchain working.
+
+FFmpeg installation on RPi based on instructions from these URLs:
 
 http://www.jeffreythompson.org/blog/2014/11/13/installing-ffmpeg-for-raspberry-pi/
 https://www.bitpi.co/2015/08/19/how-to-compile-ffmpeg-on-a-raspberry-pi/
 
-I didn't time it, butI think this took less than an hour to build and install.
+I didn't time it, but I think this took less than an hour to build and install.
 -MNB
 
 ##########
