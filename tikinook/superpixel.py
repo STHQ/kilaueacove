@@ -415,13 +415,14 @@ if __name__ == '__main__':
             image = numpy.fromstring(raw_image, dtype='uint8')
             image = image.reshape((11,5,3))
             # TODO: display the frame here
-            for y in range(5):
-                x = 0
-                for pixel in image[y]:
+            for x in range(11):
+                y = 0
+                for pixel in image[x]:
+                    print(x, ", ", y, ": ", pixel[0], ", ", pixel[1], ", ", pixel[2])
                     rattan_grid.setPixelColorRGB(x, y, pixel[0], pixel[1], pixel[2])
-                    x = x + 1
+                    y = y + 1
             rattan_grid.show()
-            time.sleep(1)
+            time.sleep(0.1)
             
         # throw away the data in the pipe's buffer.
         pipe.stdout.flush()
