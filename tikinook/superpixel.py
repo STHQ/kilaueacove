@@ -424,5 +424,5 @@ if __name__ == '__main__':
             rattan_grid.show()
             time.sleep(0.1)
             
-        # throw away the data in the pipe's buffer.
-        pipe.stdout.flush()
+            # throw away the data in the pipe's buffer.
+            pipe.stdout.flush()
