@@ -398,6 +398,8 @@ if __name__ == '__main__':
         #shelf_front_grid.show()
         #time.sleep(5)
         
+        boatGrid(rattan_grid)
+        
         # Load in the data from an MPEG-4 video
         command = [ FFMPEG_BIN,
             '-i', './animation/tiki-nook-pixel-out-v02-short.mov',
