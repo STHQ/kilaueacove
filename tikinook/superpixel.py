@@ -3,6 +3,9 @@
 
 import time
 
+import numpy
+import subprocess
+
 import neopixel
 import paleopixel_spidev as paleopixel
 
@@ -13,6 +16,8 @@ import paleopixel_spidev as paleopixel
 # SuperPixel type. Also allows merging of separate pixel strands into one
 # master strand or grid.
 
+# FFmpeg path (for loading in video pixel data)
+FFMPEG_BIN = "ffmpeg"
 
 # My LED strip configurations (for test):
 NEOPIXEL_COUNT   = 244   # Number of NeoPixels in the strand
@@ -391,5 +396,25 @@ if __name__ == '__main__':
         rattan_grid.show()
         shelf_back_grid.show()
         shelf_front_grid.show()
-        time.sleep(10)
+        time.sleep(5)
         
+        # Load in the data from an MPEG-4 video
+        command = [ FFMPEG_BIN,
+            '-i', './animation/tiki-nook-pixel-out-v02-short.mov',
+            '-f', 'image2pipe',
+            '-pix_fmt', 'rgb24',
+            '-vcodec', 'rawvideo', '-']
+        pipe = subprocess.Popen(command, stdout = subprocess.PIPE, bufsize=10**8)
+        
+        for i in range(30) #1 second
+            # read 11*5*3 bytes (= 1 frame for the overhead pixel grid)
+            raw_image = pipe.stdout.read(11*5*3)
+            # transform the byte read into a numpy array
+            image = numpy.fromstring(raw_image, dtype='uint8')
+            image = image.reshape((11,5,3))
+            # TODO: display the frame here
+            print(image)
+            time.sleep(1)
+            
+        # throw away the data in the pipe's buffer.
+        pipe.stdout.flush()
