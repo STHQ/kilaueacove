@@ -406,7 +406,7 @@ if __name__ == '__main__':
             '-vcodec', 'rawvideo', '-']
         pipe = subprocess.Popen(command, stdout = subprocess.PIPE, bufsize=10**8)
         
-        for i in range(30) #1 second
+        for i in range(30): #1 second
             # read 11*5*3 bytes (= 1 frame for the overhead pixel grid)
             raw_image = pipe.stdout.read(11*5*3)
             # transform the byte read into a numpy array
