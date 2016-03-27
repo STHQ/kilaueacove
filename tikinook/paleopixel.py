@@ -95,10 +95,17 @@ class PaleoPixel(object):
         # Trying to use the is access directly, instead of going through the
         # Python file code. Suggestion by Mike Ash. 
         spidev = os.open('/dev/spidev0.0', os.O_WRONLY)
+        #for i in range(len(self._led_data)):
+        #    os.write(spidev, chr((self._led_data[i]>>16) & 0xFF))
+        #    os.write(spidev, chr((self._led_data[i]>>8) & 0xFF))
+        #    os.write(spidev, chr(self._led_data[i] & 0xFF))
+        # Write the RGB pixels all at once
+        r, g, b = ""
         for i in range(len(self._led_data)):
-            os.write(spidev, chr((self._led_data[i]>>16) & 0xFF))
-            os.write(spidev, chr((self._led_data[i]>>8) & 0xFF))
-            os.write(spidev, chr(self._led_data[i] & 0xFF))
+            r = chr((self._led_data[i]>>16) & 0xFF)
+            g = chr((self._led_data[i]>>8) & 0xFF)
+            b = chr(self._led_data[i] & 0xFF)
+        os.write(spidev, r, g, b)
         os.close(spidev)
         time.sleep(0.0025)
 
