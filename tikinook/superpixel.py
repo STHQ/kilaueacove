@@ -202,6 +202,19 @@ class PixelGrid(object):
         """
         self.setPixelColor(x, y, Color(red, green, blue))
         
+    def setRowColor(self, row, color):
+        """Set all LEDs to the provided 24-bit color value (in RGB order).
+        """
+        for x in range(len(self._grid[row])):
+                self.setPixelColor(x, row, color)
+        
+    def setRowColorRGB(self, row, red, green, blue):
+        """Set all LEDs to the provided red, green, and blue color.
+        Each color component should be a value from 0 to 255 (where 0 is the
+        lowest intensity and 255 is the highest intensity).
+        """
+        self.setRowColor(row, Color(red, green, blue))
+        
     def setAllColor(self, color):
         """Set all LEDs to the provided 24-bit color value (in RGB order).
         """
@@ -363,8 +376,8 @@ if __name__ == '__main__':
     strand.begin()
     
     # Create a pixel grid for same
-    grid = PixelGrid(strand, (293, -9), (275, 10), (274, -10), (255, 10), (254, -11), (243, -41), (162, 41), (161, -41), (80, 41), (79, -41), (0, 39))
-    rattan_grid = PixelGrid(strand, (293, -9), (275, 10), (274, -10), (255, 10), (254, -11))
+    grid = PixelGrid(strand, (284, 10), (283, -10), (264, 10), (263, -10), (244, 10), (243, -41), (162, 41), (161, -41), (80, 41), (79, -41), (0, 39))
+    rattan_grid = PixelGrid(strand, (284, 10), (283, -10), (264, 10), (263, -10), (244, 10))
     shelf_back_grid = PixelGrid(strand, (162, 41), (80, 41), (0, 39))
     shelf_front_grid = PixelGrid(strand, (243, -41), (161, -41), (79, -41))
 
@@ -377,6 +390,7 @@ if __name__ == '__main__':
         # Theater chase animations.
         #theaterChase(strand, Color(127, 127, 127))  # White theater chase
         #theaterChase(strand, Color(127,   0,   0))  # Red theater chase
+        #theaterChase(strand, Color(  0, 127,   0))  # Green theater chase
         #theaterChase(strand, Color(  0,   0, 127))  # Blue theater chase
         # Rainbow animations.
         #rainbow(strand)
@@ -390,39 +404,22 @@ if __name__ == '__main__':
         #colorWipeGrid(grid, Color(0, 0, 255), 5)  # Blue wipe
         #colorWipeGrid(grid, Color(255, 255, 255), 5)  # White (100%) wipe
         # Use multiple grids at once, from the same strand
-        #rattan_grid.setAllColorRGB(200, 127, 0)
-        #shelf_back_grid.setAllColorRGB(0, 127, 200)
-        #shelf_front_grid.setAllColorRGB(200, 0, 0)
-        #rattan_grid.show()
-        #shelf_back_grid.show()
-        #shelf_front_grid.show()
-        #time.sleep(5)
+        rattan_grid.setAllColorRGB(250, 127, 0)
+        rattan_grid.setRowColorRGB(3, 0, 90, 75)
+        rattan_grid.setRowColorRGB(4, 0, 0, 100)
+        shelf_back_grid.setAllColorRGB(2, 5, 18)
+        shelf_front_grid.setAllColorRGB(50, 20, 10)
+        rattan_grid.show()
+        shelf_back_grid.show()
+        shelf_front_grid.show()
+        time.sleep(5)
         
-        boatGrid(rattan_grid)
+        #boatGrid(rattan_grid)
         
         # Load in the data from an MPEG-4 video
-        command = [ FFMPEG_BIN,
-            '-i', './animation/tiki-nook-pixel-out-v02-short.mov',
-            '-f', 'image2pipe',
-            '-pix_fmt', 'rgb24',
-            '-vcodec', 'rawvideo', '-']
-        pipe = subprocess.Popen(command, stdout = subprocess.PIPE, bufsize=10**8)
         
-        for i in range(30): #1 second
-            # read 11*5*3 bytes (= 1 frame for the overhead pixel grid)
-            raw_image = pipe.stdout.read(11*5*3)
-            # transform the byte read into a numpy array
-            image = numpy.fromstring(raw_image, dtype='uint8')
-            image = image.reshape((11,5,3))
-            # TODO: display the frame here
-            for x in range(11):
-                y = 0
-                for pixel in image[x]:
-                    print(x, ", ", y, ": ", pixel[0], ", ", pixel[1], ", ", pixel[2])
-                    rattan_grid.setPixelColorRGB(x, y, pixel[0], pixel[1], pixel[2])
-                    y = y + 1
-            rattan_grid.show()
-            time.sleep(0.1)
-            
-            # throw away the data in the pipe's buffer.
-            pipe.stdout.flush()
+        # TODO: Write this using OpenCV
+        
+        
+        
+        
