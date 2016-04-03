@@ -406,17 +406,11 @@ if __name__ == '__main__':
         colorWipeGrid(grid, Color(255, 255, 255), 5)  # White (100%) wipe
 
         # Use multiple grids at once, from the same strand
-<<<<<<< HEAD
         rattan_grid.setAllColorRGB(250, 127, 0)
         rattan_grid.setRowColorRGB(3, 0, 90, 75)
         rattan_grid.setRowColorRGB(4, 0, 0, 100)
-        shelf_back_grid.setAllColorRGB(2, 5, 18)
+        shelf_back_grid.setAllColorRGB(2, 4, 8)
         shelf_front_grid.setAllColorRGB(50, 20, 10)
-=======
-        rattan_grid.setAllColorRGB(200, 127, 0)
-        shelf_back_grid.setAllColorRGB(0, 127, 200)
-        shelf_front_grid.setAllColorRGB(200, 0, 0)
->>>>>>> origin/master
         rattan_grid.show()
         shelf_back_grid.show()
         shelf_front_grid.show()
@@ -425,37 +419,8 @@ if __name__ == '__main__':
         #boatGrid(rattan_grid)
         
         # Load in the data from an MPEG-4 video
-<<<<<<< HEAD
+
         
         # TODO: Write this using OpenCV
         
         
-        
-        
-=======
-        #command = [ FFMPEG_BIN,
-        #    '-i', './animation/tiki-nook-pixel-out-v02-short.mov',
-        #    '-f', 'image2pipe',
-        #    '-pix_fmt', 'rgb24',
-        #    '-vcodec', 'rawvideo', '-']
-        #pipe = subprocess.Popen(command, stdout = subprocess.PIPE, bufsize=10**8)
-        
-        #for i in range(30): #1 second
-        #    # read 11*5*3 bytes (= 1 frame for the overhead pixel grid)
-        #    raw_image = pipe.stdout.read(11*5*3)
-        #    # transform the byte read into a numpy array
-        #    image = numpy.fromstring(raw_image, dtype='uint8')
-        #    image = image.reshape((11,5,3))
-        #    # TODO: display the frame here
-        #    for x in range(11):
-        #        y = 0
-        #        for pixel in image[x]:
-        #            print(x, ", ", y, ": ", pixel[0], ", ", pixel[1], ", ", pixel[2])
-        #            rattan_grid.setPixelColorRGB(x, y, pixel[0], pixel[1], pixel[2])
-        #            y = y + 1
-        #    rattan_grid.show()
-        #    time.sleep(0.1)
-            
-            # throw away the data in the pipe's buffer.
-        #    pipe.stdout.flush()
->>>>>>> origin/master
