@@ -430,8 +430,8 @@ if __name__ == '__main__':
         # TODO: Write this using OpenCV
         # Load animation/tiki-nook-pixel-out-v02.mov
         
-        vid = cv2.VideoCapture('animation/tiki-nook-pixel-out-v02-short-11x5.mov')
-
+        vid = cv2.VideoCapture('animation/rgb-test-16x16-lossless.mov')
+        
         if (vid.isOpened()):
             print("Loaded video")
         else:
@@ -439,7 +439,7 @@ if __name__ == '__main__':
 
         frameCount = int(vid.get(cv2.CAP_PROP_FRAME_COUNT))
         fps = vid.get(cv2.CAP_PROP_FPS)
-        waitPerFrameInSeconds = 1/fps  # probably minus some overhead fudge factor
+        waitPerFrameInSeconds = 1.0 / fps  # probably minus some overhead fudge factor
 
         print("frameCount: " + str(frameCount))
         print("fps: " + str(fps))
@@ -455,10 +455,9 @@ if __name__ == '__main__':
                     for x in range(frameImg.shape[1]):
                         # print(x, y)
                         # print(frameImg[y, x])
-                        # FIXME: This does not work 
-                        rattan_grid.setPixelColorRGB(x, y, frameImg[y, x, 0], frameImg[y, x, 1], frameImg[y, x, 2])
+                        # FIXME: This is WAY too slow
+                        # print("Coordinates: " + str(x) + ", " + str(y) + "\nRGB: " + str(frameImg[y, x, 2]) + ", " + str(frameImg[y, x, 1]) + ", " + str(frameImg[y, x, 0])) 
+                        rattan_grid.setPixelColorRGB(x, y, frameImg[y, x, 2], frameImg[y, x, 1], frameImg[y, x, 0])
             rattan_grid.show()
-            time.sleep(waitPerFrameInSeconds)
-        
-        
+            # time.sleep(waitPerFrameInSeconds) # (it's already SLOOOOOOWW)
         
