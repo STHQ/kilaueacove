@@ -32,10 +32,12 @@ TIKI_NOOK_GRID = [(293, -9), (275, 10), (274, -10), (255, 10), (254, -11),
 # Index, bottom up: 0,  79, 80, 161, 162, 243, 254, 255, 274, 275, 293
 
 #####
-# 
+#
 # SuperPixel - superset pixel strand class
-# 
+#
 #####
+
+# TODO: Convert to use numpy for speed
 
 def Color(red, green, blue):
     """Convert the provided red, green, blue color to a 24-bit color value.
@@ -47,7 +49,7 @@ def Color(red, green, blue):
 class SuperPixel(object):
     def __init__(self, *strands):
         """Class to represent a superset of both neopixel and paleopixel strands
-        
+
         strands - Variable argument list of sub-strands which should make up
                   the one SuperPixel strand. The sub-strands are added to the
                   super-strand in the order the arguments are listed.
@@ -56,7 +58,7 @@ class SuperPixel(object):
         pixel_count = 0
         for strand in self._strands:
             pixel_count = pixel_count + strand.numPixels()
-        
+
         # Create an array for all of the LED color data
         self._led_data = [0] * pixel_count
 
@@ -73,7 +75,7 @@ class SuperPixel(object):
         for strand in self._strands:
             strand.begin()
         self.show()
-        
+
     def show(self):
         """Update the display with the data from the LED buffer."""
         for strand in self._strands:
@@ -84,10 +86,10 @@ class SuperPixel(object):
         """
         if (n >= len(self._led_data)):
             return  # out of bounds; throw it away
-            
+
         # SuperPixel internal representation:
         self._led_data[n] = color
-        
+
         # Now also set it in the sub-strand
         pixel_offset = 0
         pixel_max    = 0
@@ -109,7 +111,7 @@ class SuperPixel(object):
         self.setPixelColor(n, Color(red, green, blue))
 
     def getPixels(self):
-        """Return an object which allows access to the LED display data as if 
+        """Return an object which allows access to the LED display data as if
         it were a sequence of 24-bit RGB values.
         """
         return self._led_data
@@ -124,28 +126,28 @@ class SuperPixel(object):
 
 
 #####
-# 
+#
 # PixelGrid
-# 
+#
 #####
 
 class PixelGrid(object):
     def __init__(self, strand, *segments):
         """Represents a grid of pixels built from segments of LED strands.
-        
+
         strand   - The pixel strand that these segments come from. Can be of
                    class Adafruit_NeoPixel, PaleoPixel, SuperPixel or compatible
         segments - Variable argument list of segments which should make up the
                    grid. The segments are tuples of (start_pixel, length), and
                    represents one horizontal row in the grid. Each row is added
-                   from the top down to make a grid with origin 0,0 in the upper 
+                   from the top down to make a grid with origin 0,0 in the upper
                    left.
-                   
+
                    start_pixel - int, The left-most pixel in this row
                    length      - signed int, The number of pixels in this row,
                                  negative values representing a count backwards
                                  up the strand (to account for zig-zag layouts)
-        
+
         WORK IN PROGRESS
         """
         self._strand = strand
@@ -176,7 +178,7 @@ class PixelGrid(object):
         """
         self._strand.begin()
         self._strand.show()
-        
+
     def show(self):
         """Update the display with the data from the LED buffer."""
         self._strand.show()
@@ -188,40 +190,40 @@ class PixelGrid(object):
             return  # out of bounds; throw it away
         elif (x >= len(self._grid[y])):
             return  # We have to check the specific row because y isn't constant
-            
+
         # Grid internal representation:
         self._grid[y][x]["color"] = color
-        
+
         # Now also set it in the strand
         self._strand.setPixelColor(self._grid[y][x]["pixel"], self._grid[y][x]["color"])
-        
+
     def setPixelColorRGB(self, x, y, red, green, blue):
         """Set LED at position n to the provided red, green, and blue color.
         Each color component should be a value from 0 to 255 (where 0 is the
         lowest intensity and 255 is the highest intensity).
         """
         self.setPixelColor(x, y, Color(red, green, blue))
-        
+
     def setRowColor(self, row, color):
         """Set all LEDs to the provided 24-bit color value (in RGB order).
         """
         for x in range(len(self._grid[row])):
                 self.setPixelColor(x, row, color)
-        
+
     def setRowColorRGB(self, row, red, green, blue):
         """Set all LEDs to the provided red, green, and blue color.
         Each color component should be a value from 0 to 255 (where 0 is the
         lowest intensity and 255 is the highest intensity).
         """
         self.setRowColor(row, Color(red, green, blue))
-        
+
     def setAllColor(self, color):
         """Set all LEDs to the provided 24-bit color value (in RGB order).
         """
         for y in range(len(self._grid)):
             for x in range(len(self._grid[y])):
                 self.setPixelColor(x, y, color)
-        
+
     def setAllColorRGB(self, red, green, blue):
         """Set all LEDs to the provided red, green, and blue color.
         Each color component should be a value from 0 to 255 (where 0 is the
@@ -240,7 +242,7 @@ class PixelGrid(object):
         """Return the grid matrix as a 2D list.
         """
         return self._grid
-        
+
     def numRows(self):
         """Return the number of rows in the grid"""
         return len(self._grid)
@@ -255,7 +257,7 @@ class PixelGrid(object):
     def getPixelColor(self, x, y):
         """Get the 24-bit RGB color value for the LED at position x, y."""
         return self._grid[x][y]["color"]
-        
+
 
 #####
 #
@@ -267,11 +269,11 @@ class PixelGrid(object):
 
 
 #####
-# 
+#
 # Test functions which animate LEDs in various ways.
-# 
+#
 #####
-         
+
 def colorWipe(strip, color, wait_ms=50):
     """Wipe color across display a pixel at a time."""
     for i in range(strip.numPixels()):
@@ -330,11 +332,11 @@ def theaterChaseRainbow(strip, wait_ms=50):
 
 
 #####
-# 
+#
 # Grid Test functions
-# 
+#
 #####
-         
+
 def colorWipeGrid(grid, color, wait_ms=50):
     """Wipe color across display a pixel at a time."""
     theGrid = grid.getGrid()
@@ -343,7 +345,7 @@ def colorWipeGrid(grid, color, wait_ms=50):
             grid.setPixelColor(x, y, color)
             grid.show()
             time.sleep(wait_ms/1000.0)
-            
+
 def boatGrid(grid, wait_ms=5000):
     """Mark port and starboard end pixels of each row with red and green."""
     theGrid = grid.getGrid()
@@ -353,11 +355,11 @@ def boatGrid(grid, wait_ms=5000):
         grid.setPixelColorRGB(end_x, y, 0, 255, 0)
         grid.show()
     time.sleep(wait_ms/1000.0)
-     
-     
-       
-#####      
-#      
+
+
+
+#####
+#
 # Let's test it out!
 #
 #####
@@ -367,14 +369,14 @@ if __name__ == '__main__':
     # Create pixel strands with appropriate configuration.
     strand1 = neopixel.Adafruit_NeoPixel(NEOPIXEL_COUNT, NEOPIXEL_PIN)
     strand2 = paleopixel.PaleoPixel(PALEOPIXEL_COUNT)
-    
+
     # Combine them into one SuperPixel strand
     strand = SuperPixel(strand1, strand2)
-    
-    # Intialize the SuperPixel strand (must be called once, before other 
+
+    # Intialize the SuperPixel strand (must be called once, before other
     # functions, if the SuperPixel strand contains any NeoPixel sub-strands)
     strand.begin()
-    
+
     # Create a pixel grid for same
     grid = PixelGrid(strand, (284, 10), (283, -10), (264, 10), (263, -10), (244, 10), (243, -41), (162, 41), (161, -41), (80, 41), (79, -41), (0, 39))
     rattan_grid = PixelGrid(strand, (284, 10), (283, -10), (264, 10), (263, -10), (244, 10))
@@ -396,7 +398,7 @@ if __name__ == '__main__':
         #rainbow(strand)
         #rainbowCycle(strand)
         #theaterChaseRainbow(strand)
-        
+
         # Grid animations
         boatGrid(grid)                         # port-starboard markers for each row
         colorWipeGrid(grid, Color(127, 127, 127), 5)  # White (50%) wipe
@@ -415,12 +417,10 @@ if __name__ == '__main__':
         shelf_back_grid.show()
         shelf_front_grid.show()
         time.sleep(5)
-        
+
         #boatGrid(rattan_grid)
-        
+
         # Load in the data from an MPEG-4 video
 
-        
+
         # TODO: Write this using OpenCV
-        
-        
