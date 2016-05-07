@@ -103,13 +103,16 @@ class PaleoPixel(object):
         #    os.write(spidev, chr(self._led_data[i] & 0xFF))
         # Write the RGB pixels all at once
         r, g, b = ""
+        # FIXME: Why am I converting to bits and then back?
         for i in range(len(self._led_data)):
             r = chr((self._led_data[i]>>16) & 0xFF)
             g = chr((self._led_data[i]>>8) & 0xFF)
             b = chr(self._led_data[i] & 0xFF)
         os.write(spidev, r, g, b)
         os.close(spidev)
-        time.sleep(0.0025)
+        # Requires 500us to latch data, as per data sheet:
+        # https://cdn-shop.adafruit.com/datasheets/WS2801.pdf
+        time.sleep(.0005)
 
 
     def setPixelColor(self, n, color):
