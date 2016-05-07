@@ -102,8 +102,9 @@ class PaleoPixel(object):
         #    os.write(spidev, chr((self._led_data[i]>>8) & 0xFF))
         #    os.write(spidev, chr(self._led_data[i] & 0xFF))
         # Write the RGB pixels all at once
+        # FIXME: How did this ever work?
         r, g, b = ""
-        # FIXME: Why am I converting to bits and then back?
+        # TODO: Why am I converting to bits and then back?
         for i in range(len(self._led_data)):
             r = chr((self._led_data[i]>>16) & 0xFF)
             g = chr((self._led_data[i]>>8) & 0xFF)
