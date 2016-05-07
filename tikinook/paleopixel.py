@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 """
-Adafruit NeoPixel library port to control the older WS2801 pixels from 
+Adafruit NeoPixel library port to control the older WS2801 pixels from
   Raspberry Pi hardware SPI. Includes Adafruit “strandtest”-style functions
   and performs a self-test if run as main.
 
@@ -39,11 +39,11 @@ of the license.
 
 Version History:
 
-- 1.0.1 - 2016-02-29 - Changed license from CC-BY-4.0 to MIT, due to 
-                       recommendation by Creative Commons not to apply their 
+- 1.0.1 - 2016-02-29 - Changed license from CC-BY-4.0 to MIT, due to
+                       recommendation by Creative Commons not to apply their
                        licenses to software. See CC's FAQ for details:
                        https://creativecommons.org/faq/#can-i-apply-a-creative-commons-license-to-software
-- 1.0   - 2016-02-27 - Started development and complete rewrite, all in the 
+- 1.0   - 2016-02-27 - Started development and complete rewrite, all in the
                        same day!
 
 """
@@ -56,10 +56,12 @@ import RPi.GPIO as GPIO, time, os
 LED_COUNT      = 50      # Number of LED pixels.
 
 #####
-# 
+#
 # PaleoPixel - NeoPixel library port for WS2801 control over RPi hardware SPI
-# 
+#
 #####
+
+# TODO: Rewrite with numpy for better speed.
 
 def Color(red, green, blue):
     """Convert the provided red, green, blue color to a 24-bit color value.
@@ -71,7 +73,7 @@ def Color(red, green, blue):
 class PaleoPixel(object):
     def __init__(self, num):
         """Class to represent a WS2801 LED display.
-        
+
         num - number of pixels in the display.
         """
         # Create an array for the LED data
@@ -89,11 +91,11 @@ class PaleoPixel(object):
         for i in range(len(self._led_data)):
             self._led_data[i] = 0
         self.show()
-        
+
     def show(self):
         """Update the display with the data from the LED buffer."""
         # Trying to use the is access directly, instead of going through the
-        # Python file code. Suggestion by Mike Ash. 
+        # Python file code. Suggestion by Mike Ash.
         spidev = os.open('/dev/spidev0.0', os.O_WRONLY)
         #for i in range(len(self._led_data)):
         #    os.write(spidev, chr((self._led_data[i]>>16) & 0xFF))
@@ -125,7 +127,7 @@ class PaleoPixel(object):
         self.setPixelColor(n, Color(red, green, blue))
 
     def getPixels(self):
-        """Return an object which allows access to the LED display data as if 
+        """Return an object which allows access to the LED display data as if
         it were a sequence of 24-bit RGB values.
         """
         return self._led_data
@@ -139,13 +141,13 @@ class PaleoPixel(object):
         return self._led_data[n]
 
 
-        
+
 #####
-# 
+#
 # Test functions which animate LEDs in various ways.
-# 
+#
 #####
-         
+
 def colorWipe(strip, color, wait_ms=50):
     """Wipe color across display a pixel at a time."""
     for i in range(strip.numPixels()):
@@ -201,11 +203,11 @@ def theaterChaseRainbow(strip, wait_ms=50):
             time.sleep(wait_ms/1000.0)
             for i in range(0, strip.numPixels(), 3):
                 strip.setPixelColor(i+q, 0)
-     
-     
-       
-#####      
-#      
+
+
+
+#####
+#
 # Let's test it out!
 #
 #####
