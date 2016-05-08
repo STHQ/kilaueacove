@@ -50,7 +50,7 @@ Version History:
 
 """
 
-
+import numpy
 import RPi.GPIO as GPIO, time, os
 
 
@@ -79,7 +79,10 @@ class PaleoPixel(object):
         num - number of pixels in the display.
         """
         # Create an array for the LED data
-        self._led_data = [0] * num
+        # OLD
+        # self._led_data = [0] * num
+        # NEW: Create a 2D numpyarray, LED count by 3 (RGB), type int
+        self._led_data = numpy.zeros((num, 3), dtype=numpy.int)
 
     def __del__(self):
         # Clean up memory used by the library when not needed anymore.
@@ -90,8 +93,11 @@ class PaleoPixel(object):
         """Initialize _led_data to zeroes.
         Not necessary, since we do this in __init__, but handy.
         """
-        for i in range(len(self._led_data)):
-            self._led_data[i] = 0
+        # OLD
+        # for i in range(len(self._led_data)):
+        #     self._led_data[i] = 0
+        # New numpy, clip all values to zero
+        numpy.clip(self._led_data, 0, 0)
         self.show()
 
     def show(self):
@@ -105,15 +111,20 @@ class PaleoPixel(object):
         #    os.write(spidev, chr(self._led_data[i] & 0xFF))
         # Write the RGB pixels all at once
         # FIXME: How did this ever work?
-        r, g, b = ""
+        # r, g, b = ""
         # TODO: Why am I converting to bits and then back?
-        for i in range(len(self._led_data)):
-            r = chr((self._led_data[i]>>16) & 0xFF)
-            g = chr((self._led_data[i]>>8) & 0xFF)
-            b = chr(self._led_data[i] & 0xFF)
-        os.write(spidev, r, g, b)
+        # OLD
+        # for i in range(len(self._led_data)):
+        #     r = chr((self._led_data[i]>>16) & 0xFF)
+        #     g = chr((self._led_data[i]>>8) & 0xFF)
+        #     b = chr(self._led_data[i] & 0xFF)
+        # NEW - Iterate through numpy
+        for pixel in numpy.nditer(self._led_data, flags=['external_loop'], order='F'):
+            os.write(spidev, chr(pixel[0] & 0xFF))
+            os.write(spidev, chr(pixel[1] & 0xFF))
+            os.write(spidev, chr(pixel[2] & 0xFF))
         os.close(spidev)
-        # Requires 500us to latch data, as per data sheet:
+        # Requires 500us (.0005 seconds) to latch data, as per data sheet:
         # https://cdn-shop.adafruit.com/datasheets/WS2801.pdf
         time.sleep(.0005)
 
