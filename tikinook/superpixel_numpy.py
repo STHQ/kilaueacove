@@ -324,7 +324,7 @@ def rainbow(strip, wait_ms=20, iterations=1):
     """Draw rainbow that fades across all pixels at once."""
     for j in range(256*iterations):
         for i in range(strip.numPixels()):
-            strip.setPixelColor(i, wheel(i+j))
+            strip.setPixelColor(i, wheel((i+j) & 255)) # FIXME
         strip.show()
         time.sleep(wait_ms/1000.0)
 
@@ -332,7 +332,7 @@ def rainbowCycle(strip, wait_ms=20, iterations=1):
     """Draw rainbow that uniformly distributes itself across all pixels."""
     for j in range(256*iterations):
         for i in range(strip.numPixels()):
-            strip.setPixelColor(i, wheel((i * 256 / strip.numPixels()) + j))
+            strip.setPixelColor(i, wheel(((i * 256 / strip.numPixels()) + j) & 255))
         strip.show()
         time.sleep(wait_ms/1000.0)
 
@@ -341,7 +341,7 @@ def theaterChaseRainbow(strip, wait_ms=50):
     for j in range(256):
         for q in range(3):
             for i in range(0, strip.numPixels(), 3):
-                strip.setPixelColor(i+q, wheel(i+j))
+                strip.setPixelColor(i+q, wheel((i+j) % 255)) #FIXME
             strip.show()
             time.sleep(wait_ms/1000.0)
             for i in range(0, strip.numPixels(), 3):
