@@ -66,11 +66,17 @@ LED_COUNT      = 50      # Number of LED pixels.
 # TODO: Rewrite with numpy for better speed.
 
 def Color(red, green, blue):
-    """Convert the provided red, green, blue color to a 24-bit color value.
+    """Return the provided red, green, blue colors as a numpy array.
     Each color component should be a value 0-255 where 0 is the lowest intensity
     and 255 is the highest intensity.
     """
-    return ((red & 0xFF) << 16) | ((green & 0xFF) << 8) | (blue & 0xFF)
+    # OLD
+    # return ((red & 0xFF) << 16) | ((green & 0xFF) << 8) | (blue & 0xFF)
+    # NEW numpy RGB
+    # we're still doing "& 0xFF" to make sure we're not exceeding max of 255
+    rgb = numpy.array([red & 0xFF, green & 0xFF, blue & 0xFF])
+    # print("rgb: ", rgb)
+    return rgb
 
 class PaleoPixel(object):
     def __init__(self, num):
@@ -96,12 +102,13 @@ class PaleoPixel(object):
         # OLD
         # for i in range(len(self._led_data)):
         #     self._led_data[i] = 0
-        # New numpy, clip all values to zero
-        numpy.clip(self._led_data, 0, 0)
+        # NEW: Clip all values to zero
+        self._led_data = numpy.clip(self._led_data, 0, 0)
         self.show()
 
     def show(self):
         """Update the display with the data from the LED buffer."""
+        # print("_led_data: ", self._led_data)
         # Trying to use the is access directly, instead of going through the
         # Python file code. Suggestion by Mike Ash.
         spidev = os.open('/dev/spidev0.0', os.O_WRONLY)
@@ -119,10 +126,10 @@ class PaleoPixel(object):
         #     g = chr((self._led_data[i]>>8) & 0xFF)
         #     b = chr(self._led_data[i] & 0xFF)
         # NEW - Iterate through numpy
-        for pixel in numpy.nditer(self._led_data, flags=['external_loop'], order='F'):
-            os.write(spidev, chr(pixel[0] & 0xFF))
-            os.write(spidev, chr(pixel[1] & 0xFF))
-            os.write(spidev, chr(pixel[2] & 0xFF))
+        for pixel in self._led_data:
+            os.write(spidev, chr(pixel[0] & 0xFF))  #R
+            os.write(spidev, chr(pixel[1] & 0xFF))  #G
+            os.write(spidev, chr(pixel[2] & 0xFF))  #B
         os.close(spidev)
         # Requires 500us (.0005 seconds) to latch data, as per data sheet:
         # https://cdn-shop.adafruit.com/datasheets/WS2801.pdf
@@ -130,8 +137,11 @@ class PaleoPixel(object):
 
 
     def setPixelColor(self, n, color):
-        """Set LED at position n to the provided 24-bit color value (in RGB order).
+        """Set LED at position n to the provided numpy array (in RGB order).
+        n: int
+        color: numpy.array
         """
+        # print("len: ", len(self._led_data))
         if (n >= len(self._led_data)):
             return
         self._led_data[n] = color
@@ -144,8 +154,8 @@ class PaleoPixel(object):
         self.setPixelColor(n, Color(red, green, blue))
 
     def getPixels(self):
-        """Return an object which allows access to the LED display data as if
-        it were a sequence of 24-bit RGB values.
+        """Return a numpy 2D array object which allows access to the LED data
+        as [pixel][R, G, B]
         """
         return self._led_data
 
@@ -154,7 +164,9 @@ class PaleoPixel(object):
         return len(self._led_data)
 
     def getPixelColor(self, n):
-        """Get the 24-bit RGB color value for the LED at position n."""
+        """Get a numpy array with [R, G, B] color values for the LED pixel
+        at position n.
+        """
         return self._led_data[n]
 
 
