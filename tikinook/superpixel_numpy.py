@@ -168,7 +168,9 @@ class PixelGrid(object):
 
         WORK IN PROGRESS
         """
-        # TODO: Convert to numpy nD array
+        # TODO: Convert to numpy 3D array
+        # TODO: Would this be more ifficient if I grabbed the strand pixel as
+        #       an object, and there was no internal grid representation?
         self._strand = strand
         # Find maximum row width
         max_width = 0
@@ -224,10 +226,10 @@ class PixelGrid(object):
             return  # We have to check the specific row because y isn't constant
 
         # Grid internal representation:
-        self._grid[y][x]["color"] = color
+        self._grid[y][x][1], self._grid[y][x][2], self._grid[y][x][3] = color
 
         # Now also set it in the strand
-        self._strand.setPixelColor(self._grid[y][x]["pixel"], self._grid[y][x]["color"])
+        self._strand.setPixelColorRGB(self._grid[y][x][0], self._grid[y][x][1], self._grid[y][x][2], self._grid[y][x][3])
 
     def setPixelColorRGB(self, x, y, red, green, blue):
         """Set LED at position n to the provided red, green, and blue color.
@@ -237,8 +239,9 @@ class PixelGrid(object):
         self.setPixelColor(x, y, Color(red, green, blue))
 
     def setRowColor(self, row, color):
-        """Set all LEDs to the provided 24-bit color value (in RGB order).
+        """Set all row LEDs to the provided color values as [R, G, B]
         """
+        # TODO: Seems like there may be a more efficient way to do this in numpy
         for x in range(len(self._grid[row])):
                 self.setPixelColor(x, row, color)
 
@@ -250,8 +253,9 @@ class PixelGrid(object):
         self.setRowColor(row, Color(red, green, blue))
 
     def setAllColor(self, color):
-        """Set all LEDs to the provided 24-bit color value (in RGB order).
+        """Set all LEDs to the provided color values as [R, G, B]
         """
+        # TODO: Seems like there may be a more efficient way to do this in numpy
         for y in range(len(self._grid)):
             for x in range(len(self._grid[y])):
                 self.setPixelColor(x, y, color)
@@ -264,14 +268,14 @@ class PixelGrid(object):
         self.setAllColor(Color(red, green, blue))
 
     def getPixels(self):
-        """Return the grid matrix as a 2D list.
+        """Return the grid matrix as a 3D list.
         WARNING: Return value is NOT COMPATIBLE with what you would expect from
         a NeoPixel or PaleoPixel instance.
         """
         return self.getGrid()
 
     def getGrid(self):
-        """Return the grid matrix as a 2D list.
+        """Return the grid matrix as a 3D list.
         """
         return self._grid
 
@@ -287,8 +291,11 @@ class PixelGrid(object):
         return pixel_count
 
     def getPixelColor(self, x, y):
-        """Get the 24-bit RGB color value for the LED at position x, y."""
-        return self._grid[x][y]["color"]
+        """Get the [R, G, B] color value array for the LED at position x, y."""
+        red = self._grid[y][x][1]
+        green = self._grid[y][x][2]
+        blue = self._grid[y][x][3]
+        return [red, green, blue]
 
 
 #####
