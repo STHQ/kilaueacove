@@ -408,18 +408,18 @@ if __name__ == '__main__':
     print('Press Ctrl-C to quit.')
     while True:
         # Color wipe animations.
-        colorWipe(strand, Color(255, 0, 0), 0)  # Red wipe
-        colorWipe(strand, Color(0, 255, 0), 0)  # Green wipe
-        colorWipe(strand, Color(0, 0, 255), 0)  # Blue wipe
+        #colorWipe(strand, Color(255, 0, 0), 0)  # Red wipe
+        #colorWipe(strand, Color(0, 255, 0), 0)  # Green wipe
+        #colorWipe(strand, Color(0, 0, 255), 0)  # Blue wipe
         # Theater chase animations.
-        theaterChase(strand, Color(127, 127, 127))  # White theater chase
-        theaterChase(strand, Color(127,   0,   0))  # Red theater chase
-        theaterChase(strand, Color(  0, 127,   0))  # Green theater chase
-        theaterChase(strand, Color(  0,   0, 127))  # Blue theater chase
+        #theaterChase(strand, Color(127, 127, 127))  # White theater chase
+        #theaterChase(strand, Color(127,   0,   0))  # Red theater chase
+        #theaterChase(strand, Color(  0, 127,   0))  # Green theater chase
+        #theaterChase(strand, Color(  0,   0, 127))  # Blue theater chase
         # Rainbow animations.
-        rainbow(strand)
-        rainbowCycle(strand)
-        theaterChaseRainbow(strand)
+        #rainbow(strand)
+        #rainbowCycle(strand)
+        #theaterChaseRainbow(strand)
 
         # Grid animations
         boatGrid(grid)                         # port-starboard markers for each row
