@@ -328,7 +328,7 @@ def rainbow(strip, wait_ms=20, iterations=1):
         strip.show()
         time.sleep(wait_ms/1000.0)
 
-def rainbowCycle(strip, wait_ms=20, iterations=1):
+def rainbowCycle(strip, wait_ms=20, iterations=2):
     """Draw rainbow that uniformly distributes itself across all pixels."""
     for j in range(256*iterations):
         for i in range(strip.numPixels()):
@@ -408,9 +408,9 @@ if __name__ == '__main__':
     print('Press Ctrl-C to quit.')
     while True:
         # Color wipe animations.
-        colorWipe(strand, Color(255, 0, 0))  # Red wipe
-        colorWipe(strand, Color(0, 255, 0))  # Green wipe
-        colorWipe(strand, Color(0, 0, 255))  # Blue wipe
+        colorWipe(strand, Color(255, 0, 0), 0)  # Red wipe
+        colorWipe(strand, Color(0, 255, 0), 0)  # Green wipe
+        colorWipe(strand, Color(0, 0, 255), 0)  # Blue wipe
         # Theater chase animations.
         theaterChase(strand, Color(127, 127, 127))  # White theater chase
         theaterChase(strand, Color(127,   0,   0))  # Red theater chase
