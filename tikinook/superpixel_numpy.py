@@ -487,11 +487,16 @@ if __name__ == '__main__':
         print("frameCount: " + str(frameCount))
         print("fps: " + str(fps))
 
+        # Let's LOAD the data in first, and *THEN* display it.
+        print("Loading video_data")
+        video_data = numpy.zeros((frameCount, rattan_grid.shape[0], rattan_grid.shape[1], 3), dtype=numpy.int)
+
+        frame_increment = 0
         for frame in range(frameCount):
             # Grabbing values from the frame tuple
             # 'ret' is a boolean for whether there's a frame at this index
             ret, frameImg = vid.read()
-            # print("frame: " + str(frame))
+            # print("frameImg: ", frameImg)
             if(ret):
                 # print("shape: " + str(frameImg.shape))
                 for y in range(frameImg.shape[0]):
@@ -500,6 +505,15 @@ if __name__ == '__main__':
                         # print(frameImg[y, x])
                         # FIXME: This is WAY too slow
                         # print("Coordinates: " + str(x) + ", " + str(y) + "\nRGB: " + str(frameImg[y, x, 2]) + ", " + str(frameImg[y, x, 1]) + ", " + str(frameImg[y, x, 0]))
-                        rattan_grid.setPixelColorRGB(x, y, frameImg[y, x, 2], frameImg[y, x, 1], frameImg[y, x, 0])
-            rattan_grid.show()
+                        video_data[frame_increment][y][x] = [frameImg[y, x, 2], frameImg[y, x, 1], frameImg[y, x, 0]]
+            frame_increment = frame_increment + 1
+            # rattan_grid.show()
             # time.sleep(waitPerFrameInSeconds) # (it's already SLOOOOOOWW)
+
+        # Time to DISPLAY the video data
+        print ("Displaying video_data")
+        for frame in video_data:
+            for y in boatGrid:
+                for x in y:
+                    rattan_grid.setPixelColor(x, y, video_data[y][x])
+            rattan_grid.show()
