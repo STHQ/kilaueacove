@@ -418,9 +418,9 @@ if __name__ == '__main__':
 
     # Create a pixel grid for same
     grid = PixelGrid(strand, (284, 10), (283, -10), (264, 10), (263, -10), (244, 10), (243, -41), (162, 41), (161, -41), (80, 41), (79, -41), (0, 39))
-    rattan_grid = PixelGrid(strand, (284, 10), (283, -10), (264, 10), (263, -10), (244, 10))
-    shelf_back_grid = PixelGrid(strand, (162, 41), (80, 41), (0, 39))
-    shelf_front_grid = PixelGrid(strand, (243, -41), (161, -41), (79, -41))
+    #rattan_grid = PixelGrid(strand, (284, 10), (283, -10), (264, 10), (263, -10), (244, 10))
+    #shelf_back_grid = PixelGrid(strand, (162, 41), (80, 41), (0, 39))
+    #shelf_front_grid = PixelGrid(strand, (243, -41), (161, -41), (79, -41))
 
 
 
@@ -445,11 +445,11 @@ if __name__ == '__main__':
 
         # Grid animations
         boatGrid(grid)                         # port-starboard markers for each row
-        #colorWipeGrid(grid, Color(127, 127, 127), 5)  # White (50%) wipe
-        #colorWipeGrid(grid, Color(255, 0, 0), 5)  # Red wipe
-        #colorWipeGrid(grid, Color(0, 255, 0), 5)  # Green wipe
-        #colorWipeGrid(grid, Color(0, 0, 255), 5)  # Blue wipe
-        #colorWipeGrid(grid, Color(255, 255, 255), 5)  # White (100%) wipe
+        colorWipeGrid(grid, Color(127, 127, 127), 5)  # White (50%) wipe
+        colorWipeGrid(grid, Color(255, 0, 0), 5)  # Red wipe
+        colorWipeGrid(grid, Color(0, 255, 0), 5)  # Green wipe
+        colorWipeGrid(grid, Color(0, 0, 255), 5)  # Blue wipe
+        colorWipeGrid(grid, Color(255, 255, 255), 5)  # White (100%) wipe
 
         # Use multiple grids at once, from the same strand
         #rattan_grid.setAllColorRGB(250, 127, 0)
