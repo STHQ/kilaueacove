@@ -421,9 +421,9 @@ if __name__ == '__main__':
 
     # Create a pixel grid for same
     grid = PixelGrid(strand, (284, 10), (283, -10), (264, 10), (263, -10), (244, 10), (243, -41), (162, 41), (161, -41), (80, 41), (79, -41), (0, 39))
-    #rattan_grid = PixelGrid(strand, (284, 10), (283, -10), (264, 10), (263, -10), (244, 10))
-    #shelf_back_grid = PixelGrid(strand, (162, 41), (80, 41), (0, 39))
-    #shelf_front_grid = PixelGrid(strand, (243, -41), (161, -41), (79, -41))
+    rattan_grid = PixelGrid(strand, (284, 10), (283, -10), (264, 10), (263, -10), (244, 10))
+    shelf_back_grid = PixelGrid(strand, (162, 41), (80, 41), (0, 39))
+    shelf_front_grid = PixelGrid(strand, (243, -41), (161, -41), (79, -41))
 
 
 
@@ -447,30 +447,30 @@ if __name__ == '__main__':
         #theaterChaseRainbow(strand)
 
         # Grid animations
-        boatGrid(grid)                         # port-starboard markers for each row
-        colorWipeGrid(grid, Color(127, 127, 127), 5)  # White (50%) wipe
-        colorWipeGrid(grid, Color(255, 0, 0), 5)  # Red wipe
-        colorWipeGrid(grid, Color(0, 255, 0), 5)  # Green wipe
-        colorWipeGrid(grid, Color(0, 0, 255), 5)  # Blue wipe
-        colorWipeGrid(grid, Color(255, 255, 255), 5)  # White (100%) wipe
+        #boatGrid(grid)                         # port-starboard markers for each row
+        #colorWipeGrid(grid, Color(127, 127, 127), 5)  # White (50%) wipe
+        #colorWipeGrid(grid, Color(255, 0, 0), 5)  # Red wipe
+        #colorWipeGrid(grid, Color(0, 255, 0), 5)  # Green wipe
+        #colorWipeGrid(grid, Color(0, 0, 255), 5)  # Blue wipe
+        #colorWipeGrid(grid, Color(255, 255, 255), 5)  # White (100%) wipe
 
         # Use multiple grids at once, from the same strand
-        #rattan_grid.setAllColorRGB(250, 127, 0)
-        #rattan_grid.setRowColorRGB(3, 0, 90, 75)
-        #rattan_grid.setRowColorRGB(4, 0, 0, 100)
-        #shelf_back_grid.setAllColorRGB(2, 4, 8)
-        #shelf_front_grid.setAllColorRGB(50, 20, 10)
-        #rattan_grid.show()
-        #shelf_back_grid.show()
-        #shelf_front_grid.show()
-        #time.sleep(5)
+        rattan_grid.setAllColorRGB(250, 127, 0)
+        rattan_grid.setRowColorRGB(3, 0, 90, 75)
+        rattan_grid.setRowColorRGB(4, 0, 0, 100)
+        shelf_back_grid.setAllColorRGB(2, 4, 8)
+        shelf_front_grid.setAllColorRGB(50, 20, 10)
+        rattan_grid.show()
+        shelf_back_grid.show()
+        shelf_front_grid.show()
+        time.sleep(5)
 
-        #boatGrid(rattan_grid)
+        boatGrid(rattan_grid)
 
         # Load in the data from an MPEG-4 video
 
 
-        # TODO: Write this using OpenCV
+        # Now with OpenCV!
         # Load animation/tiki-nook-pixel-out-v02.mov
 
         vid = cv2.VideoCapture('animation/rgb-test-16x16-lossless.mov')
