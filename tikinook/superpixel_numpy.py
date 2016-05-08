@@ -200,6 +200,9 @@ class PixelGrid(object):
             row = row + 1
         # print("_grid: ", self._grid)
 
+        # TODO: trim the rows that are smaller than max_width
+        # How do we do this without accidentally trimming the 0th pixel?
+
     def __del__(self):
         # Clean up memory used by the library when not needed anymore.
         if self._strand is not None:
