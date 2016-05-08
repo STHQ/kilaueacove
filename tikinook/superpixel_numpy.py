@@ -286,6 +286,11 @@ class PixelGrid(object):
         """Return the number of rows in the grid"""
         return len(self._grid)
 
+    def shape(self):
+        """Return the shape of the grid"""
+        # print("shape:", self._grid.shape)
+        return self._grid.shape
+
     def numPixels(self):
         """Return the number of pixels in the display."""
         pixel_count = 0
@@ -489,7 +494,9 @@ if __name__ == '__main__':
 
         # Let's LOAD the data in first, and *THEN* display it.
         print("Loading video_data")
-        video_data = numpy.zeros((frameCount, rattan_grid.shape[0], rattan_grid.shape[1], 3), dtype=numpy.int)
+        grid_shape = rattan_grid.shape()
+        video_data = numpy.zeros((frameCount, grid_shape[0], grid_shape[1], 3), dtype=numpy.int)
+        # print("video_data.shape", video_data.shape)
 
         frame_increment = 0
         for frame in range(frameCount):
@@ -499,9 +506,9 @@ if __name__ == '__main__':
             # print("frameImg: ", frameImg)
             if(ret):
                 # print("shape: " + str(frameImg.shape))
-                for y in range(frameImg.shape[0]):
-                    for x in range(frameImg.shape[1]):
-                        # print(x, y)
+                for y in range(video_data.shape[1]):
+                    for x in range(video_data.shape[2]):
+                        # print("coordinates", x, y)
                         # print(frameImg[y, x])
                         # FIXME: This is WAY too slow
                         # print("Coordinates: " + str(x) + ", " + str(y) + "\nRGB: " + str(frameImg[y, x, 2]) + ", " + str(frameImg[y, x, 1]) + ", " + str(frameImg[y, x, 0]))
@@ -513,7 +520,7 @@ if __name__ == '__main__':
         # Time to DISPLAY the video data
         print ("Displaying video_data")
         for frame in video_data:
-            for y in boatGrid:
-                for x in y:
-                    rattan_grid.setPixelColor(x, y, video_data[y][x])
+            for y in range(frame.shape[0]):
+                for x in range(frame.shape[1]):
+                    rattan_grid.setPixelColor(x, y, frame[y][x])
             rattan_grid.show()
