@@ -63,31 +63,24 @@ LED_COUNT      = 50      # Number of LED pixels.
 #
 #####
 
-# TODO: Rewrite with numpy for better speed.
-
 def Color(red, green, blue):
     """Return the provided red, green, blue colors as a numpy array.
     Each color component should be a value 0-255 where 0 is the lowest intensity
     and 255 is the highest intensity.
+    red, green, blue: int, 0-255
+    return: numpy.array
     """
-    # OLD
-    # return ((red & 0xFF) << 16) | ((green & 0xFF) << 8) | (blue & 0xFF)
-    # NEW numpy RGB
-    # we're still doing "& 0xFF" to make sure we're not exceeding max of 255
+    # "& 0xFF" is to make sure we're not exceeding max setting of 255
     rgb = numpy.array([red & 0xFF, green & 0xFF, blue & 0xFF])
-    # print("rgb: ", rgb)
     return rgb
 
 class PaleoPixel(object):
     def __init__(self, num):
         """Class to represent a WS2801 LED display.
 
-        num - number of pixels in the display.
+        num: int, number of pixels in the display strand.
         """
-        # Create an array for the LED data
-        # OLD
-        # self._led_data = [0] * num
-        # NEW: Create a 2D numpyarray, LED count by 3 (RGB), type int
+        # Create a 2D numpyarray, LED count by 3 (RGB), type int
         self._led_data = numpy.zeros((num, 3), dtype=numpy.int)
 
     def __del__(self):
@@ -96,36 +89,20 @@ class PaleoPixel(object):
             self._led_data = None
 
     def begin(self):
-        """Initialize _led_data to zeroes.
+        """Initialize _led_data to zeroes, and show strand.
         Not necessary, since we do this in __init__, but handy.
+        Mostly included for NeoPixel compatibility.
         """
-        # OLD
-        # for i in range(len(self._led_data)):
-        #     self._led_data[i] = 0
-        # NEW: Clip all values to zero
+        # Clip all values to zero
         self._led_data = numpy.clip(self._led_data, 0, 0)
         self.show()
 
     def show(self):
         """Update the display with the data from the LED buffer."""
-        # print("_led_data: ", self._led_data)
-        # Trying to use the is access directly, instead of going through the
-        # Python file code. Suggestion by Mike Ash.
+        # Trying to use the spidev access directly through the os, instead of
+        # going through the Python file-writing code. Suggestion by Mike Ash.
         spidev = os.open('/dev/spidev0.0', os.O_WRONLY)
-        #for i in range(len(self._led_data)):
-        #    os.write(spidev, chr((self._led_data[i]>>16) & 0xFF))
-        #    os.write(spidev, chr((self._led_data[i]>>8) & 0xFF))
-        #    os.write(spidev, chr(self._led_data[i] & 0xFF))
-        # Write the RGB pixels all at once
-        # FIXME: How did this ever work?
-        # r, g, b = ""
-        # TODO: Why am I converting to bits and then back?
-        # OLD
-        # for i in range(len(self._led_data)):
-        #     r = chr((self._led_data[i]>>16) & 0xFF)
-        #     g = chr((self._led_data[i]>>8) & 0xFF)
-        #     b = chr(self._led_data[i] & 0xFF)
-        # NEW - Iterate through numpy
+        # Iterate through numpy array, write R, G, B for each pixel
         for pixel in self._led_data:
             os.write(spidev, chr(pixel[0] & 0xFF))  #R
             os.write(spidev, chr(pixel[1] & 0xFF))  #G
@@ -139,9 +116,10 @@ class PaleoPixel(object):
     def setPixelColor(self, n, color):
         """Set LED at position n to the provided numpy array (in RGB order).
         n: int
-        color: numpy.array
+        color: numpy.array, as [R, G, B]
         """
-        # print("len: ", len(self._led_data))
+        # Make sure that position n exists in our strand.
+        # If not, throw it away.
         if (n >= len(self._led_data)):
             return
         self._led_data[n] = color
@@ -150,6 +128,8 @@ class PaleoPixel(object):
         """Set LED at position n to the provided red, green, and blue color.
         Each color component should be a value from 0 to 255 (where 0 is the
         lowest intensity and 255 is the highest intensity).
+        n: int, pixel position
+        red, green, blue: int, 0-255
         """
         self.setPixelColor(n, Color(red, green, blue))
 
@@ -245,7 +225,7 @@ def theaterChaseRainbow(strip, wait_ms=50):
 if __name__ == '__main__':
     # Create PaleoPixel object with appropriate number of LEDs.
     strip = PaleoPixel(LED_COUNT)
-    # Reset the library (does not actually need to be called before
+    # Reset the strand (does not actually need to be called before
     # other functions, but we're testing here).
     strip.begin()
 
