@@ -178,12 +178,12 @@ class PixelGrid(object):
                 max_width = row_width
         # Create an empty grid array
         self._grid = numpy.zeros(shape=(len(segments), max_width, 4), dtype=numpy.int)
-        print("_grid: ", self._grid.shape)
+        # print("_grid: ", self._grid.shape)
 
         # Load up the grid with pixel location data
         row = 0
         for segment in segments:
-            print("segment: ", segment)
+            # print("segment: ", segment)
             # Create map
             start_pixel = segment[0]
             stop_pixel = segment[0] + segment[1]
@@ -193,12 +193,10 @@ class PixelGrid(object):
                 step = 1
             column = 0
             for pixel in range(start_pixel, stop_pixel, step):
-                # OLD: row.append({'pixel': pixel, "color": 0})
                 self._grid[row][column] = [pixel, 0, 0 ,0]
                 column = column + 1
-            self._grid.append(row)
             row = row + 1
-        print("_grid: ", self._grid)
+        # print("_grid: ", self._grid)
 
     def __del__(self):
         # Clean up memory used by the library when not needed anymore.
