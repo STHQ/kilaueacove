@@ -164,11 +164,24 @@ class PixelGrid(object):
                                  negative values representing a count backwards
                                  up the strand (to account for zig-zag layouts)
 
+        Internal representation: [row][column][strand_pixel, R, G, B]
+
         WORK IN PROGRESS
         """
         # TODO: Convert to numpy nD array
         self._strand = strand
-        self._grid = []
+        # Find maximum row width
+        max_width = 0
+        for segment in segments:
+            row_width = abs(segment[1])
+            if row_width > max_width:
+                max_width = row_width
+        # Create an empty grid array
+        self._grid = numpy.zeros(shape=(len(segments), max_width, 4), dtype=numpy.int)
+        print("_grid: ", self._grid.shape)
+
+        # Load up the grid with pixel location data
+        row = 0
         for segment in segments:
             print("segment: ", segment)
             # Create map
@@ -178,10 +191,14 @@ class PixelGrid(object):
                 step = -1
             else:
                 step = 1
-            row = []
+            column = 0
             for pixel in range(start_pixel, stop_pixel, step):
-                row.append({'pixel': pixel, "color": 0})
+                # OLD: row.append({'pixel': pixel, "color": 0})
+                self._grid[row][column] = [pixel, 0, 0 ,0]
+                column = column + 1
             self._grid.append(row)
+            row = row + 1
+        print("_grid: ", self._grid)
 
     def __del__(self):
         # Clean up memory used by the library when not needed anymore.
