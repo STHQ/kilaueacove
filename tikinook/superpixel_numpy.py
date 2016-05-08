@@ -44,11 +44,15 @@ TIKI_NOOK_GRID = [(293, -9), (275, 10), (274, -10), (255, 10), (254, -11),
 # NeoPixel color = 24-bit color int
 
 def Color(red, green, blue):
-    """Convert the provided red, green, blue color to a 24-bit color value.
+    """Return the provided red, green, blue colors as a numpy array.
     Each color component should be a value 0-255 where 0 is the lowest intensity
     and 255 is the highest intensity.
+    red, green, blue: int, 0-255
+    return: numpy.array
     """
-    return ((red & 0xFF) << 16) | ((green & 0xFF) << 8) | (blue & 0xFF)
+    # "& 0xFF" is to make sure we're not exceeding max setting of 255
+    rgb = numpy.array([red & 0xFF, green & 0xFF, blue & 0xFF])
+    return rgb
 
 class SuperPixel(object):
     def __init__(self, *strands):
@@ -63,8 +67,9 @@ class SuperPixel(object):
         for strand in self._strands:
             pixel_count = pixel_count + strand.numPixels()
 
-        # Create an array for all of the LED color data
-        self._led_data = [0] * pixel_count
+        # Create an array for all of the LED color data:
+        # 2D numpyarray, LED count by 3 (RGB), type int
+        self._led_data = numpy.zeros((pixel_count, 3), dtype=numpy.int)
 
     def __del__(self):
         # Clean up memory used by the library when not needed anymore.
@@ -83,13 +88,16 @@ class SuperPixel(object):
     def show(self):
         """Update the display with the data from the LED buffer."""
         for strand in self._strands:
+            # Each strand knows how to show itself.
             strand.show()
 
     def setPixelColor(self, n, color):
-        """Set LED at position n to the provided 24-bit color value (in RGB order).
+        """Set LED at position n to the provided numpy array [R, G, B].
+        n: int
+        color: numpy.array, as [R, G, B]
         """
         if (n >= len(self._led_data)):
-            return  # out of bounds; throw it away
+            return  # pixel 'n' is out of bounds; throw it away
 
         # SuperPixel internal representation:
         self._led_data[n] = color
@@ -98,11 +106,11 @@ class SuperPixel(object):
         pixel_offset = 0
         pixel_max    = 0
         for strand in self._strands:
-        # TODO: Determine which strand this pixel is a part of, and set it.
+        # Determine which strand this pixel is a part of, and set it.
             pixel_max = pixel_offset + strand.numPixels()
             if (pixel_offset <= n) and (n < pixel_max):
                 pixel = n - pixel_offset
-                strand.setPixelColor(pixel, color)
+                strand.setPixelColorRGB(pixel, color[0], color[1], color[2])
                 break
             else:  # Must be in the next one
                 pixel_offset = pixel_offset + strand.numPixels()
@@ -111,6 +119,8 @@ class SuperPixel(object):
         """Set LED at position n to the provided red, green, and blue color.
         Each color component should be a value from 0 to 255 (where 0 is the
         lowest intensity and 255 is the highest intensity).
+        n: int, pixel location
+        red, green, blue: int, 0-255
         """
         self.setPixelColor(n, Color(red, green, blue))
 
@@ -125,7 +135,9 @@ class SuperPixel(object):
         return len(self._led_data)
 
     def getPixelColor(self, n):
-        """Get the 24-bit RGB color value for the LED at position n."""
+        """Get the [R, G, B] color array for the LED at position n.
+        n: int
+        """
         return self._led_data[n]
 
 
@@ -154,6 +166,7 @@ class PixelGrid(object):
 
         WORK IN PROGRESS
         """
+        # TODO: Convert to numpy nD array
         self._strand = strand
         self._grid = []
         for segment in segments:
