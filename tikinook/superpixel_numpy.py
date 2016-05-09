@@ -354,11 +354,11 @@ class PixelPlayer(object):
         fps = vid.get(cv2.CAP_PROP_FPS)
         waitPerFrameInSeconds = 1.0 / fps  # probably minus some overhead fudge factor
 
-        print("frameCount: " + str(frameCount))
-        print("fps: " + str(fps))
+        # print("frameCount: " + str(frameCount))
+        # print("fps: " + str(fps))
 
         # Load the pixel data
-        print("Loading video_data")
+        # print("Loading video_data")
         grid_shape = self._grid.shape()
         self._video_data = numpy.zeros((frameCount, grid_shape[0], grid_shape[1], 3), dtype=numpy.int)
 
