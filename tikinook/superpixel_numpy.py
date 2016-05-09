@@ -315,6 +315,83 @@ class PixelGrid(object):
 # TODO - PixelMap class
 
 
+
+#####
+#
+# PixelPlayer - load video to play on a grid
+#
+#####
+
+class PixelPlayer(object):
+    def __init__(self, grid, file):
+        """Class for playing video on a grid of LED pixels.
+
+        grid - The PixelGrid that the video will be played on. We need to know
+               this, so that we only load data that will be used for the size
+               of the grid.
+        file - POSIX URL for the movie file to be loaded; can be relative
+
+        Recommend that the file be a QuickTime .mov, Animation codec, for
+        lossless animation quality. (It will play MPEG-4, but the compression is
+        super noisy, and very noticeable on the LED pixels.)
+
+        Pixels in the video should be 1:1 for LED pixels, and start at the left
+        edge of the video frame. You may need to create a video in multiples of
+        16x16 px, but any pixels outside the grid size will be ignored.
+
+        WORK IN PROGRESS
+        """
+        self._grid = grid
+
+        vid = cv2.VideoCapture(file)
+
+        if (vid.isOpened()):
+            print("Opened video")
+        else:
+            print("Open failed")
+
+        frameCount = int(vid.get(cv2.CAP_PROP_FRAME_COUNT))
+        fps = vid.get(cv2.CAP_PROP_FPS)
+        waitPerFrameInSeconds = 1.0 / fps  # probably minus some overhead fudge factor
+
+        print("frameCount: " + str(frameCount))
+        print("fps: " + str(fps))
+
+        # Load the pixel data
+        print("Loading video_data")
+        grid_shape = self._grid.shape()
+        self._video_data = numpy.zeros((frameCount, grid_shape[0], grid_shape[1], 3), dtype=numpy.int)
+
+        frame_increment = 0
+        for frame in range(frameCount):
+            # Grabbing values from the frame tuple
+            # 'ret' is a boolean for whether there's a frame at this index
+            ret, frameImg = vid.read()
+            if(ret):
+                for y in range(self._video_data.shape[1]):
+                    for x in range(self._video_data.shape[2]):
+                        self._video_data[frame_increment][y][x] = [frameImg[y, x, 2], frameImg[y, x, 1], frameImg[y, x, 0]]
+            frame_increment = frame_increment + 1
+        vid.release()
+
+    def __del__(self):
+        # Clean up memory used by the library when not needed anymore.
+        if self._grid is not None:
+            self._grid = None
+        if self._video_data is not None:
+            self._video_data = None
+
+    def play(self):
+        """Plays the loaded data on the PixelGrid"""
+        # print ("Displaying video_data")
+        for frame in self._video_data:
+            for y in range(frame.shape[0]):
+                for x in range(frame.shape[1]):
+                    self._grid.setPixelColor(x, y, frame[y][x])
+            self._grid.show()
+
+
+
 #####
 #
 # Strand Test functions which animate LEDs in various ways.
@@ -460,67 +537,19 @@ if __name__ == '__main__':
         #colorWipeGrid(grid, Color(255, 255, 255), 5)  # White (100%) wipe
 
         # Use multiple grids at once, from the same strand
-        rattan_grid.setAllColorRGB(250, 127, 0)
-        rattan_grid.setRowColorRGB(3, 0, 90, 75)
-        rattan_grid.setRowColorRGB(4, 0, 0, 100)
-        shelf_back_grid.setAllColorRGB(2, 4, 8)
-        shelf_front_grid.setAllColorRGB(50, 20, 10)
-        rattan_grid.show()
-        shelf_back_grid.show()
-        shelf_front_grid.show()
-        time.sleep(5)
+        #rattan_grid.setAllColorRGB(250, 127, 0)
+        #rattan_grid.setRowColorRGB(3, 0, 90, 75)
+        #rattan_grid.setRowColorRGB(4, 0, 0, 100)
+        #shelf_back_grid.setAllColorRGB(2, 4, 8)
+        #shelf_front_grid.setAllColorRGB(50, 20, 10)
+        #rattan_grid.show()
+        #shelf_back_grid.show()
+        #shelf_front_grid.show()
+        #time.sleep(5)
 
         boatGrid(rattan_grid)
 
-        # Load in the data from an MPEG-4 video
+        # Load in the data from a QuickTime video
 
-
-        # Now with OpenCV!
-        # Load animation/tiki-nook-pixel-out-v02.mov
-
-        vid = cv2.VideoCapture('animation/rgb-test-16x16-lossless.mov')
-
-        if (vid.isOpened()):
-            print("Opened video")
-        else:
-            print("Open failed")
-
-        frameCount = int(vid.get(cv2.CAP_PROP_FRAME_COUNT))
-        fps = vid.get(cv2.CAP_PROP_FPS)
-        waitPerFrameInSeconds = 1.0 / fps  # probably minus some overhead fudge factor
-
-        print("frameCount: " + str(frameCount))
-        print("fps: " + str(fps))
-
-        # Let's LOAD the data in first, and *THEN* display it.
-        print("Loading video_data")
-        grid_shape = rattan_grid.shape()
-        video_data = numpy.zeros((frameCount, grid_shape[0], grid_shape[1], 3), dtype=numpy.int)
-        # print("video_data.shape", video_data.shape)
-
-        frame_increment = 0
-        for frame in range(frameCount):
-            # Grabbing values from the frame tuple
-            # 'ret' is a boolean for whether there's a frame at this index
-            ret, frameImg = vid.read()
-            # print("frameImg: ", frameImg)
-            if(ret):
-                # print("shape: " + str(frameImg.shape))
-                for y in range(video_data.shape[1]):
-                    for x in range(video_data.shape[2]):
-                        # print("coordinates", x, y)
-                        # print(frameImg[y, x])
-                        # FIXME: This is WAY too slow
-                        # print("Coordinates: " + str(x) + ", " + str(y) + "\nRGB: " + str(frameImg[y, x, 2]) + ", " + str(frameImg[y, x, 1]) + ", " + str(frameImg[y, x, 0]))
-                        video_data[frame_increment][y][x] = [frameImg[y, x, 2], frameImg[y, x, 1], frameImg[y, x, 0]]
-            frame_increment = frame_increment + 1
-            # rattan_grid.show()
-            # time.sleep(waitPerFrameInSeconds) # (it's already SLOOOOOOWW)
-
-        # Time to DISPLAY the video data
-        print ("Displaying video_data")
-        for frame in video_data:
-            for y in range(frame.shape[0]):
-                for x in range(frame.shape[1]):
-                    rattan_grid.setPixelColor(x, y, frame[y][x])
-            rattan_grid.show()
+        test_animation = PixelPlayer(rattan_grid, 'animation/rgb-test-16x16-lossless.mov')
+        test_animation.play()
