@@ -28,6 +28,8 @@ strand = SuperPixel(strand1, strand2)
 # functions, if the SuperPixel strand contains any NeoPixel sub-strands)
 strand.begin()
 
+# FIXME: Setting up these GPIO interrupts seems to be killing the control
+#        stream to the PaleoPixels
 
 # Set up our GPIO callbacks
 def button_white(channel):
@@ -49,6 +51,7 @@ GPIO.add_event_detect(25, GPIO.FALLING, callback=button_red, bouncetime=300)
 
 # Idle loop
 while 1:
+    # what should I be doing here? The whole things is bogging down
     pass
 
 GPIO.cleanup()
