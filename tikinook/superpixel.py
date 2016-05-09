@@ -400,6 +400,12 @@ class PixelPlayer(object):
 #
 #####
 
+def colorAll(strip, color):
+    """Set color of entire strand at once."""
+    for i in range(strip.numPixels()):
+        strip.setPixelColor(i, color)
+    strip.show()
+    
 def colorWipe(strip, color, wait_ms=50):
     """Wipe color across display a pixel at a time."""
     for i in range(strip.numPixels()):
@@ -510,10 +516,6 @@ if __name__ == '__main__':
     shelf_front_grid = PixelGrid(strand, (243, -41), (161, -41), (79, -41))
 
 
-
-    # TODO: Write this using OpenC
-    # Load animation/tiki-nook-pixel-out-v02.mov
-
     print('Press Ctrl-C to quit.')
     while True:
         # Color wipe animations.
@@ -539,15 +541,15 @@ if __name__ == '__main__':
         #colorWipeGrid(grid, Color(255, 255, 255), 5)  # White (100%) wipe
 
         # Use multiple grids at once, from the same strand
-        #rattan_grid.setAllColorRGB(250, 127, 0)
-        #rattan_grid.setRowColorRGB(3, 0, 90, 75)
-        #rattan_grid.setRowColorRGB(4, 0, 0, 100)
-        #shelf_back_grid.setAllColorRGB(2, 4, 8)
-        #shelf_front_grid.setAllColorRGB(50, 20, 10)
-        #rattan_grid.show()
-        #shelf_back_grid.show()
-        #shelf_front_grid.show()
-        #time.sleep(5)
+        rattan_grid.setAllColorRGB(250, 127, 0)
+        rattan_grid.setRowColorRGB(3, 0, 90, 75)
+        rattan_grid.setRowColorRGB(4, 0, 0, 100)
+        shelf_back_grid.setAllColorRGB(2, 4, 8)
+        shelf_front_grid.setAllColorRGB(50, 20, 10)
+        rattan_grid.show()
+        shelf_back_grid.show()
+        shelf_front_grid.show()
+        time.sleep(5)
 
         boatGrid(rattan_grid)
 
