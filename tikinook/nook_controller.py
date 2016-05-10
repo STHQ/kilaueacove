@@ -1,3 +1,7 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+
+import time
 import RPi.GPIO as GPIO
 import neopixel
 import paleopixel
@@ -29,21 +33,18 @@ strand = SuperPixel(strand1, strand2)
 strand.begin()
 
 
-# FIXME: Setting up these GPIO interrupts seems to be killing the control
-#        stream to the PaleoPixels
-
 # Set up our GPIO callbacks
 def button_white(channel):
     print("button_white")
-    colorAll(strand, Color(255, 0, 0))  # Set all LEDs to Red
+    colorWipe(strand, Color(255, 0, 0), 0)  # Red wipe
 
 def button_amber(channel):
     print("button_amber")
-    colorAll(strand, Color(0, 255, 0))  # Set all LEDs to Green
+    colorWipe(strand, Color(0, 255, 0), 0)  # Green wipe
 
 def button_red(channel):
     print("button_red")
-    colorAll(strand, Color(0, 0, 255))  # Set all LEDs to Blue
+    colorWipe(strand, Color(0, 0, 255), 0)  # Blue wipe
 
 # Physical button interrupts
 GPIO.add_event_detect(23, GPIO.FALLING, callback=button_white, bouncetime=300)
@@ -53,7 +54,6 @@ GPIO.add_event_detect(25, GPIO.FALLING, callback=button_red, bouncetime=300)
 
 # Idle loop
 while 1:
-    # Should I be doing something else here?
-    pass
+    time.sleep(1)
 
 GPIO.cleanup()
