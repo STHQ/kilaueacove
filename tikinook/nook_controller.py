@@ -1,5 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
+"""
+Code specific to controlling the lights and other display events
+in the tiki nook for Kilauea Cove.
+
+Author: Mark Boszko (boszko+kilaueacove@gmail.com)
+
+License:
+Licensed under The MIT License (MIT). Please see LICENSE.txt for full text
+of the license.
+
+Version History:
+- 1.0.0 - 2016-05-07 - Started development
+"""
 
 import time
 import RPi.GPIO as GPIO
