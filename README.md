@@ -14,15 +14,9 @@ Plus, y’know, alliteration is pretty fun.
 
 <sub>\*The only other Kilauea Cove I could find by searching online is the name of a pair of water slides at [Big Surf Water Park](http://bigsurffun.com/rides/) in Tempe, AZ.</sub>
 
-## Construction and Setup
+## Wiki
 
-### Screening Room
-
-TODO: This will document the steps necessary to replicate my current setup. Screening Room-specific.
-
-### Tiki Nook
-
-TODO: This will document the steps necessary to replicate my current setup. Tiki Nook-specific. At the moment, I would suggest checking out the thread on [Tiki Central](http://www.tikiroom.com/tikicentral/bb/viewtopic.php?topic=51211&forum=20&25).
+[Visit the wiki](https://github.com/bobtiki/kilaueacove/wiki) for details on construction, programming, and decor!
 
 ## Licenses
 
