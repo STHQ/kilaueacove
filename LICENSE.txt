@@ -1,4 +1,4 @@
-The Lava Lounge project is Copyright (c) 2016 Mark N. Boszko
+The Kilauea Cove project is Copyright (c) 2016 Mark N. Boszko
 
 This repository contains software developed by other people, where necessary 
 to the operation of my systems. Their licenses continue to apply. See the 
@@ -41,7 +41,7 @@ For all other elements by Mark Boszko, including documentation,
 graphics, and diagrams:
 
 
-Lava Lounge by Mark N. Boszko is licensed under a
+Kilauea Cove by Mark N. Boszko is licensed under a
 Creative Commons Attribution 4.0 International License.
 https://creativecommons.org/licenses/by/4.0/
 
