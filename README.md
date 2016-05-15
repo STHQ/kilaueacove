@@ -1,24 +1,32 @@
-# Lava Lounge
+# Kilauea Cove
 
-This repository relates to my screening room (home theater) called the Lava Lounge, plus the Tiki Nook, just outside the Lava Lounge's door, where there is a drinks cart and shelves with tiki mugs.
+This repository relates to my screening room (home theater) and the “tiki took,” just outside the screening room’s door, where there is a drinks cart, and shelves with tiki mugs and other barware. Colectively, this is **Kilauea Cove**.
 
-The purpose is to collect all of my code, wiring diagrams, graphical elements, and setup instructions for the lighting, effects, and other electronics in the space — not only for my own use (if/when we move and I have to piece it all back together again), but as a reference for anyone else who plans to build interactive lights and effects for a small space.
+The purpose is to collect all of my code, wiring diagrams, graphical elements, and setup instructions for the lighting, effects, and other electronics in the space — not only for my own use (if/when we move and I have to piece it back together again), but as a reference for anyone else who plans to build interactive lights and effects for a small space.
 
-More discussion of these elements as I create or update them can be found on my blog, under the [Lava Lounge](http://stationinthemetro.com/tag/lava-lounge) and [Tiki Nook](http://stationinthemetro.com/tag/tiki-nook) tags.
+More discussion of these elements as I create or update them can be found on my blog, under the [Lava Lounge](http://stationinthemetro.com/tag/lava-lounge) and [Tiki Nook](http://stationinthemetro.com/tag/tiki-nook) tags. I am also posting work-in-progress photos and commentary to a thread on [Tiki Central](http://www.tikiroom.com/tikicentral/bb/viewtopic.php?topic=51211&forum=20&25).
+
+**Q:** Wasn't this called “Lava Lounge” before?
+
+**A:** Yes. However, the old name, “Lava Lounge,” unintentionally duplicated the name of [a Seattle bar](https://critiki.com/location/lava-lounge-seattle-173/). To reduce possible confusion (since I am *also* in Seattle), and to give my space a unique\* name globally, *Kilauea Cove* is the new name. The most direct references are [Kilauea](https://en.wikipedia.org/wiki/Kīlauea), the most active volcano in the Hawaiian Islands, and *cove* can be defined as “[a recessed place](http://www.merriam-webster.com/dictionary/cove),” which describes the Tiki Nook very well. Of course, the alternate water-related meaning of *cove*, and the reference to [one of my favorite surf rock bands](http://www.kilaueas.de), only add to the enjoyment.
+
+Plus, y’know, alliteration is pretty fun.
+
+<sub>\*The only other Kilauea Cove I could find by searching online is the name of a pair of water slides at [Big Surf Water Park](http://bigsurffun.com/rides/) in Tempe, AZ.</sub>
 
 ## Construction and Setup
 
-### Lava Lounge
+### Screening Room
 
-TODO: This will document the steps necessary to replicate my current setup. Lava Lounge-specific.
+TODO: This will document the steps necessary to replicate my current setup. Screening Room-specific.
 
 ### Tiki Nook
 
-TODO: This will document the steps necessary to replicate my current setup. Tiki Nook-specific.
+TODO: This will document the steps necessary to replicate my current setup. Tiki Nook-specific. At the moment, I would suggest checking out the thread on [Tiki Central](http://www.tikiroom.com/tikicentral/bb/viewtopic.php?topic=51211&forum=20&25).
 
 ## Licenses
 
-The Lava Lounge project is Copyright © 2016 Mark N. Boszko.
+The Kilauea Cove project is Copyright © 2016 Mark N. Boszko.
 
 This repository contains clones of software developed by other people, when necessary to the operation of my systems. Their licenses continue to apply.
 
@@ -32,4 +40,4 @@ Since [Creative Commons recommends against applying their licenses to software](
 
 All other elements, including documentation, graphics, and diagrams, are licensed under **CC-BY-4.0**.
 
-<a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">Lava Lounge</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://stationinthemetro.com/tag/lava-lounge" property="cc:attributionName" rel="cc:attributionURL">Mark N. Boszko</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+<a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">Kilauea Cove</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://stationinthemetro.com/tag/lava-lounge" property="cc:attributionName" rel="cc:attributionURL">Mark N. Boszko</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
