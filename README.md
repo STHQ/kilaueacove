@@ -1,6 +1,6 @@
 # Kilauea Cove
 
-This repository relates to my screening room (home theater) and the “tiki took,” just outside the screening room’s door, where there is a drinks cart, and shelves with tiki mugs and other barware. Colectively, this is **Kilauea Cove**.
+This repository relates to my screening room (home theater) and the “tiki took,” just outside the screening room’s door, where there is a drinks cart, and shelves with tiki mugs and other barware. Collectively, this is **Kilauea Cove**.
 
 The purpose is to collect all of my code, wiring diagrams, graphical elements, and setup instructions for the lighting, effects, and other electronics in the space — not only for my own use (if/when we move and I have to piece it back together again), but as a reference for anyone else who plans to build interactive lights and effects for a small space.
 
@@ -16,7 +16,7 @@ More discussion of these elements as I create or update them can be found on my 
 
 **A:** Yes. However, the old name, “Lava Lounge,” unintentionally duplicated the name of [a Seattle bar](https://critiki.com/location/lava-lounge-seattle-173/). To reduce possible confusion (since I am *also* in Seattle), and to give my space a unique\* name globally, *Kilauea Cove* is the new name.
 
-<sub>\*The only other Kilauea Cove I could find by searching online is the name of a pair of water slides at [Big Surf Water Park](http://bigsurffun.com/rides/) in Tempe, AZ.</sub>
+<sub>\*The only other Kilauea Cove I could find, by searching online, is the name of a pair of water slides at [Big Surf Water Park](http://bigsurffun.com/rides/) in Tempe, AZ.</sub>
 
 **Q:** Why “Kilauea Cove”?
 
