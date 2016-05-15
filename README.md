@@ -8,7 +8,11 @@ More discussion of these elements as I create or update them can be found on my 
 
 **Q:** Wasn't this called “Lava Lounge” before?
 
-**A:** Yes. However, the old name, “Lava Lounge,” unintentionally duplicated the name of [a Seattle bar](https://critiki.com/location/lava-lounge-seattle-173/). To reduce possible confusion (since I am *also* in Seattle), and to give my space a unique\* name globally, *Kilauea Cove* is the new name. The most direct references are [Kilauea](https://en.wikipedia.org/wiki/Kīlauea), the most active volcano in the Hawaiian Islands, and *cove* can be defined as “[a recessed place](http://www.merriam-webster.com/dictionary/cove),” which describes the Tiki Nook very well. Of course, the alternate water-related meaning of *cove*, and the reference to [one of my favorite surf rock bands](http://www.kilaueas.de), only add to the enjoyment.
+**A:** Yes. However, the old name, “Lava Lounge,” unintentionally duplicated the name of [a Seattle bar](https://critiki.com/location/lava-lounge-seattle-173/). To reduce possible confusion (since I am *also* in Seattle), and to give my space a unique\* name globally, *Kilauea Cove* is the new name.
+
+**Q:** Why “Kilauea Cove”?
+
+**A:** The most direct references are [Kilauea](https://en.wikipedia.org/wiki/Kīlauea), the most active volcano in the Hawaiian Islands, which ties in to what I hope will be a very active Volcano Show. *Cove* can be defined as “[a recessed place](http://www.merriam-webster.com/dictionary/cove),” which describes the Tiki Nook very well. Of course, the alternate water-related meaning of *cove*, and the reference to [one of my favorite surf rock bands](http://www.kilaueas.de), only add to the enjoyment.
 
 Plus, y’know, alliteration is pretty fun.
 
