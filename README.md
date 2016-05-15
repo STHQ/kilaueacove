@@ -6,21 +6,23 @@ The purpose is to collect all of my code, wiring diagrams, graphical elements, a
 
 More discussion of these elements as I create or update them can be found on my blog, under the [Kilauea Cove](http://stationinthemetro.com/tag/kilauea-cove) and [Tiki Nook](http://stationinthemetro.com/tag/tiki-nook) tags. I am also posting work-in-progress photos and commentary to a thread on [Tiki Central](http://www.tikiroom.com/tikicentral/bb/viewtopic.php?topic=51211&forum=20&25).
 
+## Wiki
+
+[Visit the wiki](https://github.com/bobtiki/kilaueacove/wiki) for details on construction, programming, and decor!
+
+## The Name
+
 **Q:** Wasn't this called “Lava Lounge” before?
 
 **A:** Yes. However, the old name, “Lava Lounge,” unintentionally duplicated the name of [a Seattle bar](https://critiki.com/location/lava-lounge-seattle-173/). To reduce possible confusion (since I am *also* in Seattle), and to give my space a unique\* name globally, *Kilauea Cove* is the new name.
+
+<sub>\*The only other Kilauea Cove I could find by searching online is the name of a pair of water slides at [Big Surf Water Park](http://bigsurffun.com/rides/) in Tempe, AZ.</sub>
 
 **Q:** Why “Kilauea Cove”?
 
 **A:** The most direct references are [Kilauea](https://en.wikipedia.org/wiki/Kīlauea), the most active volcano in the Hawaiian Islands, which ties in to what I hope will be a very active Volcano Show. *Cove* can be defined as “[a recessed place](http://www.merriam-webster.com/dictionary/cove),” which describes the Tiki Nook very well. Of course, the alternate water-related meaning of *cove*, and the reference to [one of my favorite surf rock bands](http://www.kilaueas.de), only add to the enjoyment.
 
 Plus, y’know, alliteration is pretty fun.
-
-<sub>\*The only other Kilauea Cove I could find by searching online is the name of a pair of water slides at [Big Surf Water Park](http://bigsurffun.com/rides/) in Tempe, AZ.</sub>
-
-## Wiki
-
-[Visit the wiki](https://github.com/bobtiki/kilaueacove/wiki) for details on construction, programming, and decor!
 
 ## Licenses
 
