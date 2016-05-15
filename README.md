@@ -4,7 +4,7 @@ This repository relates to my screening room (home theater) and the “tiki took
 
 The purpose is to collect all of my code, wiring diagrams, graphical elements, and setup instructions for the lighting, effects, and other electronics in the space — not only for my own use (if/when we move and I have to piece it back together again), but as a reference for anyone else who plans to build interactive lights and effects for a small space.
 
-More discussion of these elements as I create or update them can be found on my blog, under the [Lava Lounge](http://stationinthemetro.com/tag/lava-lounge) and [Tiki Nook](http://stationinthemetro.com/tag/tiki-nook) tags. I am also posting work-in-progress photos and commentary to a thread on [Tiki Central](http://www.tikiroom.com/tikicentral/bb/viewtopic.php?topic=51211&forum=20&25).
+More discussion of these elements as I create or update them can be found on my blog, under the [Kilauea Cove](http://stationinthemetro.com/tag/kilauea-cove) and [Tiki Nook](http://stationinthemetro.com/tag/tiki-nook) tags. I am also posting work-in-progress photos and commentary to a thread on [Tiki Central](http://www.tikiroom.com/tikicentral/bb/viewtopic.php?topic=51211&forum=20&25).
 
 **Q:** Wasn't this called “Lava Lounge” before?
 
