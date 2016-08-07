@@ -11,6 +11,7 @@ Licensed under The MIT License (MIT). Please see LICENSE.txt for full text
 of the license.
 
 Version History:
+- 1.1.0 - 2016-08-07 - Add the 3 button NeoPixels + the 24 ring NeoPixels
 - 1.0.0 - 2016-05-07 - Started development
 """
 
@@ -33,7 +34,10 @@ GPIO.setup(25, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 # Set up the strand
 
 # My LED strip configurations (for test):
-NEOPIXEL_COUNT   = 244   # Number of NeoPixels in the strand
+WHITE_LED = 0            # These are the LEDs inside the buttons
+AMBER_LED = 1
+RED_LED = 2
+NEOPIXEL_COUNT   = 271   # Number of NeoPixels in the strand
 NEOPIXEL_PIN     = 18    # GPIO pin connected to the pixels (must support PWM!)
 PALEOPIXEL_COUNT = 50    # Number of PaleoPixels in the strand
 
@@ -49,10 +53,12 @@ strand = SuperPixel(strand1, strand2)
 strand.begin()
 
 # Set up grid segments
-grid = PixelGrid(strand, (284, 10), (283, -10), (264, 10), (263, -10), (244, 10), (243, -41), (162, 41), (161, -41), (80, 41), (79, -41), (0, 39))
-rattan_grid = PixelGrid(strand, (284, 10), (283, -10), (264, 10), (263, -10), (244, 10))
-shelf_back_grid = PixelGrid(strand, (162, 41), (80, 41), (0, 39))
-shelf_front_grid = PixelGrid(strand, (243, -41), (161, -41), (79, -41))
+grid = PixelGrid(strand, (311, 10), (310, -10), (291, 10), (290, -10), (271, 10), (246, -41), (165, 41), (164, -41), (83, 41), (82, -41), (3, 39))
+button_grid = PixelGrid(strand, (0, 3))
+rattan_grid = PixelGrid(strand, (311, 10), (310, -10), (291, 10), (290, -10), (271, 10))
+shelf_back_grid = PixelGrid(strand, (165, 41), (83, 41), (3, 39))
+shelf_front_grid = PixelGrid(strand, (246, -41), (164, -41), (82, -41))
+ring_grid = PixelGrid (strand, (247, 24))
 
 # Make these globals so threaded button functions can address it
 global WHITE_TIMEOUT
@@ -72,6 +78,9 @@ def button_white(channel='default'):
         WHITE_TIMEOUT.cancel()
     print("button_white")
     print("channel: ", channel)
+    button_grid.setRowColorRGB(0, 10, 10, 10)
+    button_grid.setPixelColorRGB(WHITE_LED, 0, 128, 128, 128)
+    button_grid.show()
     shelf_back_grid.setRowColorRGB(2, 192, 160, 128)
     shelf_back_grid.show()
     WHITE_TIMEOUT = threading.Timer(300, button_amber, ['WHITE_TIMEOUT'])
@@ -83,6 +92,9 @@ def button_amber(channel='default'):
         WHITE_TIMEOUT.cancel()
     print("button_amber")
     print("channel: ", channel)
+    button_grid.setRowColorRGB(0, 10, 10, 10)
+    button_grid.setPixelColorRGB(AMBER_LED, 0, 128, 128, 128)
+    button_grid.show()
     rattan_grid.setRowColorRGB(0, 250, 127, 0)
     rattan_grid.setRowColorRGB(1, 128, 50, 0)
     rattan_grid.setRowColorRGB(2, 64, 10, 0)
@@ -119,6 +131,9 @@ def button_red(channel='default'):
     GPIO.output(20, GPIO.HIGH)
     print("button_red")
     print("channel: ", channel)
+    button_grid.setRowColorRGB(0, 10, 10, 10)
+    button_grid.setPixelColorRGB(RED_LED, 0, 128, 128, 128)
+    button_grid.show()
     # Blackout
     grid.setAllColorRGB(0, 0, 0)
     grid.show()
