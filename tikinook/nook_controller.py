@@ -135,7 +135,7 @@ def button_red(channel='default'):
     # GPIO.output(20, GPIO.HIGH)
     if (IS_TOGGLE):
         # This (should) prevents another volcano run until it's toggled off first
-        toggle_red_off(channnel='show_start')
+        toggle_red_off(channel='show_start')
         print("button_red")
         print("channel: ", channel)
         # Start the show
