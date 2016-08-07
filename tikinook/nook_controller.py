@@ -22,13 +22,24 @@ import neopixel
 import paleopixel
 from superpixel import *
 
+# Identify GPIO pins
+
+BUTTON_WHITE_IN = 23
+BUTTON_AMBER_IN = 24
+BUTTON_RED_IN = 25
+TOGGLE_RED_IN = 16
+TOGGLE_RED_LED = 20
+
+
+# Set up GPIO pins
+
 GPIO.setmode(GPIO.BCM)
 
-GPIO.setup(20, GPIO.OUT)
-GPIO.setup(16, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(23, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(24, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(25, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(BUTTON_WHITE_IN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(BUTTON_AMBER_IN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(BUTTON_RED_IN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(TOGGLE_RED_IN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(TOGGLE_RED_LED, GPIO.OUT)
 
 
 # Set up the strand
@@ -114,17 +125,17 @@ def toggle_red_on(channel='default'):
     print("toggle_red_on")
     global IS_TOGGLE
     IS_TOGGLE = True
-    GPIO.output(20, GPIO.HIGH)
-    GPIO.remove_event_detect(16)
-    GPIO.add_event_detect(16, GPIO.RISING, callback=toggle_red_off, bouncetime=300)
+    GPIO.output(TOGGLE_RED_LED, GPIO.HIGH)
+    GPIO.remove_event_detect(TOGGLE_RED_IN)
+    GPIO.add_event_detect(TOGGLE_RED_IN, GPIO.RISING, callback=toggle_red_off, bouncetime=300)
 
 def toggle_red_off(channel='default'):
     print("toggle_red_off")
     global IS_TOGGLE
     IS_TOGGLE = False
-    GPIO.output(20, GPIO.LOW)
-    GPIO.remove_event_detect(16)
-    GPIO.add_event_detect(16, GPIO.FALLING, callback=toggle_red_on, bouncetime=300)
+    GPIO.output(TOGGLE_RED_LED, GPIO.LOW)
+    GPIO.remove_event_detect(TOGGLE_RED_IN)
+    GPIO.add_event_detect(TOGGLE_RED_IN, GPIO.FALLING, callback=toggle_red_on, bouncetime=300)
 
 def button_red(channel='default'):
     global WHITE_TIMEOUT
@@ -132,7 +143,7 @@ def button_red(channel='default'):
         WHITE_TIMEOUT.cancel()
     global IS_TOGGLE
     print(IS_TOGGLE)
-    # GPIO.output(20, GPIO.HIGH)
+    # GPIO.output(TOGGLE_RED_LED, GPIO.HIGH)
     if (IS_TOGGLE):
         # This (should) prevents another volcano run until it's toggled off first
         toggle_red_off(channel='show_start')
@@ -175,14 +186,14 @@ def button_red(channel='default'):
         # Play animation
         test_animation = PixelPlayer(rattan_grid, 'animation/rgb-test-16x16-lossless.mov')
         test_animation.play()
-        # GPIO.output(20, GPIO.LOW)
+        # GPIO.output(TOGGLE_RED_LED, GPIO.LOW)
         button_amber()
 
 # Physical button interrupts
-GPIO.add_event_detect(23, GPIO.FALLING, callback=button_white, bouncetime=300)
-GPIO.add_event_detect(24, GPIO.FALLING, callback=button_amber, bouncetime=300)
-GPIO.add_event_detect(25, GPIO.FALLING, callback=button_red, bouncetime=2000)
-GPIO.add_event_detect(16, GPIO.FALLING, callback=toggle_red_on, bouncetime=300)
+GPIO.add_event_detect(TOGGLE_RED_IN, GPIO.FALLING, callback=toggle_red_on, bouncetime=500)
+GPIO.add_event_detect(BUTTON_WHITE_IN, GPIO.FALLING, callback=button_white, bouncetime=500)
+GPIO.add_event_detect(BUTTON_AMBER_IN, GPIO.FALLING, callback=button_amber, bouncetime=500)
+GPIO.add_event_detect(BUTTON_RED_IN, GPIO.FALLING, callback=button_red, bouncetime=500)
 
 
 # Display the default pattern once
