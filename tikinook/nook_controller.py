@@ -38,7 +38,7 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup(BUTTON_WHITE_IN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(BUTTON_AMBER_IN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(BUTTON_RED_IN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(TOGGLE_RED_IN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(TOGGLE_RED_IN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(TOGGLE_RED_LED, GPIO.OUT)
 
 
@@ -127,7 +127,7 @@ def toggle_red_on(channel='default'):
     IS_TOGGLE = True
     GPIO.output(TOGGLE_RED_LED, GPIO.HIGH)
     GPIO.remove_event_detect(TOGGLE_RED_IN)
-    GPIO.add_event_detect(TOGGLE_RED_IN, GPIO.RISING, callback=toggle_red_off, bouncetime=300)
+    GPIO.add_event_detect(TOGGLE_RED_IN, GPIO.FALLING, callback=toggle_red_off, bouncetime=300)
 
 def toggle_red_off(channel='default'):
     print("toggle_red_off")
@@ -135,17 +135,16 @@ def toggle_red_off(channel='default'):
     IS_TOGGLE = False
     GPIO.output(TOGGLE_RED_LED, GPIO.LOW)
     GPIO.remove_event_detect(TOGGLE_RED_IN)
-    GPIO.add_event_detect(TOGGLE_RED_IN, GPIO.FALLING, callback=toggle_red_on, bouncetime=300)
+    GPIO.add_event_detect(TOGGLE_RED_IN, GPIO.RISING, callback=toggle_red_on, bouncetime=300)
 
 def button_red(channel='default'):
     global WHITE_TIMEOUT
     if (WHITE_TIMEOUT is not None):
         WHITE_TIMEOUT.cancel()
     global IS_TOGGLE
-    print(IS_TOGGLE)
-    # GPIO.output(TOGGLE_RED_LED, GPIO.HIGH)
     if (IS_TOGGLE):
-        # This (should) prevents another volcano run until it's toggled off first
+        # This (should) prevent another volcano run
+        #     until the toggle is physically cycled first
         toggle_red_off(channel='show_start')
         print("button_red")
         print("channel: ", channel)
@@ -186,11 +185,10 @@ def button_red(channel='default'):
         # Play animation
         test_animation = PixelPlayer(rattan_grid, 'animation/rgb-test-16x16-lossless.mov')
         test_animation.play()
-        # GPIO.output(TOGGLE_RED_LED, GPIO.LOW)
-        button_amber()
+    button_amber()
 
 # Physical button interrupts
-GPIO.add_event_detect(TOGGLE_RED_IN, GPIO.FALLING, callback=toggle_red_on, bouncetime=500)
+GPIO.add_event_detect(TOGGLE_RED_IN, GPIO.RISING, callback=toggle_red_on, bouncetime=500)
 GPIO.add_event_detect(BUTTON_WHITE_IN, GPIO.FALLING, callback=button_white, bouncetime=500)
 GPIO.add_event_detect(BUTTON_AMBER_IN, GPIO.FALLING, callback=button_amber, bouncetime=500)
 GPIO.add_event_detect(BUTTON_RED_IN, GPIO.FALLING, callback=button_red, bouncetime=500)
