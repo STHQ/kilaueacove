@@ -19,13 +19,15 @@ import paleopixel
 
 
 # My LED strip configurations (for test):
-NEOPIXEL_COUNT   = 244   # Number of NeoPixels in the strand
+NEOPIXEL_COUNT   = 271   # Number of NeoPixels in the strand
 NEOPIXEL_PIN     = 18    # GPIO pin connected to the pixels (must support PWM!)
 PALEOPIXEL_COUNT = 50    # Number of PaleoPixels in the strand
 
 # My grid configuration (for test):
-TIKI_NOOK_GRID = [(293, -9), (275, 10), (274, -10), (255, 10), (254, -11),
-                  (243, -41), (162, 41), (161, -41), (80, 41), (79, -41), (0, 39)]
+TIKI_NOOK_GRID = [(311, 10), (310, -10), (291, 10), (290, -10), (271, 10),
+                  (247, 24),
+                  (246, -41), (165, 41), (164, -41), (83, 41), (82, -41), (3, 39),
+                  (0, 3)]
 
 # Rows, bottom up: 39, -41, 41, -41,  41, -41, -11,  10, -10,  10,  -9
 # Index, bottom up: 0,  79, 80, 161, 162, 243, 254, 255, 274, 275, 293
@@ -519,18 +521,18 @@ if __name__ == '__main__':
     print('Press Ctrl-C to quit.')
     while True:
         # Color wipe animations.
-        #colorWipe(strand, Color(255, 0, 0), 0)  # Red wipe
-        #colorWipe(strand, Color(0, 255, 0), 0)  # Green wipe
-        #colorWipe(strand, Color(0, 0, 255), 0)  # Blue wipe
+        colorWipe(strand, Color(255, 0, 0), 0)  # Red wipe
+        colorWipe(strand, Color(0, 255, 0), 0)  # Green wipe
+        colorWipe(strand, Color(0, 0, 255), 0)  # Blue wipe
         # Theater chase animations.
-        #theaterChase(strand, Color(127, 127, 127))  # White theater chase
-        #theaterChase(strand, Color(127,   0,   0))  # Red theater chase
-        #theaterChase(strand, Color(  0, 127,   0))  # Green theater chase
-        #theaterChase(strand, Color(  0,   0, 127))  # Blue theater chase
+        theaterChase(strand, Color(127, 127, 127))  # White theater chase
+        theaterChase(strand, Color(127,   0,   0))  # Red theater chase
+        theaterChase(strand, Color(  0, 127,   0))  # Green theater chase
+        theaterChase(strand, Color(  0,   0, 127))  # Blue theater chase
         # Rainbow animations.
-        #rainbow(strand)
-        #rainbowCycle(strand)
-        #theaterChaseRainbow(strand)
+        rainbow(strand)
+        rainbowCycle(strand)
+        theaterChaseRainbow(strand)
 
         # Grid animations
         #boatGrid(grid)                         # port-starboard markers for each row
@@ -541,19 +543,19 @@ if __name__ == '__main__':
         #colorWipeGrid(grid, Color(255, 255, 255), 5)  # White (100%) wipe
 
         # Use multiple grids at once, from the same strand
-        rattan_grid.setAllColorRGB(250, 127, 0)
-        rattan_grid.setRowColorRGB(3, 0, 90, 75)
-        rattan_grid.setRowColorRGB(4, 0, 0, 100)
-        shelf_back_grid.setAllColorRGB(2, 4, 8)
-        shelf_front_grid.setAllColorRGB(50, 20, 10)
-        rattan_grid.show()
-        shelf_back_grid.show()
-        shelf_front_grid.show()
-        time.sleep(5)
-
-        boatGrid(rattan_grid)
+        # rattan_grid.setAllColorRGB(250, 127, 0)
+#         rattan_grid.setRowColorRGB(3, 0, 90, 75)
+#         rattan_grid.setRowColorRGB(4, 0, 0, 100)
+#         shelf_back_grid.setAllColorRGB(2, 4, 8)
+#         shelf_front_grid.setAllColorRGB(50, 20, 10)
+#         rattan_grid.show()
+#         shelf_back_grid.show()
+#         shelf_front_grid.show()
+#         time.sleep(5)
+# 
+#         boatGrid(rattan_grid)
 
         # Load in the data from a QuickTime video
 
-        test_animation = PixelPlayer(rattan_grid, 'animation/rgb-test-16x16-lossless.mov')
-        test_animation.play()
+        # test_animation = PixelPlayer(rattan_grid, 'animation/rgb-test-16x16-lossless.mov')
+#         test_animation.play()
