@@ -134,9 +134,11 @@ def button_red(channel='default'):
     print(IS_TOGGLE)
     # GPIO.output(20, GPIO.HIGH)
     if (IS_TOGGLE):
-        IS_TOGGLE = False  # This prevents another volcano run until it's toggled off first
+        # This (should) prevents another volcano run until it's toggled off first
+        toggle_red_off(channnel='show_start')
         print("button_red")
         print("channel: ", channel)
+        # Start the show
         button_grid.setRowColorRGB(0, 16, 16, 16)
         button_grid.setPixelColorRGB(RED_LED, 0, 64, 64, 64)
         button_grid.show()
@@ -174,7 +176,6 @@ def button_red(channel='default'):
         test_animation = PixelPlayer(rattan_grid, 'animation/rgb-test-16x16-lossless.mov')
         test_animation.play()
         # GPIO.output(20, GPIO.LOW)
-        GPIO.add_event_detect(16, GPIO.FALLING, callback=toggle_red_on, bouncetime=300)
         button_amber()
 
 # Physical button interrupts
