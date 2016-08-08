@@ -74,6 +74,8 @@ ring_grid = PixelGrid (strand, (247, 24))
 # Make these globals so threaded button functions can address it
 global WHITE_TIMEOUT
 WHITE_TIMEOUT = None
+# Length in seconds
+WHITE_TIMEOUT_LENGTH = 300
 
 global IS_TOGGLE
 IS_TOGGLE = False
@@ -96,7 +98,7 @@ def button_white(channel='default'):
     ring_grid.show()
     shelf_back_grid.setRowColorRGB(2, 192, 160, 128)
     shelf_back_grid.show()
-    WHITE_TIMEOUT = threading.Timer(300, button_amber, ['WHITE_TIMEOUT'])
+    WHITE_TIMEOUT = threading.Timer(WHITE_TIMEOUT_LENGTH, button_amber, ['WHITE_TIMEOUT'])
     WHITE_TIMEOUT.start()
 
 def button_amber(channel='default'):
@@ -149,7 +151,7 @@ def button_red(channel='default'):
         # Clear any timeout, so it doesn't interrupt the show
         global WHITE_TIMEOUT
         if (WHITE_TIMEOUT is not None):
-        WHITE_TIMEOUT.cancel()
+            WHITE_TIMEOUT.cancel()
         # This (should) prevent another volcano run
         #     until the toggle is physically cycled first
         #toggle_red_off(channel='volcano_start')
