@@ -31,18 +31,16 @@ GPIO.setup(BUTTON_WHITE_IN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(BUTTON_AMBER_IN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(BUTTON_RED_IN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(TOGGLE_RED_IN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.setup(TOGGLE_RED_LED, GPIO.OUT)
+GPIO.setup(TOGGLE_RED_LED, GPIO.OUT)     
 
 # Idle loop
 try:
     while True:
         if GPIO.input(TOGGLE_RED_IN):   
-            print "Port TOGGLE_RED_IN is 1/HIGH/True /\"  
-            GPIO.output(TOGGLE_RED_LED, 1)           
+            print "Port TOGGLE_RED_IN is 1/HIGH/True /\\"   
         else:  
-            print "Port TOGGLE_RED_IN is 0/LOW/False \/"  
-            GPIO.output(TOGGLE_RED_LED, 0)           
-        time.sleep(1)
+            print "Port TOGGLE_RED_IN is 0/LOW/False \\/"      
+        time.sleep(0.1)
 except KeyboardInterrupt:
     print("\nAttempting to clean up…")
 finally:
