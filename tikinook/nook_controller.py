@@ -11,8 +11,9 @@ Licensed under The MIT License (MIT). Please see LICENSE.txt for full text
 of the license.
 
 Version History:
-- 1.1.0 - 2016-08-07 - Add the 3 button NeoPixels + the 24 ring NeoPixels
-- 1.0.0 - 2016-05-07 - Started development
+- 0.2.0 - 2016-08-07 - Add the 3 button NeoPixels + the 24 ring NeoPixels
+                       Fixed the red toggle detection + volcano show restriction
+- 0.1.0 - 2016-05-07 - Started development
 """
 
 import time
@@ -84,8 +85,14 @@ IS_TOGGLE = False
 # FIXME: animation functions need to know when another function has been called
 #        and cancel any further animation in the current function.
 
+# TODO: smooth transitions between animation functions
+
 # Set up our GPIO callbacks
 def button_white(channel='default'):
+    """Turns on the bottom row of LEDs white, for mixing drinks.
+    
+    Times out based on the value in WHITE_TIMEOUT_LENGTH (seconds)
+    """
     global WHITE_TIMEOUT
     if (WHITE_TIMEOUT is not None):
         WHITE_TIMEOUT.cancel()
@@ -102,6 +109,10 @@ def button_white(channel='default'):
     WHITE_TIMEOUT.start()
 
 def button_amber(channel='default'):
+    """Default idle mode.
+    
+    TODO: subtle animation
+    """
     global WHITE_TIMEOUT
     if (WHITE_TIMEOUT is not None):
         WHITE_TIMEOUT.cancel()
@@ -124,6 +135,10 @@ def button_amber(channel='default'):
     shelf_front_grid.show()
 
 def toggle_red_on(channel='default'):
+    """Volcano Safety Toggle: ON
+    
+    When on, volcano show can be started by pressing red button.
+    """
     print("toggle_red_on")
     print("channel: ", channel)
     global IS_TOGGLE
@@ -133,6 +148,10 @@ def toggle_red_on(channel='default'):
     GPIO.add_event_detect(TOGGLE_RED_IN, GPIO.FALLING, callback=toggle_red_off, bouncetime=300)
 
 def toggle_red_off(channel='default'):
+    """Volcano Safety Toggle: OFF
+    
+    When off, volcano show cannot be started.
+    """
     print("toggle_red_off")
     print("channel: ", channel)
     global IS_TOGGLE
@@ -142,6 +161,14 @@ def toggle_red_off(channel='default'):
     GPIO.add_event_detect(TOGGLE_RED_IN, GPIO.RISING, callback=toggle_red_on, bouncetime=300)
 
 def button_red(channel='default'):
+    """Volcano Show
+    
+    Requires Volcano Safety Toggle to be on.
+    Starts a synchronized light, sound, and smoke show.
+    TODO: final lighting sequence
+    TODO: Sound
+    TODO: Smoke
+    """
     print("button_red")
     print("channel: ", channel)
     # Does nothing unless the toggle is on
@@ -195,7 +222,8 @@ def button_red(channel='default'):
         test_animation.play()
         button_amber(channel = 'volcano_end')
 
-# Physical button interrupts
+
+# Initialize physical button interrupts
 GPIO.add_event_detect(TOGGLE_RED_IN, GPIO.RISING, callback=toggle_red_on, bouncetime=500)
 GPIO.add_event_detect(BUTTON_WHITE_IN, GPIO.FALLING, callback=button_white, bouncetime=500)
 GPIO.add_event_detect(BUTTON_AMBER_IN, GPIO.FALLING, callback=button_amber, bouncetime=500)
