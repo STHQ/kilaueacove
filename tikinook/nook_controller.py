@@ -4,6 +4,9 @@
 Code specific to controlling the lights and other display events
 in the tiki nook for Kilauea Cove.
 
+Must be run from the current directory, else the animation will not load, as:
+    sudo python nook_controller.py
+
 Author: Mark Boszko (boszko+kilaueacove@gmail.com)
 
 License:
