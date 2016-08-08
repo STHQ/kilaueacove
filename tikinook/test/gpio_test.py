@@ -37,12 +37,12 @@ GPIO.setup(TOGGLE_RED_LED, GPIO.OUT)
 try:
     while True:
         if GPIO.input(TOGGLE_RED_IN):   
-            print "Port TOGGLE_RED_IN is 1/HIGH/True +++"  
+            print "Port TOGGLE_RED_IN is 1/HIGH/True /\"  
             GPIO.output(TOGGLE_RED_LED, 1)           
         else:  
-            print "Port TOGGLE_RED_IN is 0/LOW/False -"  
+            print "Port TOGGLE_RED_IN is 0/LOW/False \/"  
             GPIO.output(TOGGLE_RED_LED, 0)           
-        time.sleep(0.1)
+        time.sleep(1)
 except KeyboardInterrupt:
     print("\nAttempting to clean up…")
 finally:
