@@ -123,6 +123,7 @@ def button_amber(channel='default'):
 
 def toggle_red_on(channel='default'):
     print("toggle_red_on")
+    print("channel: ", channel)
     global IS_TOGGLE
     IS_TOGGLE = True
     GPIO.output(TOGGLE_RED_LED, GPIO.HIGH)
@@ -131,6 +132,7 @@ def toggle_red_on(channel='default'):
 
 def toggle_red_off(channel='default'):
     print("toggle_red_off")
+    print("channel: ", channel)
     global IS_TOGGLE
     IS_TOGGLE = False
     GPIO.output(TOGGLE_RED_LED, GPIO.LOW)
@@ -138,16 +140,20 @@ def toggle_red_off(channel='default'):
     GPIO.add_event_detect(TOGGLE_RED_IN, GPIO.RISING, callback=toggle_red_on, bouncetime=300)
 
 def button_red(channel='default'):
-    global WHITE_TIMEOUT
-    if (WHITE_TIMEOUT is not None):
-        WHITE_TIMEOUT.cancel()
+    print("button_red")
+    print("channel: ", channel)
+    # Does nothing unless the toggle is on
     global IS_TOGGLE
+    print("IS_TOGGLE: ", IS_TOGGLE)
     if (IS_TOGGLE):
+        # Clear any timeout, so it doesn't interrupt the show
+        global WHITE_TIMEOUT
+        if (WHITE_TIMEOUT is not None):
+        WHITE_TIMEOUT.cancel()
         # This (should) prevent another volcano run
         #     until the toggle is physically cycled first
-        toggle_red_off(channel='show_start')
-        print("button_red")
-        print("channel: ", channel)
+        #toggle_red_off(channel='volcano_start')
+        IS_TOGGLE = False
         # Start the show
         button_grid.setRowColorRGB(0, 16, 16, 16)
         button_grid.setPixelColorRGB(RED_LED, 0, 64, 64, 64)
@@ -185,7 +191,7 @@ def button_red(channel='default'):
         # Play animation
         test_animation = PixelPlayer(rattan_grid, 'animation/rgb-test-16x16-lossless.mov')
         test_animation.play()
-    button_amber()
+        button_amber(channel = 'volcano_end')
 
 # Physical button interrupts
 GPIO.add_event_detect(TOGGLE_RED_IN, GPIO.RISING, callback=toggle_red_on, bouncetime=500)
@@ -199,7 +205,7 @@ button_amber()
 
 # Idle loop
 try:
-    while 1:
+    while True:
         time.sleep(1)
 except KeyboardInterrupt:
     print("\nAttempting to clean up…")
