@@ -32,7 +32,7 @@ BUTTON_WHITE_IN = 23
 BUTTON_AMBER_IN = 24
 BUTTON_RED_IN = 25
 TOGGLE_RED_IN = 16
-TOGGLE_RED_LED = 20
+SMOKE_POWER = 20
 
 
 # Set up GPIO pins
@@ -43,7 +43,7 @@ GPIO.setup(BUTTON_WHITE_IN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(BUTTON_AMBER_IN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(BUTTON_RED_IN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(TOGGLE_RED_IN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.setup(TOGGLE_RED_LED, GPIO.OUT)
+GPIO.setup(SMOKE_POWER, GPIO.OUT)
 
 
 # Set up the strand
@@ -146,7 +146,7 @@ def toggle_red_on(channel='default'):
     print("channel: ", channel)
     global IS_TOGGLE
     IS_TOGGLE = True
-    GPIO.output(TOGGLE_RED_LED, GPIO.HIGH)
+    GPIO.output(SMOKE_POWER, GPIO.HIGH)
     GPIO.remove_event_detect(TOGGLE_RED_IN)
     GPIO.add_event_detect(TOGGLE_RED_IN, GPIO.FALLING, callback=toggle_red_off, bouncetime=300)
 
@@ -159,7 +159,7 @@ def toggle_red_off(channel='default'):
     print("channel: ", channel)
     global IS_TOGGLE
     IS_TOGGLE = False
-    GPIO.output(TOGGLE_RED_LED, GPIO.LOW)
+    GPIO.output(SMOKE_POWER, GPIO.LOW)
     GPIO.remove_event_detect(TOGGLE_RED_IN)
     GPIO.add_event_detect(TOGGLE_RED_IN, GPIO.RISING, callback=toggle_red_on, bouncetime=300)
 
@@ -184,7 +184,7 @@ def button_red(channel='default'):
             WHITE_TIMEOUT.cancel()
         # This (should) prevent another volcano run
         #     until the toggle is physically cycled first
-        #toggle_red_off(channel='volcano_start')
+        #     without turning off SMOKE_POWER
         IS_TOGGLE = False
         # Start the show
         button_grid.setRowColorRGB(0, 16, 16, 16)
