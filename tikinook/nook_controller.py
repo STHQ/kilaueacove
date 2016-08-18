@@ -32,7 +32,7 @@ BUTTON_WHITE_IN = 23
 BUTTON_AMBER_IN = 24
 BUTTON_RED_IN = 25
 TOGGLE_RED_IN = 16
-SMOKE_POWER = 20
+FISH_FLOAT = 20
 
 
 # Set up GPIO pins
@@ -43,7 +43,7 @@ GPIO.setup(BUTTON_WHITE_IN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(BUTTON_AMBER_IN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(BUTTON_RED_IN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(TOGGLE_RED_IN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.setup(SMOKE_POWER, GPIO.OUT)
+GPIO.setup(FISH_FLOAT, GPIO.OUT)
 
 
 # Set up the strand
@@ -101,12 +101,13 @@ def button_white(channel='default'):
         WHITE_TIMEOUT.cancel()
     print("button_white")
     print("channel: ", channel)
+    GPIO.output(FISH_FLOAT, GPIO.HIGH)
     button_grid.setRowColorRGB(0, 16, 16, 16)
     button_grid.setPixelColorRGB(WHITE_LED, 0, 64, 64, 64)
     button_grid.show()
     ring_grid.setRowColorRGB(0, 0, 0, 0)
     ring_grid.show()
-    shelf_back_grid.setRowColorRGB(2, 192, 160, 128)
+    shelf_back_grid.setRowColorRGB(2, 255, 160, 64) # a more "natural" white
     shelf_back_grid.show()
     WHITE_TIMEOUT = threading.Timer(WHITE_TIMEOUT_LENGTH, button_amber, ['WHITE_TIMEOUT'])
     WHITE_TIMEOUT.start()
@@ -121,6 +122,7 @@ def button_amber(channel='default'):
         WHITE_TIMEOUT.cancel()
     print("button_amber")
     print("channel: ", channel)
+    GPIO.output(FISH_FLOAT, GPIO.HIGH)
     button_grid.setRowColorRGB(0, 16, 16, 16)
     button_grid.setPixelColorRGB(AMBER_LED, 0, 64, 64, 64)
     button_grid.show()
@@ -146,7 +148,6 @@ def toggle_red_on(channel='default'):
     print("channel: ", channel)
     global IS_TOGGLE
     IS_TOGGLE = True
-    GPIO.output(SMOKE_POWER, GPIO.HIGH)
     GPIO.remove_event_detect(TOGGLE_RED_IN)
     GPIO.add_event_detect(TOGGLE_RED_IN, GPIO.FALLING, callback=toggle_red_off, bouncetime=300)
 
@@ -159,7 +160,6 @@ def toggle_red_off(channel='default'):
     print("channel: ", channel)
     global IS_TOGGLE
     IS_TOGGLE = False
-    GPIO.output(SMOKE_POWER, GPIO.LOW)
     GPIO.remove_event_detect(TOGGLE_RED_IN)
     GPIO.add_event_detect(TOGGLE_RED_IN, GPIO.RISING, callback=toggle_red_on, bouncetime=300)
 
@@ -184,7 +184,7 @@ def button_red(channel='default'):
             WHITE_TIMEOUT.cancel()
         # This (should) prevent another volcano run
         #     until the toggle is physically cycled first
-        #     without turning off SMOKE_POWER
+        #     without turning off FISH_FLOAT
         IS_TOGGLE = False
         # Start the show
         button_grid.setRowColorRGB(0, 16, 16, 16)
@@ -193,6 +193,7 @@ def button_red(channel='default'):
         # Blackout
         grid.setAllColorRGB(0, 0, 0)
         grid.show()
+        GPIO.output(FISH_FLOAT, GPIO.LOW)
         time.sleep(1)
         # Highlight the volcano
         y = 0  # top row
@@ -223,6 +224,11 @@ def button_red(channel='default'):
         # Play animation
         test_animation = PixelPlayer(rattan_grid, 'animation/rgb-test-16x16-lossless.mov')
         test_animation.play()
+        # Blackout
+        grid.setAllColorRGB(0, 0, 0)
+        grid.show()
+        time.sleep(1)
+        # Back to idle
         button_amber(channel = 'volcano_end')
 
 
