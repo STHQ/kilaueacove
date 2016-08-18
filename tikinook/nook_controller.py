@@ -33,6 +33,7 @@ BUTTON_AMBER_IN = 24
 BUTTON_RED_IN = 25
 TOGGLE_RED_IN = 16
 FISH_FLOAT = 20
+SMOKE_CONTROL = 21
 
 
 # Set up GPIO pins
@@ -44,6 +45,7 @@ GPIO.setup(BUTTON_AMBER_IN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(BUTTON_RED_IN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(TOGGLE_RED_IN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(FISH_FLOAT, GPIO.OUT)
+GPIO.setup(SMOKE_CONTROL, GPIO.OUT)
 
 
 # Set up the strand
@@ -194,6 +196,7 @@ def button_red(channel='default'):
         grid.setAllColorRGB(0, 0, 0)
         grid.show()
         GPIO.output(FISH_FLOAT, GPIO.LOW)
+        GPIO.output(SMOKE_CONTROL, GPIO.HIGH)
         time.sleep(1)
         # Highlight the volcano
         y = 0  # top row
@@ -229,6 +232,7 @@ def button_red(channel='default'):
         grid.show()
         time.sleep(1)
         # Back to idle
+        GPIO.output(SMOKE_CONTROL, GPIO.LOW)
         button_amber(channel = 'volcano_end')
 
 
