@@ -225,7 +225,7 @@ def button_red(channel='default'):
         ring_grid.show()
         time.sleep(5)
         # Play animation
-        test_animation = PixelPlayer(rattan_grid, 'animation/rgb-test-16x16-lossless.mov')
+        test_animation = PixelPlayer(rattan_grid, '/home/pi/tikinook/animation/rgb-test-16x16-lossless.mov')
         test_animation.play()
         # Blackout
         grid.setAllColorRGB(0, 0, 0)
