@@ -34,6 +34,8 @@ BUTTON_RED_IN = 25
 TOGGLE_RED_IN = 16
 FISH_FLOAT = 20
 SMOKE_CONTROL = 21
+IDLE_SOUND = 22
+VOLCANO_SOUND = 27
 
 
 # Set up GPIO pins
@@ -46,6 +48,10 @@ GPIO.setup(BUTTON_RED_IN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(TOGGLE_RED_IN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(FISH_FLOAT, GPIO.OUT)
 GPIO.setup(SMOKE_CONTROL, GPIO.OUT)
+GPIO.setup(IDLE_SOUND, GPIO.OUT)
+GPIO.output(IDLE_SOUND, GPIO.LOW)  # sound on
+GPIO.setup(VOLCANO_SOUND, GPIO.OUT)
+GPIO.output(VOLCANO_SOUND, GPIO.HIGH)  # off
 
 
 # Set up the strand
@@ -103,6 +109,7 @@ def button_white(channel='default'):
         WHITE_TIMEOUT.cancel()
     print("button_white")
     print("channel: ", channel)
+    GPIO.output(IDLE_SOUND, GPIO.LOW)
     GPIO.output(FISH_FLOAT, GPIO.HIGH)
     button_grid.setRowColorRGB(0, 16, 16, 16)
     button_grid.setPixelColorRGB(WHITE_LED, 0, 64, 64, 64)
@@ -124,6 +131,7 @@ def button_amber(channel='default'):
         WHITE_TIMEOUT.cancel()
     print("button_amber")
     print("channel: ", channel)
+    GPIO.output(IDLE_SOUND, GPIO.LOW)
     GPIO.output(FISH_FLOAT, GPIO.HIGH)
     button_grid.setRowColorRGB(0, 16, 16, 16)
     button_grid.setPixelColorRGB(AMBER_LED, 0, 64, 64, 64)
@@ -197,6 +205,8 @@ def button_red(channel='default'):
         grid.show()
         GPIO.output(FISH_FLOAT, GPIO.LOW)
         GPIO.output(SMOKE_CONTROL, GPIO.HIGH)
+        GPIO.output(IDLE_SOUND, GPIO.HIGH)  # Idle Sound off
+        GPIO.output(VOLCANO_SOUND, GPIO.LOW)  # Volcano sound trigger
         time.sleep(1)
         # Highlight the volcano
         y = 0  # top row
@@ -220,7 +230,7 @@ def button_red(channel='default'):
         shelf_back_grid.setRowColorRGB(1, 16, 0, 0)
         shelf_back_grid.setRowColorRGB(2, 4, 0, 0)
         shelf_back_grid.show()
-        time.sleep(5)
+        time.sleep(10)
         ring_grid.setRowColorRGB(0, 255, 0, 0)
         ring_grid.show()
         time.sleep(5)
@@ -230,9 +240,10 @@ def button_red(channel='default'):
         # Blackout
         grid.setAllColorRGB(0, 0, 0)
         grid.show()
-        time.sleep(1)
+        time.sleep(3)
         # Back to idle
         GPIO.output(SMOKE_CONTROL, GPIO.LOW)
+        GPIO.output(VOLCANO_SOUND, GPIO.HIGH)  # off
         button_amber(channel = 'volcano_end')
 
 
