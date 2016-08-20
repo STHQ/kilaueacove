@@ -208,6 +208,7 @@ def button_red(channel='default'):
         GPIO.output(IDLE_SOUND, GPIO.HIGH)  # Idle Sound off
         GPIO.output(VOLCANO_SOUND, GPIO.LOW)  # Volcano sound trigger
         time.sleep(1)
+        GPIO.output(VOLCANO_SOUND, GPIO.HIGH)  # off
         # Highlight the volcano
         y = 0  # top row
         shelf_front_grid.setAllColorRGB(0, 0, 0)
@@ -243,7 +244,6 @@ def button_red(channel='default'):
         time.sleep(3)
         # Back to idle
         GPIO.output(SMOKE_CONTROL, GPIO.LOW)
-        GPIO.output(VOLCANO_SOUND, GPIO.HIGH)  # off
         button_amber(channel = 'volcano_end')
 
 
