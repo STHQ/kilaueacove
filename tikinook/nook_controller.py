@@ -19,20 +19,12 @@ Version History:
 - 0.1.0 - 2016-05-07 - Started development
 """
 
-import pygame
 import time
 import RPi.GPIO as GPIO
 import threading
 import neopixel
 import paleopixel
 from superpixel import *
-
-# Set up sound effects
-pygame.mixer.init()
-background = pygame.mixer.Sound('/home/pi/tikinook/sounds/sea-test.mov')
-background.play(loops=-1) # loops indefinitely
-
-eruption = pygame.mixer.Sound('/home/pi/tikinook/sounds/eruption-test.mov')
 
 # Identify GPIO pins
 
@@ -228,11 +220,10 @@ def button_red(channel='default'):
         shelf_back_grid.setRowColorRGB(1, 16, 0, 0)
         shelf_back_grid.setRowColorRGB(2, 4, 0, 0)
         shelf_back_grid.show()
-        time.sleep(10)
+        time.sleep(5)
         ring_grid.setRowColorRGB(0, 255, 0, 0)
         ring_grid.show()
-        eruption.play()
-        time.sleep(10)
+        time.sleep(5)
         # Play animation
         test_animation = PixelPlayer(rattan_grid, '/home/pi/tikinook/animation/rgb-test-16x16-lossless.mov')
         test_animation.play()
