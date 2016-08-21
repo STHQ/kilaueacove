@@ -204,6 +204,8 @@ def button_red(channel='default'):
         grid.setAllColorRGB(0, 0, 0)
         grid.show()
         GPIO.output(FISH_FLOAT, GPIO.LOW)
+        # load the animation
+        volcano_animation = PixelPlayer(rattan_grid, '/home/pi/tikinook/animation/volcano-v05-16x16.mov')
         GPIO.output(SMOKE_CONTROL, GPIO.HIGH)
         GPIO.output(IDLE_SOUND, GPIO.HIGH)  # Idle Sound off
         GPIO.output(VOLCANO_SOUND, GPIO.LOW)  # Volcano sound trigger
@@ -234,10 +236,9 @@ def button_red(channel='default'):
         time.sleep(10)
         ring_grid.setRowColorRGB(0, 255, 0, 0)
         ring_grid.show()
-        time.sleep(5)
+        time.sleep(4)
         # Play animation
-        test_animation = PixelPlayer(rattan_grid, '/home/pi/tikinook/animation/rgb-test-16x16-lossless.mov')
-        test_animation.play()
+        volcano_animation.play()
         # Blackout
         grid.setAllColorRGB(0, 0, 0)
         grid.show()
