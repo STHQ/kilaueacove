@@ -1,14 +1,18 @@
 # Kilauea Cove
 
-This repository relates to my screening room (home theater) and the “tiki took,” just outside the screening room’s door, where there is a drinks cart, and shelves with tiki mugs and other barware. Collectively, this is **Kilauea Cove**.
+> [As featured on Critiki!](https://news.critiki.com/2017/04/25/how-to-build-a-volcano-raspberry-pi-style/) Thanks, Humuhumu!
+
+This repository relates to my screening room (home theater) and the “tiki took,” just outside the screening room’s door, where there is a drinks cart, and shelves with tiki mugs and other barware. Collectively, this is **[Kilauea Cove](https://critiki.com/location/kilauea-cove-seattle-1005/)**.
 
 The purpose is to collect all of my code, wiring diagrams, graphical elements, and setup instructions for the lighting, effects, and other electronics in the space — not only for my own use (if/when we move and I have to piece it back together again), but as a reference for anyone else who plans to build interactive lights and effects for a small space.
 
-More discussion of these elements as I create or update them can be found on my blog, under the [Kilauea Cove](http://stationinthemetro.com/tag/kilauea-cove) and [Tiki Nook](http://stationinthemetro.com/tag/tiki-nook) tags. I am also posting work-in-progress photos and commentary to a thread on [Tiki Central](http://www.tikiroom.com/tikicentral/bb/viewtopic.php?topic=51211&forum=20&25).
+I did a [full write-up on my Vixen Labs website](https://vixenlabs.com/2017/02/18/kilauea-cove-raspberry-pi-active-volcano/), with information about how I built the whole Cove space. I have also posted work-in-progress photos and commentary to a thread on [Tiki Central](http://www.tikiroom.com/tikicentral/bb/viewtopic.php?topic=51211&forum=20&25), though that is a bit out of date.
+
+As I update further versions of this project, you'll find posts under the [Kilauea Cove](https://vixenlabs.com/project/kilauea-cove/) tag on Vixen Labs.
 
 ## Wiki
 
-[Visit the wiki](https://github.com/bobtiki/kilaueacove/wiki) for details on construction, programming, and decor!
+[Visit the wiki](https://github.com/bobtiki/kilaueacove/wiki) for more details on construction, programming, and decor!
 
 ## The Name
 
@@ -34,7 +38,7 @@ Unless otherwise stated, all content authored by me, Mark Boszko, and contained 
 
 ### Software
 
-Since [Creative Commons recommends against applying their licenses to software](https://creativecommons.org/faq/#can-i-apply-a-creative-commons-license-to-software), my code is available under the **MIT license**. This includes code for running on Raspberry Pi and Arduino. Please see LICENSE.txt for the full license text.
+Since [Creative Commons recommends against applying their licenses to software](https://creativecommons.org/faq/#can-i-apply-a-creative-commons-license-to-software), my code is available under the **MIT license**. This includes code for running on Raspberry Pi and Arduino. Please see [LICENSE.txt](LICENSE.txt) for the full license text, but the rough version is: do what you like with it, but please credit me if you use my code.
 
 ### Other Elements
 
