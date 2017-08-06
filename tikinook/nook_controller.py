@@ -22,6 +22,9 @@ Version History:
 import time
 import RPi.GPIO as GPIO
 import threading
+
+from phue import Bridge
+
 import neopixel
 import paleopixel
 from superpixel import *
@@ -55,6 +58,11 @@ else:
     GPIO.output(IDLE_SOUND, GPIO.HIGH)  # sound off
 GPIO.setup(VOLCANO_SOUND, GPIO.OUT)
 GPIO.output(VOLCANO_SOUND, GPIO.HIGH)  # off
+
+
+# Set up the Hue Bridge
+hue_bridge = Bridge('192.168.10.16')
+HUE_FISH_FLOAT = 5
 
 
 # Set up the strand
@@ -117,6 +125,8 @@ def button_white(channel='default'):
     else:
         GPIO.output(IDLE_SOUND, GPIO.HIGH)  # sound off
     GPIO.output(FISH_FLOAT, GPIO.HIGH)
+    hue_command = {'transitiontime': 30, 'on': True, 'bri': 255, 'sat': 255, 'hue': 12750}
+    hue_bridge.set_light(HUE_FISH_FLOAT, hue_command)
     button_grid.setRowColorRGB(0, 16, 16, 16)
     button_grid.setPixelColorRGB(WHITE_LED, 0, 64, 64, 64)
     button_grid.show()
@@ -142,6 +152,8 @@ def button_amber(channel='default'):
     else:
         GPIO.output(IDLE_SOUND, GPIO.HIGH)  # sound off
     GPIO.output(FISH_FLOAT, GPIO.HIGH)
+    hue_command = {'transitiontime': 30, 'on': True, 'bri': 255, 'sat': 255, 'hue': 12750}
+    hue_bridge.set_light(HUE_FISH_FLOAT, hue_command)
     button_grid.setRowColorRGB(0, 16, 16, 16)
     button_grid.setPixelColorRGB(AMBER_LED, 0, 64, 64, 64)
     button_grid.show()
@@ -212,7 +224,10 @@ def button_red(channel='default'):
         # Blackout
         grid.setAllColorRGB(0, 0, 0)
         grid.show()
-        GPIO.output(FISH_FLOAT, GPIO.LOW)
+        # Now we're controlling the lamp with Hue, so we're turning it on
+        GPIO.output(FISH_FLOAT, GPIO.HIGH)
+        hue_command = {'transitiontime': 300, 'on': True, 'bri': 10, 'sat': 255, 'hue': 0}
+        hue_bridge.set_light(HUE_FISH_FLOAT, hue_command)
         # load the animation
         volcano_animation = PixelPlayer(rattan_grid, '/home/pi/tikinook/animation/volcano-v05-16x16.mov')
         GPIO.output(SMOKE_CONTROL, GPIO.HIGH)
