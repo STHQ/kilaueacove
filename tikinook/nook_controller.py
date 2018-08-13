@@ -32,7 +32,7 @@ BUTTON_WHITE_IN = 23
 BUTTON_AMBER_IN = 24
 BUTTON_RED_IN = 25
 TOGGLE_RED_IN = 16
-FISH_FLOAT = 20
+# FISH_FLOAT = 20
 SMOKE_CONTROL = 21
 IDLE_SOUND = 22
 VOLCANO_SOUND = 27
@@ -46,7 +46,7 @@ GPIO.setup(BUTTON_WHITE_IN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(BUTTON_AMBER_IN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(BUTTON_RED_IN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(TOGGLE_RED_IN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.setup(FISH_FLOAT, GPIO.OUT)
+# GPIO.setup(FISH_FLOAT, GPIO.OUT)
 GPIO.setup(SMOKE_CONTROL, GPIO.OUT)
 GPIO.setup(IDLE_SOUND, GPIO.OUT)
 if (USE_IDLE_SOUND):
@@ -116,7 +116,7 @@ def button_white(channel='default'):
         GPIO.output(IDLE_SOUND, GPIO.LOW)  # sound on
     else:
         GPIO.output(IDLE_SOUND, GPIO.HIGH)  # sound off
-    GPIO.output(FISH_FLOAT, GPIO.HIGH)
+#     GPIO.output(FISH_FLOAT, GPIO.HIGH)
     button_grid.setRowColorRGB(0, 16, 16, 16)
     button_grid.setPixelColorRGB(WHITE_LED, 0, 64, 64, 64)
     button_grid.show()
@@ -141,7 +141,7 @@ def button_amber(channel='default'):
         GPIO.output(IDLE_SOUND, GPIO.LOW)  # sound on
     else:
         GPIO.output(IDLE_SOUND, GPIO.HIGH)  # sound off
-    GPIO.output(FISH_FLOAT, GPIO.HIGH)
+#     GPIO.output(FISH_FLOAT, GPIO.HIGH)
     button_grid.setRowColorRGB(0, 16, 16, 16)
     button_grid.setPixelColorRGB(AMBER_LED, 0, 64, 64, 64)
     button_grid.show()
@@ -212,7 +212,7 @@ def button_red(channel='default'):
         # Blackout
         grid.setAllColorRGB(0, 0, 0)
         grid.show()
-        GPIO.output(FISH_FLOAT, GPIO.LOW)
+#         GPIO.output(FISH_FLOAT, GPIO.LOW)
         # load the animation
         volcano_animation = PixelPlayer(rattan_grid, '/home/pi/tikinook/animation/volcano-v05-16x16.mov')
         GPIO.output(SMOKE_CONTROL, GPIO.HIGH)
