@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 """
 Code specific to controlling the lights and other display events
@@ -14,14 +14,21 @@ Licensed under The MIT License (MIT). Please see LICENSE.txt for full text
 of the license.
 
 Version History:
+- 0.3.0 - 2018-08-13 - Started on upgrades to show, and OSC for communication
 - 0.2.0 - 2016-08-07 - Add the 3 button NeoPixels + the 24 ring NeoPixels
                        Fixed the red toggle detection + volcano show restriction
 - 0.1.0 - 2016-05-07 - Started development
 """
 
-import time
+import argparse
+import math
 import RPi.GPIO as GPIO
+import time
 import threading
+
+from pythonosc import dispatcher
+from pythonosc import osc_server
+
 import neopixel
 import paleopixel
 from superpixel import *
@@ -255,23 +262,50 @@ def button_red(channel='default'):
         # Back to idle
         GPIO.output(SMOKE_CONTROL, GPIO.LOW)
         button_amber(channel = 'volcano_end')
+        
+def erupt_handler(unused_addr, args, erupt):
+	# erupt == 1.0 always, so I'm not even going to check
+	toggle_red_on()
+	button_red()
+	toggle_red_off()
+        
+        
 
+##########
+# main code
+##########
 
-# Initialize physical button interrupts
-GPIO.add_event_detect(TOGGLE_RED_IN, GPIO.RISING, callback=toggle_red_on, bouncetime=500)
-GPIO.add_event_detect(BUTTON_WHITE_IN, GPIO.FALLING, callback=button_white, bouncetime=500)
-GPIO.add_event_detect(BUTTON_AMBER_IN, GPIO.FALLING, callback=button_amber, bouncetime=500)
-GPIO.add_event_detect(BUTTON_RED_IN, GPIO.FALLING, callback=button_red, bouncetime=500)
+if __name__ == "__main__":
 
+	parser = argparse.ArgumentParser()
+	parser.add_argument("--ip", default="192.168.10.15", help="The ip to listen on")
+	parser.add_argument("--port", type=int, default=8000, help="The port to listen on")
+	args = parser.parse_args()
 
-# Display the default pattern once
-button_amber()
+	# Initialize physical button interrupts
+	GPIO.add_event_detect(TOGGLE_RED_IN, GPIO.RISING, callback=toggle_red_on, bouncetime=500)
+	GPIO.add_event_detect(BUTTON_WHITE_IN, GPIO.FALLING, callback=button_white, bouncetime=500)
+	GPIO.add_event_detect(BUTTON_AMBER_IN, GPIO.FALLING, callback=button_amber, bouncetime=500)
+	GPIO.add_event_detect(BUTTON_RED_IN, GPIO.FALLING, callback=button_red, bouncetime=500)
 
-# Idle loop
-try:
-    while True:
-        time.sleep(1)
-except KeyboardInterrupt:
-    print("\nAttempting to clean up…")
-finally:
-    GPIO.cleanup()
+	# Display the default pattern once
+	button_amber()
+
+	# Start the OSC listener
+	dispatcher = dispatcher.Dispatcher()
+	dispatcher.map("/erupt", erupt_handler, "Erupt")
+	server = osc_server.ThreadingOSCUDPServer(
+		(args.ip, args.port),
+		dispatcher,
+	)
+	print("Serving on {}".format(server.server_address))
+	server.serve_forever()
+
+	# Idle loop
+# 	try:
+# 		while True:
+# 			time.sleep(1)
+# 	except KeyboardInterrupt:
+# 		print("\nAttempting to clean up…")
+# 	finally:
+# 		GPIO.cleanup()
