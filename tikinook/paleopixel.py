@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 """
 Adafruit NeoPixel library port to control the older WS2801 pixels from
@@ -107,9 +107,10 @@ class PaleoPixel(object):
         spidev = os.open('/dev/spidev0.0', os.O_WRONLY)
         # Iterate through numpy array, write R, G, B for each pixel
         for pixel in self._led_data:
-            os.write(spidev, chr(pixel[0] & 0xFF))  #R
-            os.write(spidev, chr(pixel[1] & 0xFF))  #G
-            os.write(spidev, chr(pixel[2] & 0xFF))  #B
+#             os.write(spidev, chr(pixel[0] & 0xFF))  #R
+            os.write(spidev, bytes(chr(pixel[0] & 0xFF), "UTF-8"))  #R
+            os.write(spidev, bytes(chr(pixel[1] & 0xFF), "UTF-8"))  #G
+            os.write(spidev, bytes(chr(pixel[2] & 0xFF), "UTF-8"))  #B
         os.close(spidev)
         # Requires 500us (.0005 seconds) to latch data, as per data sheet:
         # https://cdn-shop.adafruit.com/datasheets/WS2801.pdf
