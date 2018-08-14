@@ -43,7 +43,10 @@ class _LED_Data(object):
                 index += 1
         # Else assume the passed in value is a number to the position.
         else:
-            return ws.ws2811_led_set(self.channel, pos, value)
+            # return ws.ws2811_led_set(self.channel, pos, value)
+            # Testing value types:
+            # print("type value.item(): {}", type(value.item()))
+            return ws.ws2811_led_set(self.channel, pos.item(), value.item())
 
 
 class Adafruit_NeoPixel(object):
