@@ -108,8 +108,7 @@ class PaleoPixel(object):
         # Iterate through numpy array, write R, G, B for each pixel
         for pixel in self._led_data:
             # FIXME: This makes the code run, but it has screwed up the color values.
-            # Original:
-            # os.write(spidev, chr(pixel[0] & 0xFF))  #R
+#             os.write(spidev, chr(pixel[0] & 0xFF))  #R
             os.write(spidev, bytes(chr(pixel[0] & 0xFF), "UTF-8"))  #R
             os.write(spidev, bytes(chr(pixel[1] & 0xFF), "UTF-8"))  #G
             os.write(spidev, bytes(chr(pixel[2] & 0xFF), "UTF-8"))  #B
