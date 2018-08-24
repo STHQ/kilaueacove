@@ -178,8 +178,8 @@ class SuperPixel(object):
                         new_rgb.append(current_rgb[color])
                 print("new_rgb", new_rgb)
                 self.setPixelColor(index, new_rgb)
-                self.show()
-            time.sleep(frame_delay)
+            self.show()
+            # time.sleep(frame_delay)
 
 
 #####
