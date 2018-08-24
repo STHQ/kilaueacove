@@ -21,7 +21,6 @@ Version History:
 """
 
 import argparse
-import math
 import RPi.GPIO as GPIO
 import time
 import threading
@@ -33,17 +32,17 @@ import neopixel
 import paleopixel
 from superpixel import *
 
+# ------------------------------
+# GPIO setup
+# ------------------------------
+
 # Identify GPIO pins
 
 BUTTON_WHITE_IN = 23
 BUTTON_AMBER_IN = 24
 BUTTON_RED_IN = 25
 TOGGLE_RED_IN = 16
-# FISH_FLOAT = 20
 SMOKE_CONTROL = 21
-# IDLE_SOUND = 22
-# VOLCANO_SOUND = 27
-# USE_IDLE_SOUND = False
 
 # Set up GPIO pins
 
@@ -53,15 +52,11 @@ GPIO.setup(BUTTON_WHITE_IN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(BUTTON_AMBER_IN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(BUTTON_RED_IN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(TOGGLE_RED_IN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-# GPIO.setup(FISH_FLOAT, GPIO.OUT)
 GPIO.setup(SMOKE_CONTROL, GPIO.OUT)
-# GPIO.setup(IDLE_SOUND, GPIO.OUT)
-# if (USE_IDLE_SOUND):
-#     GPIO.output(IDLE_SOUND, GPIO.LOW)  # sound on
-# else:
-#     GPIO.output(IDLE_SOUND, GPIO.HIGH)  # sound off
-# GPIO.setup(VOLCANO_SOUND, GPIO.OUT)
-# GPIO.output(VOLCANO_SOUND, GPIO.HIGH)  # off
+
+# ------------------------------
+# LED setup
+# ------------------------------
 
 # Set up the strand
 
@@ -93,6 +88,10 @@ shelf_back_grid = PixelGrid(strand, (165, 41), (83, 41), (3, 39))
 shelf_front_grid = PixelGrid(strand, (246, -41), (164, -41), (82, -41))
 ring_grid = PixelGrid(strand, (247, 24))
 
+# ------------------------------
+# Globals
+# ------------------------------
+
 # Make these globals so threaded button functions can address it
 global WHITE_TIMEOUT
 WHITE_TIMEOUT = None
@@ -102,6 +101,10 @@ WHITE_TIMEOUT_LENGTH = 300
 global IS_TOGGLE
 IS_TOGGLE = False
 
+
+# ------------------------------
+# Callback methods
+# ------------------------------
 
 # FIXME: animation functions need to know when another function has been called
 #        and cancel any further animation in the current function.
@@ -117,16 +120,13 @@ def button_white(channel='default'):
     print("button_white()")
     print("channel: ", channel)
 
-    # Reset the timer for the white light
+    # Cancel the timer for the white light
     global WHITE_TIMEOUT
     if (WHITE_TIMEOUT is not None):
         WHITE_TIMEOUT.cancel()
 
-    # if (USE_IDLE_SOUND):
-    #     GPIO.output(IDLE_SOUND, GPIO.LOW)  # sound on
-    # else:
-    #     GPIO.output(IDLE_SOUND, GPIO.HIGH)  # sound off
-    #     GPIO.output(FISH_FLOAT, GPIO.HIGH)
+    # Set all row colors the same as button_amber(), except
+    # get the row underneath the bottom shelf, and show white
     button_grid.setRowColorRGB(0, 16, 16, 16)
     button_grid.setPixelColorRGB(WHITE_LED, 0, 64, 64, 64)
     button_grid.show()
@@ -134,6 +134,8 @@ def button_white(channel='default'):
     ring_grid.show()
     shelf_back_grid.setRowColorRGB(2, 255, 160, 64)  # a more "natural" white
     shelf_back_grid.show()
+
+    # Start a timer to go back to amber after WHITE_TIMEOUT_LENGTH
     WHITE_TIMEOUT = threading.Timer(WHITE_TIMEOUT_LENGTH, button_amber, ['WHITE_TIMEOUT'])
     WHITE_TIMEOUT.start()
 
@@ -146,16 +148,12 @@ def button_amber(channel='default'):
     print("button_amber()")
     print("channel: ", channel)
 
-    # Remove the timer for the white light
+    # Cancel the timer for the white light
     global WHITE_TIMEOUT
     if (WHITE_TIMEOUT is not None):
         WHITE_TIMEOUT.cancel()
 
-    # if (USE_IDLE_SOUND):
-    #     GPIO.output(IDLE_SOUND, GPIO.LOW)  # sound on
-    # else:
-    #     GPIO.output(IDLE_SOUND, GPIO.HIGH)  # sound off
-    #     GPIO.output(FISH_FLOAT, GPIO.HIGH)
+    # Set pretty colors
     button_grid.setRowColorRGB(0, 16, 16, 16)
     button_grid.setPixelColorRGB(AMBER_LED, 0, 64, 64, 64)
     button_grid.show()
@@ -189,7 +187,7 @@ def toggle_red_on(channel='default'):
 def toggle_red_off(channel='default'):
     """Volcano Safety Toggle: OFF
     
-    When off, volcano show cannot be started.
+    When off, volcano show cannot be started, unless triggered by OSC.
     """
     print("toggle_red_off")
     print("channel: ", channel)
@@ -214,29 +212,29 @@ def button_red(channel='default'):
     global IS_TOGGLE
     print("IS_TOGGLE: ", IS_TOGGLE)
     if (IS_TOGGLE):
-        # Clear any timeout, so it doesn't interrupt the show
+        # Cancel the timer for the white light, so it doesn't interrupt the show
         global WHITE_TIMEOUT
         if (WHITE_TIMEOUT is not None):
             WHITE_TIMEOUT.cancel()
+
         # This (should) prevent another volcano run
         #     until the toggle is physically cycled first
-        #     without turning off FISH_FLOAT
         IS_TOGGLE = False
+
         # Start the show
         button_grid.setRowColorRGB(0, 16, 16, 16)
         button_grid.setPixelColorRGB(RED_LED, 0, 64, 64, 64)
         button_grid.show()
+
         # Blackout
         grid.setAllColorRGB(0, 0, 0)
         grid.show()
-        #         GPIO.output(FISH_FLOAT, GPIO.LOW)
+
         # load the animation
+        # TODO: load this once at setup, instead of each time the button is pressed
         volcano_animation = PixelPlayer(rattan_grid, '/home/pi/kilaueacove/tikinook/animation/volcano-v05-16x16.mov')
         GPIO.output(SMOKE_CONTROL, GPIO.HIGH)
-        # GPIO.output(IDLE_SOUND, GPIO.HIGH)  # Idle Sound off
-        # GPIO.output(VOLCANO_SOUND, GPIO.LOW)  # Volcano sound trigger
-        # time.sleep(1)
-        # GPIO.output(VOLCANO_SOUND, GPIO.HIGH)  # off
+
         # Highlight the volcano
         y = 0  # top row
         shelf_front_grid.setAllColorRGB(0, 0, 0)
@@ -263,12 +261,15 @@ def button_red(channel='default'):
         ring_grid.setRowColorRGB(0, 255, 0, 0)
         ring_grid.show()
         time.sleep(4)
+
         # Play animation
         volcano_animation.play()
+
         # Blackout
         grid.setAllColorRGB(0, 0, 0)
         grid.show()
         time.sleep(3)
+
         # Back to idle
         GPIO.output(SMOKE_CONTROL, GPIO.LOW)
         button_amber(channel='volcano_end')
@@ -285,9 +286,9 @@ def erupt_handler(unused_addr, args, erupt):
     button_red(channel='OSC')
 
 
-##########
-# main code
-##########
+# ------------------------------
+# Main code
+# ------------------------------
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -313,6 +314,7 @@ if __name__ == "__main__":
     )
     print("OSC listening on {}".format(server.server_address))
     server.serve_forever()
+    print("OSC active.")
 
     # Idle loop
     try:
