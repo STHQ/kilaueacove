@@ -158,7 +158,7 @@ class SuperPixel(object):
         print("frame_delay", frame_delay)
         frames = int(FADE_FPS * seconds)
         print("frames", frames)
-        for frame in range(frames)
+        for frame in range(frames):
             frames_remain = frames - frame
             current_colors = self._led_data
             for index, current_rgb in enumerate(current_colors):
