@@ -21,6 +21,7 @@ Version History:
 """
 
 import argparse
+import numpy
 import RPi.GPIO as GPIO
 import time
 import threading
@@ -239,7 +240,8 @@ def button_red(channel='default'):
         # Blackout
         # grid.setAllColorRGB(0, 0, 0)
         # grid.show()
-        new_colors = [[128,57,88], [129,32,89]]
+        pixel_count = len(super_strand.getPixels())
+        new_colors = numpy.zeros((pixel_count, 3), dtype=numpy.int)
         super_strand.fade_to_colors(new_colors=new_colors, seconds=3)
 
         # Smoke starts

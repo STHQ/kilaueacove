@@ -33,6 +33,10 @@ TIKI_NOOK_GRID = [(311, 10), (310, -10), (291, 10), (290, -10), (271, 10),
 # Rows, bottom up: 39, -41, 41, -41,  41, -41, -11,  10, -10,  10,  -9
 # Index, bottom up: 0,  79, 80, 161, 162, 243, 254, 255, 274, 275, 293
 
+# Fade frames per second
+FADE_FPS = 30
+
+
 #####
 #
 # SuperPixel - superset pixel strand class
@@ -147,15 +151,24 @@ class SuperPixel(object):
         return self._led_data[n]
 
     def fade_to_colors(self, new_colors, seconds):
-        """Fade from the current pixel colors to a new Numpy array of
+        """Fade from the current pixel colors to a new list of
         pixel color values, over a float number of seconds.
         """
+        frame_delay = 1.0 / FADE_FPS
+        frames = int(FADE_FPS * seconds)
         current_colors = self._led_data
-        for pixel in current_colors:
-            print(pixel)
+        for index, rgb in enumerate(current_colors):
+            # print(pixel)
             # TODO: Compare to current colors
-            # TODO: for delta in time slice
-            # TODO: get incrementally closer
+            new_rgb = []
+            for color in range(3):
+                delta = rgb[color] - new_colors[index][color]
+                delta_frame = int(delta / frames)
+                new_rgb.append(rgb[color] + delta_frame)
+            self.setPixelColor(index, new_rgb)
+            self.show()
+            frames = frames - 1
+            time.sleep(frame_delay)
 
 
 #####
