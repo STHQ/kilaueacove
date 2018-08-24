@@ -334,4 +334,5 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         print("\nAttempting to clean up…")
     finally:
+        server.shutdown()
         GPIO.cleanup()
