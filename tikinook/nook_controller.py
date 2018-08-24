@@ -41,9 +41,9 @@ BUTTON_RED_IN = 25
 TOGGLE_RED_IN = 16
 # FISH_FLOAT = 20
 SMOKE_CONTROL = 21
-IDLE_SOUND = 22
+# IDLE_SOUND = 22
 VOLCANO_SOUND = 27
-USE_IDLE_SOUND = False
+# USE_IDLE_SOUND = False
 
 # Set up GPIO pins
 
@@ -55,11 +55,11 @@ GPIO.setup(BUTTON_RED_IN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(TOGGLE_RED_IN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 # GPIO.setup(FISH_FLOAT, GPIO.OUT)
 GPIO.setup(SMOKE_CONTROL, GPIO.OUT)
-GPIO.setup(IDLE_SOUND, GPIO.OUT)
-if (USE_IDLE_SOUND):
-    GPIO.output(IDLE_SOUND, GPIO.LOW)  # sound on
-else:
-    GPIO.output(IDLE_SOUND, GPIO.HIGH)  # sound off
+# GPIO.setup(IDLE_SOUND, GPIO.OUT)
+# if (USE_IDLE_SOUND):
+#     GPIO.output(IDLE_SOUND, GPIO.LOW)  # sound on
+# else:
+#     GPIO.output(IDLE_SOUND, GPIO.HIGH)  # sound off
 GPIO.setup(VOLCANO_SOUND, GPIO.OUT)
 GPIO.output(VOLCANO_SOUND, GPIO.HIGH)  # off
 
@@ -119,10 +119,11 @@ def button_white(channel='default'):
         WHITE_TIMEOUT.cancel()
     print("button_white")
     print("channel: ", channel)
-    if (USE_IDLE_SOUND):
-        GPIO.output(IDLE_SOUND, GPIO.LOW)  # sound on
-    else:
-        GPIO.output(IDLE_SOUND, GPIO.HIGH)  # sound off
+
+    # if (USE_IDLE_SOUND):
+    #     GPIO.output(IDLE_SOUND, GPIO.LOW)  # sound on
+    # else:
+    #     GPIO.output(IDLE_SOUND, GPIO.HIGH)  # sound off
     #     GPIO.output(FISH_FLOAT, GPIO.HIGH)
     button_grid.setRowColorRGB(0, 16, 16, 16)
     button_grid.setPixelColorRGB(WHITE_LED, 0, 64, 64, 64)
@@ -145,10 +146,11 @@ def button_amber(channel='default'):
         WHITE_TIMEOUT.cancel()
     print("button_amber")
     print("channel: ", channel)
-    if (USE_IDLE_SOUND):
-        GPIO.output(IDLE_SOUND, GPIO.LOW)  # sound on
-    else:
-        GPIO.output(IDLE_SOUND, GPIO.HIGH)  # sound off
+
+    # if (USE_IDLE_SOUND):
+    #     GPIO.output(IDLE_SOUND, GPIO.LOW)  # sound on
+    # else:
+    #     GPIO.output(IDLE_SOUND, GPIO.HIGH)  # sound off
     #     GPIO.output(FISH_FLOAT, GPIO.HIGH)
     button_grid.setRowColorRGB(0, 16, 16, 16)
     button_grid.setPixelColorRGB(AMBER_LED, 0, 64, 64, 64)
@@ -227,7 +229,7 @@ def button_red(channel='default'):
         # load the animation
         volcano_animation = PixelPlayer(rattan_grid, '/home/pi/kilaueacove/tikinook/animation/volcano-v05-16x16.mov')
         GPIO.output(SMOKE_CONTROL, GPIO.HIGH)
-        GPIO.output(IDLE_SOUND, GPIO.HIGH)  # Idle Sound off
+        # GPIO.output(IDLE_SOUND, GPIO.HIGH)  # Idle Sound off
         GPIO.output(VOLCANO_SOUND, GPIO.LOW)  # Volcano sound trigger
         time.sleep(1)
         GPIO.output(VOLCANO_SOUND, GPIO.HIGH)  # off
