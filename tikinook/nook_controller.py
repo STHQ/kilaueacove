@@ -58,35 +58,35 @@ GPIO.setup(SMOKE_CONTROL, GPIO.OUT)
 # LED setup
 # ------------------------------
 
-# Set up the strand
+# Set up the super_strand
 
 # My LED strip configurations (for test):
 WHITE_LED = 0  # These are the LEDs inside the buttons
 AMBER_LED = 1
 RED_LED = 2
-NEOPIXEL_COUNT = 271  # Number of NeoPixels in the strand
+NEOPIXEL_COUNT = 271  # Number of NeoPixels in the super_strand
 NEOPIXEL_PIN = 18  # GPIO pin connected to the pixels (must support PWM!)
-PALEOPIXEL_COUNT = 50  # Number of PaleoPixels in the strand
+PALEOPIXEL_COUNT = 50  # Number of PaleoPixels in the super_strand
 
 # Create pixel strands with appropriate configuration.
-strand1 = neopixel.Adafruit_NeoPixel(NEOPIXEL_COUNT, NEOPIXEL_PIN)
-strand2 = paleopixel.PaleoPixel(PALEOPIXEL_COUNT)
+neopixel_strand = neopixel.Adafruit_NeoPixel(NEOPIXEL_COUNT, NEOPIXEL_PIN)
+paleopixel_strand = paleopixel.PaleoPixel(PALEOPIXEL_COUNT)
 
-# Combine them into one SuperPixel strand
-strand = SuperPixel(strand1, strand2)
+# Combine them into one SuperPixel super_strand
+super_strand = SuperPixel(neopixel_strand, paleopixel_strand)
 
-# Intialize the SuperPixel strand (must be called once, before other
-# functions, if the SuperPixel strand contains any NeoPixel sub-strands)
-strand.begin()
+# Intialize the SuperPixel super_strand (must be called once, before other
+# functions, if the SuperPixel super_strand contains any NeoPixel sub-strands)
+super_strand.begin()
 
 # Set up grid segments
-grid = PixelGrid(strand, (311, 10), (310, -10), (291, 10), (290, -10), (271, 10), (246, -41), (165, 41), (164, -41),
+grid = PixelGrid(super_strand, (311, 10), (310, -10), (291, 10), (290, -10), (271, 10), (246, -41), (165, 41), (164, -41),
                  (83, 41), (82, -41), (3, 39))
-button_grid = PixelGrid(strand, (0, 3))
-rattan_grid = PixelGrid(strand, (311, 10), (310, -10), (291, 10), (290, -10), (271, 10))
-shelf_back_grid = PixelGrid(strand, (165, 41), (83, 41), (3, 39))
-shelf_front_grid = PixelGrid(strand, (246, -41), (164, -41), (82, -41))
-ring_grid = PixelGrid(strand, (247, 24))
+button_grid = PixelGrid(super_strand, (0, 3))
+rattan_grid = PixelGrid(super_strand, (311, 10), (310, -10), (291, 10), (290, -10), (271, 10))
+shelf_back_grid = PixelGrid(super_strand, (165, 41), (83, 41), (3, 39))
+shelf_front_grid = PixelGrid(super_strand, (246, -41), (164, -41), (82, -41))
+ring_grid = PixelGrid(super_strand, (247, 24))
 
 
 # ------------------------------
@@ -230,11 +230,12 @@ def button_red(channel='default'):
         #     until the toggle is physically cycled first
         IS_TOGGLE = False
 
-        # Start the show
+        # Start the show; set color of control box buttons
         button_grid.setRowColorRGB(0, 16, 16, 16)
         button_grid.setPixelColorRGB(RED_LED, 0, 64, 64, 64)
         button_grid.show()
 
+        # TODO: Slower fade out, bottom to top
         # Blackout
         grid.setAllColorRGB(0, 0, 0)
         grid.show()
@@ -242,6 +243,7 @@ def button_red(channel='default'):
         # Smoke starts
         GPIO.output(SMOKE_CONTROL, GPIO.HIGH)
 
+        # TODO, top row slower shrink in from edges, turn red
         # Highlight the volcano
         y = 0  # top row
         shelf_front_grid.setAllColorRGB(0, 0, 0)
@@ -265,6 +267,9 @@ def button_red(channel='default'):
         shelf_back_grid.setRowColorRGB(2, 4, 0, 0)
         shelf_back_grid.show()
         time.sleep(10)
+
+        # Turn the ring red to highlight smoke
+        # TODO: make this fluctuate red/orage/yellow during eruption sequence
         ring_grid.setRowColorRGB(0, 255, 0, 0)
         ring_grid.show()
         time.sleep(4)
@@ -313,16 +318,14 @@ if __name__ == "__main__":
     # Display the default pattern once
     button_amber()
 
-    # Start the OSC listener
+    # Set up the OSC listener
     dispatcher = dispatcher.Dispatcher()
     dispatcher.map("/erupt", erupt_handler, "Erupt")
-    server = osc_server.ThreadingOSCUDPServer(
-        (args.ip, args.port),
-        dispatcher,
-    )
+    # Run the server on its own thread
+    server = ForkingOSCUDPServer((args.ip, args.port), dispatcher)
+    server_thread = threading.Thread(target=server.serve_forever)
+    server_thread.start()
     print("OSC listening on {}".format(server.server_address))
-    server.serve_forever()
-    print("OSC active.")
 
     # Idle loop
     try:
