@@ -282,16 +282,14 @@ def button_red(channel='default'):
         # FIXME: Slow this down!
         volcano_animation.play(delay=0.013)
 
-        # Blackout
-        # grid.setAllColorRGB(0, 0, 0)
-        # grid.show()
+        # Smoke off
+        GPIO.output(SMOKE_CONTROL, GPIO.LOW)
         time.sleep(3)
+
+        # Fade to black
         new_colors = numpy.zeros((pixel_count, 3), dtype=numpy.int)
         super_strand.fade_to_colors(new_colors=new_colors, seconds=1)
         time.sleep(3)
-
-        # Back to idle
-        GPIO.output(SMOKE_CONTROL, GPIO.LOW)
 
         # Fade up to Amber
         # Start with black
@@ -339,7 +337,7 @@ def button_red(channel='default'):
         super_strand.fade_to_colors(new_colors=amber_colors, seconds=2)
 
         # Comment out so I can examine the fade results
-        # button_amber(channel='volcano_end')
+        button_amber(channel='volcano_end')
 
 
 def erupt_handler(unused_addr, args, erupt):
