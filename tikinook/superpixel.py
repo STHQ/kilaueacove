@@ -421,7 +421,7 @@ class PixelPlayer(object):
         if self._video_data is not None:
             self._video_data = None
 
-    def play(self):
+    def play(self, delay=0):
         """Plays the loaded data on the PixelGrid"""
         # print ("Displaying video_data")
         for frame in self._video_data:
@@ -429,6 +429,7 @@ class PixelPlayer(object):
                 for x in range(frame.shape[1]):
                     self._grid.setPixelColor(x, y, frame[y][x])
             self._grid.show()
+            time.sleep(delay)
 
 
 #####

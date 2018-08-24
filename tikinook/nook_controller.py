@@ -279,7 +279,8 @@ def button_red(channel='default'):
         time.sleep(4)
 
         # Play animation
-        volcano_animation.play()
+        # FIXME: Slow this down!
+        volcano_animation.play(delay=0.03)
 
         # Blackout
         # grid.setAllColorRGB(0, 0, 0)
@@ -290,30 +291,10 @@ def button_red(channel='default'):
 
         # Back to idle
         GPIO.output(SMOKE_CONTROL, GPIO.LOW)
-        # TODO: Fade up to Amber light settings
 
-        # REFERENCE:
-        # button_grid.setRowColorRGB(0, 16, 16, 16)
-        # button_grid.setPixelColorRGB(AMBER_LED, 0, 64, 64, 64)
-        # button_grid.show()
-        # ring_grid.setRowColorRGB(0, 0, 0, 0)
-        # ring_grid.show()
-        # rattan_grid.setRowColorRGB(0, 250, 127, 0)
-        # rattan_grid.setRowColorRGB(1, 128, 50, 0)
-        # rattan_grid.setRowColorRGB(2, 64, 10, 0)
-        # rattan_grid.setRowColorRGB(3, 0, 90, 75)
-        # rattan_grid.setRowColorRGB(4, 0, 0, 100)
-        # shelf_back_grid.setAllColorRGB(0, 2, 4)
-        # shelf_front_grid.setAllColorRGB(50, 20, 10)
-        #
-        # button_grid = PixelGrid(super_strand, (0, 3))
-        # rattan_grid = PixelGrid(super_strand, (311, 10), (310, -10), (291, 10), (290, -10), (271, 10))
-        # shelf_back_grid = PixelGrid(super_strand, (165, 41), (83, 41), (3, 39))
-        # shelf_front_grid = PixelGrid(super_strand, (246, -41), (164, -41), (82, -41))
-
+        # Fade up to Amber
         # Start with black
         amber_colors = numpy.zeros((pixel_count, 3), dtype=numpy.int)
-
         # Assign Amber colors
         amber_colors[WHITE_LED] = [16, 16, 16]
         amber_colors[AMBER_LED] = [64, 64, 64]
