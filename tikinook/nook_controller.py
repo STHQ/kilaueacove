@@ -280,7 +280,7 @@ def button_red(channel='default'):
 
         # Play animation
         # FIXME: Slow this down!
-        volcano_animation.play(delay=0.03)
+        volcano_animation.play(delay=0.02)
 
         # Blackout
         # grid.setAllColorRGB(0, 0, 0)
