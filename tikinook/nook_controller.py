@@ -88,6 +88,15 @@ shelf_back_grid = PixelGrid(strand, (165, 41), (83, 41), (3, 39))
 shelf_front_grid = PixelGrid(strand, (246, -41), (164, -41), (82, -41))
 ring_grid = PixelGrid(strand, (247, 24))
 
+
+# ------------------------------
+# Eruption animation setup
+# ------------------------------
+
+# load the animation
+volcano_animation = PixelPlayer(rattan_grid, '/home/pi/kilaueacove/tikinook/animation/volcano-v05-16x16.mov')
+
+
 # ------------------------------
 # Globals
 # ------------------------------
@@ -230,9 +239,7 @@ def button_red(channel='default'):
         grid.setAllColorRGB(0, 0, 0)
         grid.show()
 
-        # load the animation
-        # TODO: load this once at setup, instead of each time the button is pressed
-        volcano_animation = PixelPlayer(rattan_grid, '/home/pi/kilaueacove/tikinook/animation/volcano-v05-16x16.mov')
+        # Smoke starts
         GPIO.output(SMOKE_CONTROL, GPIO.HIGH)
 
         # Highlight the volcano
@@ -291,6 +298,7 @@ def erupt_handler(unused_addr, args, erupt):
 # ------------------------------
 
 if __name__ == "__main__":
+    # Set up OSC variables from command line args
     parser = argparse.ArgumentParser()
     parser.add_argument("--ip", default="192.168.10.15", help="The ip to listen on")
     parser.add_argument("--port", type=int, default=8000, help="The port to listen on")
