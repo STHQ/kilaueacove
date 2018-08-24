@@ -322,7 +322,7 @@ if __name__ == "__main__":
     dispatcher = dispatcher.Dispatcher()
     dispatcher.map("/erupt", erupt_handler, "Erupt")
     # Run the server on its own thread
-    server = ForkingOSCUDPServer((args.ip, args.port), dispatcher)
+    server = osc_server.ForkingOSCUDPServer((args.ip, args.port), dispatcher)
     server_thread = threading.Thread(target=server.serve_forever)
     server_thread.start()
     print("OSC listening on {}".format(server.server_address))
