@@ -146,6 +146,17 @@ class SuperPixel(object):
         """
         return self._led_data[n]
 
+    def fade_to_colors(self, new_colors, seconds):
+        """Fade from the current pixel colors to a new Numpy array of
+        pixel color values, over a float number of seconds.
+        """
+        current_colors = self._led_data
+        for pixel in current_colors:
+            print(pixel)
+            # TODO: Compare to current colors
+            # TODO: for delta in time slice
+            # TODO: get incrementally closer
+
 
 #####
 #

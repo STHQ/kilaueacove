@@ -237,8 +237,10 @@ def button_red(channel='default'):
 
         # TODO: Slower fade out, bottom to top
         # Blackout
-        grid.setAllColorRGB(0, 0, 0)
-        grid.show()
+        # grid.setAllColorRGB(0, 0, 0)
+        # grid.show()
+        new_colors = [[128,57,88], [129,32,89]]
+        super_strand.fade_to_colors(new_colors=new_colors, seconds=3)
 
         # Smoke starts
         GPIO.output(SMOKE_CONTROL, GPIO.HIGH)
