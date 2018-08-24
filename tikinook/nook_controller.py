@@ -114,11 +114,13 @@ def button_white(channel='default'):
     
     Times out based on the value in WHITE_TIMEOUT_LENGTH (seconds)
     """
+    print("button_white()")
+    print("channel: ", channel)
+
+    # Reset the timer for the white light
     global WHITE_TIMEOUT
     if (WHITE_TIMEOUT is not None):
         WHITE_TIMEOUT.cancel()
-    print("button_white")
-    print("channel: ", channel)
 
     # if (USE_IDLE_SOUND):
     #     GPIO.output(IDLE_SOUND, GPIO.LOW)  # sound on
@@ -141,11 +143,13 @@ def button_amber(channel='default'):
     
     TODO: subtle animation
     """
+    print("button_amber()")
+    print("channel: ", channel)
+
+    # Remove the timer for the white light
     global WHITE_TIMEOUT
     if (WHITE_TIMEOUT is not None):
         WHITE_TIMEOUT.cancel()
-    print("button_amber")
-    print("channel: ", channel)
 
     # if (USE_IDLE_SOUND):
     #     GPIO.output(IDLE_SOUND, GPIO.LOW)  # sound on
@@ -272,6 +276,7 @@ def button_red(channel='default'):
 
 def erupt_handler(unused_addr, args, erupt):
     # erupt == 1.0 always, so I'm not even going to check
+    print("erupt_handler()")
     print("unused_addr:", unused_addr)
     print("args:", args)
     print("erupt:", erupt)
