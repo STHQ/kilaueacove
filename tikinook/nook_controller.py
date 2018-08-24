@@ -314,11 +314,11 @@ if __name__ == "__main__":
     print("Serving on {}".format(server.server_address))
     server.serve_forever()
 
-# Idle loop
-	try:
-		while True:
-			time.sleep(1)
-	except KeyboardInterrupt:
-		print("\nAttempting to clean up…")
-	finally:
-		GPIO.cleanup()
+    # Idle loop
+    try:
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        print("\nAttempting to clean up…")
+    finally:
+        GPIO.cleanup()
