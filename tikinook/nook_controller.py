@@ -280,11 +280,12 @@ def button_red(channel='default'):
 
         # Play animation
         # FIXME: Slow this down!
-        volcano_animation.play(delay=0.02)
+        volcano_animation.play(delay=0.013)
 
         # Blackout
         # grid.setAllColorRGB(0, 0, 0)
         # grid.show()
+        time.sleep(3)
         new_colors = numpy.zeros((pixel_count, 3), dtype=numpy.int)
         super_strand.fade_to_colors(new_colors=new_colors, seconds=1)
         time.sleep(3)
