@@ -270,6 +270,9 @@ def button_red(channel='default'):
 
 def erupt_handler(unused_addr, args, erupt):
     # erupt == 1.0 always, so I'm not even going to check
+    print("unused_addr:", unused_addr)
+    print("args:", args)
+    print("erupt:", erupt)
     global IS_TOGGLE
     IS_TOGGLE = True
     button_red(channel='OSC')
