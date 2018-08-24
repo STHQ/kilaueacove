@@ -282,13 +282,82 @@ def button_red(channel='default'):
         volcano_animation.play()
 
         # Blackout
-        grid.setAllColorRGB(0, 0, 0)
-        grid.show()
+        # grid.setAllColorRGB(0, 0, 0)
+        # grid.show()
+        new_colors = numpy.zeros((pixel_count, 3), dtype=numpy.int)
+        super_strand.fade_to_colors(new_colors=new_colors, seconds=1)
         time.sleep(3)
 
         # Back to idle
         GPIO.output(SMOKE_CONTROL, GPIO.LOW)
-        button_amber(channel='volcano_end')
+        # TODO: Fade up to Amber light settings
+
+        # REFERENCE:
+        # button_grid.setRowColorRGB(0, 16, 16, 16)
+        # button_grid.setPixelColorRGB(AMBER_LED, 0, 64, 64, 64)
+        # button_grid.show()
+        # ring_grid.setRowColorRGB(0, 0, 0, 0)
+        # ring_grid.show()
+        # rattan_grid.setRowColorRGB(0, 250, 127, 0)
+        # rattan_grid.setRowColorRGB(1, 128, 50, 0)
+        # rattan_grid.setRowColorRGB(2, 64, 10, 0)
+        # rattan_grid.setRowColorRGB(3, 0, 90, 75)
+        # rattan_grid.setRowColorRGB(4, 0, 0, 100)
+        # shelf_back_grid.setAllColorRGB(0, 2, 4)
+        # shelf_front_grid.setAllColorRGB(50, 20, 10)
+        #
+        # button_grid = PixelGrid(super_strand, (0, 3))
+        # rattan_grid = PixelGrid(super_strand, (311, 10), (310, -10), (291, 10), (290, -10), (271, 10))
+        # shelf_back_grid = PixelGrid(super_strand, (165, 41), (83, 41), (3, 39))
+        # shelf_front_grid = PixelGrid(super_strand, (246, -41), (164, -41), (82, -41))
+
+        # Start with black
+        amber_colors = numpy.zeros((pixel_count, 3), dtype=numpy.int)
+
+        # Assign Amber colors
+        amber_colors[WHITE_LED] = [16, 16, 16]
+        amber_colors[AMBER_LED] = [64, 64, 64]
+        amber_colors[RED_LED] = [16, 16, 16]
+        # Ring is already black, no need to change
+        for index in range(311, 321):
+            # Rattan row 0
+            amber_colors[index] = [250, 127, 0]
+        for index in range(301, 311):
+            # Rattan row 1
+            amber_colors[index] = [128, 50, 0]
+        for index in range(291, 301):
+            # Rattan row 2
+            amber_colors[index] = [64, 10, 0]
+        for index in range(281, 291):
+            # Rattan row 3
+            amber_colors[index] = [0, 90, 75]
+        for index in range(271, 281):
+            # Rattan row 4
+            amber_colors[index] = [0, 0, 100]
+        for index in range(165, 206):
+            # Shelf Back row 0
+            amber_colors[index] = [0, 2, 4]
+        for index in range(83, 124):
+            # Shelf Back row 1
+            amber_colors[index] = [0, 2, 4]
+        for index in range(3, 42):
+            # Shelf Back row 2
+            amber_colors[index] = [0, 2, 4]
+        for index in range(206, 247):
+            # Shelf Front row 0
+            amber_colors[index] = [50, 20, 10]
+        for index in range(124, 165):
+            # Shelf Front row 1
+            amber_colors[index] = [50, 20, 10]
+        for index in range(42, 83):
+            # Shelf Front row 2
+            amber_colors[index] = [50, 20, 10]
+
+        # Fade
+        super_strand.fade_to_colors(new_colors=amber_colors, seconds=2)
+
+        # Comment out so I can examine the fade results
+        # button_amber(channel='volcano_end')
 
 
 def erupt_handler(unused_addr, args, erupt):
