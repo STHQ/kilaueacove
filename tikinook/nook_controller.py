@@ -14,7 +14,7 @@ Licensed under The MIT License (MIT). Please see LICENSE.txt for full text
 of the license.
 
 Version History:
-- 0.3.0 - 2018-08-13 - Started on upgrades to show, and OSC for communication
+- 2.0.0 - 2018-08-13 - Upgrades to show, and OSC for communication
 - 0.2.0 - 2016-08-07 - Add the 3 button NeoPixels + the 24 ring NeoPixels
                        Fixed the red toggle detection + volcano show restriction
 - 0.1.0 - 2016-05-07 - Started development
