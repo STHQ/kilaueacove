@@ -69,8 +69,9 @@ GPIO.output(VOLCANO_SOUND, GPIO.HIGH)  # off
 WHITE_LED = 0  # These are the LEDs inside the buttons
 AMBER_LED = 1
 RED_LED = 2
-NEOPIXEL_PIN     = 18    # GPIO pin connected to the pixels (must support PWM!)
-PALEOPIXEL_COUNT = 50    # Number of PaleoPixels in the strand
+NEOPIXEL_COUNT = 271  # Number of NeoPixels in the strand
+NEOPIXEL_PIN = 18  # GPIO pin connected to the pixels (must support PWM!)
+PALEOPIXEL_COUNT = 50  # Number of PaleoPixels in the strand
 
 # Create pixel strands with appropriate configuration.
 strand1 = neopixel.Adafruit_NeoPixel(NEOPIXEL_COUNT, NEOPIXEL_PIN)
