@@ -42,7 +42,7 @@ TOGGLE_RED_IN = 16
 # FISH_FLOAT = 20
 SMOKE_CONTROL = 21
 # IDLE_SOUND = 22
-VOLCANO_SOUND = 27
+# VOLCANO_SOUND = 27
 # USE_IDLE_SOUND = False
 
 # Set up GPIO pins
@@ -60,8 +60,8 @@ GPIO.setup(SMOKE_CONTROL, GPIO.OUT)
 #     GPIO.output(IDLE_SOUND, GPIO.LOW)  # sound on
 # else:
 #     GPIO.output(IDLE_SOUND, GPIO.HIGH)  # sound off
-GPIO.setup(VOLCANO_SOUND, GPIO.OUT)
-GPIO.output(VOLCANO_SOUND, GPIO.HIGH)  # off
+# GPIO.setup(VOLCANO_SOUND, GPIO.OUT)
+# GPIO.output(VOLCANO_SOUND, GPIO.HIGH)  # off
 
 # Set up the strand
 
@@ -234,9 +234,9 @@ def button_red(channel='default'):
         volcano_animation = PixelPlayer(rattan_grid, '/home/pi/kilaueacove/tikinook/animation/volcano-v05-16x16.mov')
         GPIO.output(SMOKE_CONTROL, GPIO.HIGH)
         # GPIO.output(IDLE_SOUND, GPIO.HIGH)  # Idle Sound off
-        GPIO.output(VOLCANO_SOUND, GPIO.LOW)  # Volcano sound trigger
-        time.sleep(1)
-        GPIO.output(VOLCANO_SOUND, GPIO.HIGH)  # off
+        # GPIO.output(VOLCANO_SOUND, GPIO.LOW)  # Volcano sound trigger
+        # time.sleep(1)
+        # GPIO.output(VOLCANO_SOUND, GPIO.HIGH)  # off
         # Highlight the volcano
         y = 0  # top row
         shelf_front_grid.setAllColorRGB(0, 0, 0)
