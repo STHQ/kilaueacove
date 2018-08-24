@@ -158,23 +158,27 @@ class SuperPixel(object):
         print("frame_delay", frame_delay)
         frames = int(FADE_FPS * seconds)
         print("frames", frames)
-        current_colors = self._led_data
-        for index, current_rgb in enumerate(current_colors):
-            # print(pixel)
-            # TODO: Compare to current colors
-            new_rgb = []
-            for color in range(3):
-                # print("color", color)
-                # print("current_rgb[color]", current_rgb[color])
-                # print("new_colors[index][color]", new_colors[index][color])
-                delta = current_rgb[color] - new_colors[index][color]
-                # print("delta", delta)
-                delta_frame = int(delta / frames)
-                new_rgb.append(current_rgb[color] - delta_frame)
-            print("new_rgb", new_rgb)
-            self.setPixelColor(index, new_rgb)
-            self.show()
-            frames = frames - 1
+        for frame in range(frames)
+            frames_remain = frames - frame
+            current_colors = self._led_data
+            for index, current_rgb in enumerate(current_colors):
+                # print(pixel)
+                # TODO: Compare to current colors
+                new_rgb = []
+                for color in range(3):
+                    # print("color", color)
+                    # print("current_rgb[color]", current_rgb[color])
+                    # print("new_colors[index][color]", new_colors[index][color])
+                    delta = current_rgb[color] - new_colors[index][color]
+                    # print("delta", delta)
+                    if delta != 0 and frames_remain != 0:
+                        delta_frame = int(delta / frames_remain)
+                        new_rgb.append(current_rgb[color] - delta_frame)
+                    else:
+                        new_rgb.append(current_rgb[color])
+                print("new_rgb", new_rgb)
+                self.setPixelColor(index, new_rgb)
+                self.show()
             time.sleep(frame_delay)
 
 
