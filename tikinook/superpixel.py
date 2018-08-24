@@ -155,20 +155,23 @@ class SuperPixel(object):
         pixel color values, over a float number of seconds.
         """
         frame_delay = 1.0 / FADE_FPS
+        print("frame_delay", frame_delay)
         frames = int(FADE_FPS * seconds)
+        print("frames", frames)
         current_colors = self._led_data
         for index, current_rgb in enumerate(current_colors):
             # print(pixel)
             # TODO: Compare to current colors
             new_rgb = []
             for color in range(3):
-                print("color", color)
-                print("current_rgb[color]", current_rgb[color])
-                print("new_colors[index][color]", new_colors[index][color])
+                # print("color", color)
+                # print("current_rgb[color]", current_rgb[color])
+                # print("new_colors[index][color]", new_colors[index][color])
                 delta = current_rgb[color] - new_colors[index][color]
-                print("delta", delta)
+                # print("delta", delta)
                 delta_frame = int(delta / frames)
-                new_rgb.append(current_rgb[color] + delta_frame)
+                new_rgb.append(current_rgb[color] - delta_frame)
+            print("new_rgb", new_rgb)
             self.setPixelColor(index, new_rgb)
             self.show()
             frames = frames - 1
