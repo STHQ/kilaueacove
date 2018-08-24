@@ -305,10 +305,10 @@ if __name__ == "__main__":
     server.serve_forever()
 
 # Idle loop
-# 	try:
-# 		while True:
-# 			time.sleep(1)
-# 	except KeyboardInterrupt:
-# 		print("\nAttempting to clean up…")
-# 	finally:
-# 		GPIO.cleanup()
+	try:
+		while True:
+			time.sleep(1)
+	except KeyboardInterrupt:
+		print("\nAttempting to clean up…")
+	finally:
+		GPIO.cleanup()
