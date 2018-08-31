@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 """
 Adafruit NeoPixel library port to control the older WS2801 pixels from
@@ -42,6 +42,7 @@ of the license.
 
 Version History:
 
+- 2.0.0 - 2018-08-22 - Updating to use Adafruit_WS2801, for Python 3, removing Numpy
 - 1.1.0 - 2016-05-08 - Updated to use numpy for the internal arrays, for
                        speed improvements
 - 1.0.1 - 2016-02-29 - Changed license from CC-BY-4.0 to MIT, due to
@@ -53,12 +54,15 @@ Version History:
 
 """
 
-import numpy
-import RPi.GPIO as GPIO, time, os
+import time
 
+# Import the WS2801 module.
+import Adafruit_WS2801
+import Adafruit_GPIO.SPI as SPI
 
 # LED strip configuration:
-LED_COUNT      = 50      # Number of LED pixels.
+LED_COUNT = 50  # Number of LED pixels.
+
 
 #####
 #
@@ -67,15 +71,15 @@ LED_COUNT      = 50      # Number of LED pixels.
 #####
 
 def Color(red, green, blue):
-    """Return the provided red, green, blue colors as a numpy array.
+    """Return the provided red, green, blue colors as a list.
     Each color component should be a value 0-255 where 0 is the lowest intensity
     and 255 is the highest intensity.
     red, green, blue: int, 0-255
-    return: numpy.array
+    return: list
     """
-    # "& 0xFF" is to make sure we're not exceeding max setting of 255
-    rgb = numpy.array([red & 0xFF, green & 0xFF, blue & 0xFF])
+    rgb = [red, green, blue]
     return rgb
+
 
 class PaleoPixel(object):
     def __init__(self, num):
@@ -83,13 +87,15 @@ class PaleoPixel(object):
 
         num: int, number of pixels in the display strand.
         """
-        # Create a 2D numpyarray, LED count by 3 (RGB), type int
-        self._led_data = numpy.zeros((num, 3), dtype=numpy.int)
+        # Specify a hardware SPI connection on /dev/spidev0.0:
+        SPI_PORT = 0
+        SPI_DEVICE = 0
+        self.ws2801_strand = Adafruit_WS2801.WS2801Pixels(num, spi=SPI.SpiDev(SPI_PORT, SPI_DEVICE))
 
     def __del__(self):
-        # Clean up memory used by the library when not needed anymore.
-        if self._led_data is not None:
-            self._led_data = None
+        # Clean up memory used when not needed anymore.
+        if self.ws2801_strand is not None:
+            self.ws2801_strand = None
 
     def begin(self):
         """Initialize _led_data to zeroes, and show strand.
@@ -97,35 +103,19 @@ class PaleoPixel(object):
         Mostly included for NeoPixel compatibility.
         """
         # Clip all values to zero
-        self._led_data = numpy.clip(self._led_data, 0, 0)
-        self.show()
+        self.ws2801_strand.clear()
+        self.ws2801_strand.show()
 
     def show(self):
         """Update the display with the data from the LED buffer."""
-        # Trying to use the spidev access directly through the os, instead of
-        # going through the Python file-writing code. Suggestion by Mike Ash.
-        spidev = os.open('/dev/spidev0.0', os.O_WRONLY)
-        # Iterate through numpy array, write R, G, B for each pixel
-        for pixel in self._led_data:
-            os.write(spidev, chr(pixel[0] & 0xFF))  #R
-            os.write(spidev, chr(pixel[1] & 0xFF))  #G
-            os.write(spidev, chr(pixel[2] & 0xFF))  #B
-        os.close(spidev)
-        # Requires 500us (.0005 seconds) to latch data, as per data sheet:
-        # https://cdn-shop.adafruit.com/datasheets/WS2801.pdf
-        time.sleep(.0005)
-
+        self.ws2801_strand.show()
 
     def setPixelColor(self, n, color):
-        """Set LED at position n to the provided numpy array (in RGB order).
+        """Set LED at position n to the provided list (in RGB order).
         n: int
-        color: numpy.array, as [R, G, B]
+        color: list, as [R, G, B]
         """
-        # Make sure that position n exists in our strand.
-        # If not, throw it away.
-        if (n >= len(self._led_data)):
-            return
-        self._led_data[n] = color
+        self.setPixelColorRGB(n, color[0], color[1], color[2])
 
     def setPixelColorRGB(self, n, red, green, blue):
         """Set LED at position n to the provided red, green, and blue color.
@@ -134,24 +124,32 @@ class PaleoPixel(object):
         n: int, pixel position
         red, green, blue: int, 0-255
         """
-        self.setPixelColor(n, Color(red, green, blue))
+        if n >= self.numPixels():
+            # outside the strand length; throw it away
+            pass
+        else:
+            self.ws2801_strand.set_pixel_rgb(n, red, green, blue)
 
     def getPixels(self):
-        """Return a numpy 2D array object which allows access to the LED data
-        as [pixel][R, G, B]
+        """Return a list of tuples which allows access to the LED data
+        as [(R, G, B), ...]
         """
-        return self._led_data
+        pixels_rgb = []
+        for pixel_index in range(self.ws2801_strand.count()):
+            pixel_rgb = self.ws2801_strand.get_pixel_rgb(pixel_index)
+            pixels_rgb.append(pixel_rgb)
+        return pixels_rgb
 
     def numPixels(self):
         """Return the number of pixels in the display."""
-        return len(self._led_data)
+        # print("numPixels: {}", self.ws2801_strand.count())
+        return self.ws2801_strand.count()
 
     def getPixelColor(self, n):
-        """Get a numpy array with [R, G, B] color values for the LED pixel
+        """Get a tuple with (R, G, B) color values for the LED pixel
         at position n.
         """
-        return self._led_data[n]
-
+        return self.ws2801_strand.get_pixel_rgb(pixel_index)
 
 
 #####
@@ -165,18 +163,21 @@ def colorWipe(strip, color, wait_ms=20):
     for i in range(strip.numPixels()):
         strip.setPixelColor(i, color)
         strip.show()
-        time.sleep(wait_ms/1000.0)
+        time.sleep(wait_ms / 1000.0)
+
 
 def theaterChase(strip, color, wait_ms=50, iterations=10):
     """Movie theater marquee style chaser animation."""
     for j in range(iterations):
         for q in range(3):
             for i in range(0, strip.numPixels(), 3):
-                strip.setPixelColor(i+q, color)
+                # print("i: {}, q: {}, i+q: {}", i, q, i+q)
+                strip.setPixelColor(i + q, color)
             strip.show()
-            time.sleep(wait_ms/1000.0)
+            time.sleep(wait_ms / 1000.0)
             for i in range(0, strip.numPixels(), 3):
-                strip.setPixelColor(i+q, Color(0, 0, 0))
+                strip.setPixelColor(i + q, Color(0, 0, 0))
+
 
 def wheel(pos):
     """Generate rainbow colors across 0-255 positions."""
@@ -189,33 +190,35 @@ def wheel(pos):
         pos -= 170
         return Color(0, pos * 3, 255 - pos * 3)
 
+
 def rainbow(strip, wait_ms=20, iterations=1):
     """Draw rainbow that fades across all pixels at once."""
-    for j in range(256*iterations):
+    for j in range(256 * iterations):
         for i in range(strip.numPixels()):
-            strip.setPixelColor(i, wheel((i+j) % 255))
+            strip.setPixelColor(i, wheel((i + j) % 255))
         strip.show()
-        time.sleep(wait_ms/1000.0)
+        time.sleep(wait_ms / 1000.0)
+
 
 def rainbowCycle(strip, wait_ms=20, iterations=2):
     """Draw rainbow that uniformly distributes itself across all pixels."""
-    for j in range(256*iterations):
+    for j in range(256 * iterations):
         for i in range(strip.numPixels()):
-            strip.setPixelColor(i, wheel(((i * 256 / strip.numPixels()) + j) % 255))
+            strip.setPixelColor(i, wheel(((i * 256 // strip.numPixels()) + j) % 255))
         strip.show()
-        time.sleep(wait_ms/1000.0)
+        time.sleep(wait_ms / 1000.0)
+
 
 def theaterChaseRainbow(strip, wait_ms=50):
     """Rainbow movie theater marquee style chaser animation."""
     for j in range(256):
         for q in range(3):
             for i in range(0, strip.numPixels(), 3):
-                strip.setPixelColor(i+q, wheel((i+j) % 255))
+                strip.setPixelColor(i + q, wheel((i + j) % 255))
             strip.show()
-            time.sleep(wait_ms/1000.0)
+            time.sleep(wait_ms / 1000.0)
             for i in range(0, strip.numPixels(), 3):
-                strip.setPixelColor(i+q, Color(0, 0, 0))
-
+                strip.setPixelColor(i + q, Color(0, 0, 0))
 
 
 #####
@@ -240,9 +243,9 @@ if __name__ == '__main__':
         colorWipe(strip, Color(0, 0, 255), 0)  # Blue wipe
         # Theater chase animations.
         theaterChase(strip, Color(127, 127, 127))  # White theater chase
-        theaterChase(strip, Color(127,   0,   0))  # Red theater chase
-        theaterChase(strip, Color(  0, 127, 127))  # Green theater chase
-        theaterChase(strip, Color(  0,   0, 127))  # Blue theater chase
+        theaterChase(strip, Color(127, 0, 0))  # Red theater chase
+        theaterChase(strip, Color(0, 127, 127))  # Green theater chase
+        theaterChase(strip, Color(0, 0, 127))  # Blue theater chase
         # Rainbow animations.
         rainbow(strip)
         rainbowCycle(strip)

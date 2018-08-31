@@ -10,10 +10,12 @@ def Color(red, green, blue):
     """
     return (red << 16) | (green << 8) | blue
 
+
 class _LED_Data(object):
     """Wrapper class which makes a SWIG LED color data array look and feel like
     a Python list of integers.
     """
+
     def __init__(self, channel, size):
         self.size = size
         self.channel = channel
@@ -34,6 +36,8 @@ class _LED_Data(object):
         """Set the 24-bit RGB color value at the provided position or slice of
         positions.
         """
+        # debug
+        # print("pos: {}, value: {}", pos, value)
         # Handle if a slice of positions are passed in by setting the appropriate
         # LED data values to the provided values.
         if isinstance(pos, slice):
@@ -43,7 +47,11 @@ class _LED_Data(object):
                 index += 1
         # Else assume the passed in value is a number to the position.
         else:
+            # print("pos: {}, value: {}", type(pos), type(value))
             return ws.ws2811_led_set(self.channel, pos, value)
+            # Testing value types:
+            # print("type value.item(): {}", type(value.item()))
+            # return ws.ws2811_led_set(self.channel, pos.item(), value.item())
 
 
 class Adafruit_NeoPixel(object):
@@ -97,7 +105,7 @@ class Adafruit_NeoPixel(object):
         resp = ws.ws2811_init(self._leds)
         if resp != 0:
             raise RuntimeError('ws2811_init failed with code {0}'.format(resp))
-        
+
     def show(self):
         """Update the display with the data from the LED buffer."""
         resp = ws.ws2811_render(self._leds)
@@ -114,11 +122,9 @@ class Adafruit_NeoPixel(object):
         green = (color >> 8) & 0xFF
         blue = color & 0xFF
         color = (green << 16) | (red << 8) | blue
-        
+
         # Now back to what it should be:
         self._led_data[n] = color
-        
-        
 
     def setPixelColorRGB(self, n, red, green, blue):
         """Set LED at position n to the provided red, green, and blue color.

@@ -19,9 +19,9 @@ import paleopixel
 
 
 # My LED strip configurations (for test):
-NEOPIXEL_COUNT   = 271   # Number of NeoPixels in the strand
-NEOPIXEL_PIN     = 18    # GPIO pin connected to the pixels (must support PWM!)
-PALEOPIXEL_COUNT = 50    # Number of PaleoPixels in the strand
+NEOPIXEL_COUNT = 271  # Number of NeoPixels in the strand
+NEOPIXEL_PIN = 18  # GPIO pin connected to the pixels (must support PWM!)
+PALEOPIXEL_COUNT = 50  # Number of PaleoPixels in the strand
 
 # My grid configuration (for test):
 TIKI_NOOK_GRID = [(311, 10), (310, -10), (291, 10), (290, -10), (271, 10),
@@ -29,8 +29,13 @@ TIKI_NOOK_GRID = [(311, 10), (310, -10), (291, 10), (290, -10), (271, 10),
                   (246, -41), (165, 41), (164, -41), (83, 41), (82, -41), (3, 39),
                   (0, 3)]
 
+
 # Rows, bottom up: 39, -41, 41, -41,  41, -41, -11,  10, -10,  10,  -9
 # Index, bottom up: 0,  79, 80, 161, 162, 243, 254, 255, 274, 275, 293
+
+# Fade frames per second
+FADE_FPS = 30
+
 
 #####
 #
@@ -52,8 +57,11 @@ def Color(red, green, blue):
     return: numpy.array
     """
     # "& 0xFF" is to make sure we're not exceeding max setting of 255
-    rgb = numpy.array([red & 0xFF, green & 0xFF, blue & 0xFF])
+    # 2018-08-22 This seems to have an error with Python 3
+    # rgb = numpy.array([red & 0xFF, green & 0xFF, blue & 0xFF])
+    rgb = numpy.array([red, green, blue])
     return rgb
+
 
 class SuperPixel(object):
     def __init__(self, *strands):
@@ -92,7 +100,7 @@ class SuperPixel(object):
             # Each strand knows how to show itself.
             strand.show()
 
-    def setPixelColor(self, n, color):
+    def setPixelColor(self, n, color_rgb):
         """Set LED at position n to the provided numpy array [R, G, B].
         n: int
         color: numpy.array, as [R, G, B]
@@ -101,17 +109,17 @@ class SuperPixel(object):
             return  # pixel 'n' is out of bounds; throw it away
 
         # SuperPixel internal representation:
-        self._led_data[n] = color
+        self._led_data[n] = color_rgb
 
         # Now also set it in the sub-strand
         pixel_offset = 0
-        pixel_max    = 0
+        pixel_max = 0
         for strand in self._strands:
-        # Determine which strand this pixel is a part of, and set it.
+            # Determine which strand this pixel is a part of, and set it.
             pixel_max = pixel_offset + strand.numPixels()
             if (pixel_offset <= n) and (n < pixel_max):
                 pixel = n - pixel_offset
-                strand.setPixelColorRGB(pixel, color[0], color[1], color[2])
+                strand.setPixelColorRGB(pixel, color_rgb[0].item(), color_rgb[1].item(), color_rgb[2].item())
                 break
             else:  # Must be in the next one
                 pixel_offset = pixel_offset + strand.numPixels()
@@ -124,6 +132,7 @@ class SuperPixel(object):
         red, green, blue: int, 0-255
         """
         self.setPixelColor(n, Color(red, green, blue))
+        # self.setPixelColor(n, red, green, blue)
 
     def getPixels(self):
         """Return an object which allows access to the LED display data as if
@@ -140,6 +149,30 @@ class SuperPixel(object):
         n: int
         """
         return self._led_data[n]
+
+    def fade_to_colors(self, new_colors, seconds):
+        """Fade from the current pixel colors to a new list of
+        pixel color values, over a float number of seconds.
+        """
+        frame_delay = 1.0 / FADE_FPS
+        # print("frame_delay", frame_delay)
+        frames = int(FADE_FPS * seconds)
+        # print("frames", frames)
+        for frame in range(frames):
+            frames_remain = frames - frame
+            current_colors = self._led_data
+            for index, current_rgb in enumerate(current_colors):
+                new_rgb = []
+                for color in range(3):
+                    delta = current_rgb[color] - new_colors[index][color]
+                    if delta != 0 and frames_remain != 0:
+                        delta_frame = int(delta / frames_remain)
+                        new_rgb.append(current_rgb[color] - delta_frame)
+                    else:
+                        new_rgb.append(current_rgb[color])
+                self.setPixelColor(index, new_rgb)
+            self.show()
+            # time.sleep(frame_delay)
 
 
 #####
@@ -196,7 +229,7 @@ class PixelGrid(object):
                 step = 1
             column = 0
             for pixel in range(start_pixel, stop_pixel, step):
-                self._grid[row][column] = [pixel, 0, 0 ,0]
+                self._grid[row][column] = [pixel, 0, 0, 0]
                 column = column + 1
             row = row + 1
         # print("_grid: ", self._grid)
@@ -221,7 +254,7 @@ class PixelGrid(object):
         """Update the display with the data from the LED buffer."""
         self._strand.show()
 
-    def setPixelColor(self, x, y, color):
+    def setPixelColor(self, x=0, y=0, color_rgb=None):
         """Set LED at position x, y to the provided 24-bit color value (in RGB order).
         """
         if (y >= len(self._grid)):
@@ -230,24 +263,27 @@ class PixelGrid(object):
             return  # We have to check the specific row because y isn't constant
 
         # Grid internal representation:
-        self._grid[y][x][1], self._grid[y][x][2], self._grid[y][x][3] = color
+        self._grid[y][x][1], self._grid[y][x][2], self._grid[y][x][3] = color_rgb
 
         # Now also set it in the strand
-        self._strand.setPixelColorRGB(self._grid[y][x][0], self._grid[y][x][1], self._grid[y][x][2], self._grid[y][x][3])
+        self._strand.setPixelColorRGB(self._grid[y][x][0].item(), self._grid[y][x][1], self._grid[y][x][2],
+                                      self._grid[y][x][3])
 
     def setPixelColorRGB(self, x, y, red, green, blue):
         """Set LED at position n to the provided red, green, and blue color.
         Each color component should be a value from 0 to 255 (where 0 is the
         lowest intensity and 255 is the highest intensity).
         """
-        self.setPixelColor(x, y, Color(red, green, blue))
+        color_rgb = Color(red, green, blue)
+        # print("> About to call setPixelColor({}, {}, {})", x, y, color_rgb)
+        self.setPixelColor(x=x, y=y, color_rgb=color_rgb)
 
     def setRowColor(self, row, color):
         """Set all row LEDs to the provided color values as [R, G, B]
         """
         # TODO: Seems like there may be a more efficient way to do this in numpy
         for x in range(len(self._grid[row])):
-                self.setPixelColor(x, row, color)
+            self.setPixelColor(x, row, color)
 
     def setRowColorRGB(self, row, red, green, blue):
         """Set all LEDs to the provided red, green, and blue color.
@@ -316,7 +352,6 @@ class PixelGrid(object):
 # TODO - PixelMap class
 
 
-
 #####
 #
 # PixelPlayer - load video to play on a grid
@@ -353,10 +388,10 @@ class PixelPlayer(object):
 
         frameCount = int(vid.get(cv2.CAP_PROP_FRAME_COUNT))
         fps = vid.get(cv2.CAP_PROP_FPS)
-        waitPerFrameInSeconds = 1.0 / fps  # probably minus some overhead fudge factor
+        print("frameCount: " + str(frameCount))
+        print("fps: " + str(fps))
 
-        # print("frameCount: " + str(frameCount))
-        # print("fps: " + str(fps))
+        waitPerFrameInSeconds = 1.0 / fps  # probably minus some overhead fudge factor
 
         # Load the pixel data
         # print("Loading video_data")
@@ -368,11 +403,12 @@ class PixelPlayer(object):
             # Grabbing values from the frame tuple
             # 'ret' is a boolean for whether there's a frame at this index
             ret, frameImg = vid.read()
-            if(ret):
+            if (ret):
                 for y in range(self._video_data.shape[1]):
                     for x in range(self._video_data.shape[2]):
-                        try: # grid may be bigger than video
-                            self._video_data[frame_increment][y][x] = [frameImg[y, x, 2], frameImg[y, x, 1], frameImg[y, x, 0]]
+                        try:  # grid may be bigger than video
+                            self._video_data[frame_increment][y][x] = [frameImg[y, x, 2], frameImg[y, x, 1],
+                                                                       frameImg[y, x, 0]]
                         except IndexError:
                             pass
             frame_increment = frame_increment + 1
@@ -385,7 +421,7 @@ class PixelPlayer(object):
         if self._video_data is not None:
             self._video_data = None
 
-    def play(self):
+    def play(self, delay=0):
         """Plays the loaded data on the PixelGrid"""
         # print ("Displaying video_data")
         for frame in self._video_data:
@@ -393,7 +429,7 @@ class PixelPlayer(object):
                 for x in range(frame.shape[1]):
                     self._grid.setPixelColor(x, y, frame[y][x])
             self._grid.show()
-
+            time.sleep(delay)
 
 
 #####
@@ -407,24 +443,27 @@ def colorAll(strip, color):
     for i in range(strip.numPixels()):
         strip.setPixelColor(i, color)
     strip.show()
-    
+
+
 def colorWipe(strip, color, wait_ms=50):
     """Wipe color across display a pixel at a time."""
     for i in range(strip.numPixels()):
         strip.setPixelColor(i, color)
         strip.show()
-        time.sleep(wait_ms/1000.0)
+        time.sleep(wait_ms / 1000.0)
+
 
 def theaterChase(strip, color, wait_ms=50, iterations=5):
     """Movie theater marquee style chaser animation."""
     for j in range(iterations):
         for q in range(3):
             for i in range(0, strip.numPixels(), 3):
-                strip.setPixelColor(i+q, color)
+                strip.setPixelColor(i + q, color)
             strip.show()
-            time.sleep(wait_ms/1000.0)
+            time.sleep(wait_ms / 1000.0)
             for i in range(0, strip.numPixels(), 3):
-                strip.setPixelColor(i+q, Color(0, 0, 0))
+                strip.setPixelColor(i + q, Color(0, 0, 0))
+
 
 def wheel(pos):
     """Generate rainbow colors across 0-255 positions."""
@@ -437,32 +476,35 @@ def wheel(pos):
         pos -= 170
         return Color(0, pos * 3, 255 - pos * 3)
 
+
 def rainbow(strip, wait_ms=20, iterations=1):
     """Draw rainbow that fades across all pixels at once."""
-    for j in range(256*iterations):
+    for j in range(256 * iterations):
         for i in range(strip.numPixels()):
-            strip.setPixelColor(i, wheel((i+j) & 255)) # FIXME
+            strip.setPixelColor(i, wheel((i + j) & 255))  # FIXME
         strip.show()
-        time.sleep(wait_ms/1000.0)
+        time.sleep(wait_ms / 1000.0)
+
 
 def rainbowCycle(strip, wait_ms=20, iterations=2):
     """Draw rainbow that uniformly distributes itself across all pixels."""
-    for j in range(256*iterations):
+    for j in range(256 * iterations):
         for i in range(strip.numPixels()):
-            strip.setPixelColor(i, wheel(((i * 256 / strip.numPixels()) + j) & 255))
+            strip.setPixelColor(i, wheel(((i * 256 // strip.numPixels()) + j) & 255))
         strip.show()
-        time.sleep(wait_ms/1000.0)
+        time.sleep(wait_ms / 1000.0)
+
 
 def theaterChaseRainbow(strip, wait_ms=50):
     """Rainbow movie theater marquee style chaser animation."""
     for j in range(256):
         for q in range(3):
             for i in range(0, strip.numPixels(), 3):
-                strip.setPixelColor(i+q, wheel((i+j) % 255)) #FIXME
+                strip.setPixelColor(i + q, wheel((i + j) % 255))  # FIXME
             strip.show()
-            time.sleep(wait_ms/1000.0)
+            time.sleep(wait_ms / 1000.0)
             for i in range(0, strip.numPixels(), 3):
-                strip.setPixelColor(i+q, Color(0, 0, 0))
+                strip.setPixelColor(i + q, Color(0, 0, 0))
 
 
 #####
@@ -478,7 +520,8 @@ def colorWipeGrid(grid, color, wait_ms=50):
         for x in range(len(theGrid[y])):
             grid.setPixelColor(x, y, color)
             grid.show()
-            time.sleep(wait_ms/1000.0)
+            time.sleep(wait_ms / 1000.0)
+
 
 def boatGrid(grid, wait_ms=5000):
     """Mark port and starboard end pixels of each row with red and green."""
@@ -488,8 +531,7 @@ def boatGrid(grid, wait_ms=5000):
         end_x = len(theGrid[y]) - 1
         grid.setPixelColorRGB(end_x, y, 0, 255, 0)
         grid.show()
-    time.sleep(wait_ms/1000.0)
-
+    time.sleep(wait_ms / 1000.0)
 
 
 #####
@@ -512,35 +554,44 @@ if __name__ == '__main__':
     strand.begin()
 
     # Create a pixel grid for same
-    grid = PixelGrid(strand, (284, 10), (283, -10), (264, 10), (263, -10), (244, 10), (243, -41), (162, 41), (161, -41), (80, 41), (79, -41), (0, 39))
+    grid = PixelGrid(strand, (284, 10), (283, -10), (264, 10), (263, -10), (244, 10), (243, -41), (162, 41), (161, -41),
+                     (80, 41), (79, -41), (0, 39))
     rattan_grid = PixelGrid(strand, (284, 10), (283, -10), (264, 10), (263, -10), (244, 10))
     shelf_back_grid = PixelGrid(strand, (162, 41), (80, 41), (0, 39))
     shelf_front_grid = PixelGrid(strand, (243, -41), (161, -41), (79, -41))
 
-
     print('Press Ctrl-C to quit.')
     while True:
-        # Color wipe animations.
+        # # Color wipe animations.
         colorWipe(strand, Color(255, 0, 0), 0)  # Red wipe
+        time.sleep(1)
         colorWipe(strand, Color(0, 255, 0), 0)  # Green wipe
+        time.sleep(1)
         colorWipe(strand, Color(0, 0, 255), 0)  # Blue wipe
-        # Theater chase animations.
-        theaterChase(strand, Color(127, 127, 127))  # White theater chase
-        theaterChase(strand, Color(127,   0,   0))  # Red theater chase
-        theaterChase(strand, Color(  0, 127,   0))  # Green theater chase
-        theaterChase(strand, Color(  0,   0, 127))  # Blue theater chase
-        # Rainbow animations.
-        rainbow(strand)
-        rainbowCycle(strand)
-        theaterChaseRainbow(strand)
+        time.sleep(1)
+        # # Theater chase animations.
+        # theaterChase(strand, Color(127, 127, 127))  # White theater chase
+        # theaterChase(strand, Color(127,   0,   0))  # Red theater chase
+        # theaterChase(strand, Color(  0, 127,   0))  # Green theater chase
+        # theaterChase(strand, Color(  0,   0, 127))  # Blue theater chase
+        # # Rainbow animations.
+        # rainbow(strand)
+        # rainbowCycle(strand)
+        # theaterChaseRainbow(strand)
 
         # Grid animations
-        #boatGrid(grid)                         # port-starboard markers for each row
-        #colorWipeGrid(grid, Color(127, 127, 127), 5)  # White (50%) wipe
-        #colorWipeGrid(grid, Color(255, 0, 0), 5)  # Red wipe
-        #colorWipeGrid(grid, Color(0, 255, 0), 5)  # Green wipe
-        #colorWipeGrid(grid, Color(0, 0, 255), 5)  # Blue wipe
-        #colorWipeGrid(grid, Color(255, 255, 255), 5)  # White (100%) wipe
+        boatGrid(grid)  # port-starboard markers for each row
+        time.sleep(1)
+        colorWipeGrid(grid, Color(127, 127, 127), 5)  # White (50%) wipe
+        time.sleep(1)
+        colorWipeGrid(grid, Color(255, 0, 0), 5)  # Red wipe
+        time.sleep(1)
+        colorWipeGrid(grid, Color(0, 255, 0), 5)  # Green wipe
+        time.sleep(1)
+        colorWipeGrid(grid, Color(0, 0, 255), 5)  # Blue wipe
+        time.sleep(1)
+        colorWipeGrid(grid, Color(255, 255, 255), 5)  # White (100%) wipe
+        time.sleep(1)
 
         # Use multiple grids at once, from the same strand
         # rattan_grid.setAllColorRGB(250, 127, 0)
@@ -555,7 +606,7 @@ if __name__ == '__main__':
 # 
 #         boatGrid(rattan_grid)
 
-        # Load in the data from a QuickTime video
+# Load in the data from a QuickTime video
 
-        # test_animation = PixelPlayer(rattan_grid, 'animation/rgb-test-16x16-lossless.mov')
+# test_animation = PixelPlayer(rattan_grid, 'animation/rgb-test-16x16-lossless.mov')
 #         test_animation.play()
